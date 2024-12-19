@@ -23,9 +23,14 @@ class testScreen:
         self.center_X = center_X
         self.center_Y = center_Y
 
+        '''
         self.switch = Elements.switch(screen, 500, 500, center_X, center_Y, 50, True, "Multiple Attempts", ["right", 30], Elements.colors, 500, True)
         self.Elements.append(self.switch)
         self.Interactive.append(self.switch)
+        '''
+
+        self.imageTest = Elements.Image(screen, center_X, center_Y, 300, 300, "IntegralSymbol.png", 1, 2, Elements.colors)
+        self.Elements.append(self.imageTest)
 
     def run(self):
         self.draw()
@@ -326,13 +331,16 @@ class problemScreen:
 
         if (Screens.eventDict[self.problemType] == "algebra"):
             self.problem = AlgebraProblems.problemList[random.randint(0, len(AlgebraProblems.problemList)-1)]
+            #self.problem = AlgebraProblems.problemList[4]
         elif (Screens.eventDict[self.problemType] == "mod"):
             self.problem = ModProblems.problemList[random.randint(0, len(ModProblems.problemList)-1)]
+            #self.problem = ModProblems.problemList[4]
         elif (Screens.eventDict[self.problemType] == "dooms"):
             self.problem = DoomProblems.problemList[random.randint(0, len(DoomProblems.problemList)-1)]
+            #self.problem = DoomProblems.problemList[4]
         elif (Screens.eventDict[self.problemType] == "statistics"):
-            #self.problem = StatProblems.problemList[random.randint(0, len(StatProblems.problemList)-1)]
-            self.problem = StatProblems.problemList[4]
+            self.problem = StatProblems.problemList[random.randint(0, len(StatProblems.problemList)-1)]
+            #self.problem = StatProblems.problemList[4]
 
         self.problem.create()
         self.problemController.loadProblemDisplay(self.problem)

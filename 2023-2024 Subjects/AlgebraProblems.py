@@ -511,7 +511,7 @@ class AlgebraProblem3:
     def getAnswer(self):
         return self.answers
 
-problemList = [AlgebraProblem1(), AlgebraProblem2()] #AlgebraProblem3()
+problemList = [AlgebraProblem1(), AlgebraProblem2(), AlgebraProblem3()]
 
 #print(pygame.font.get_fonts())
 #problem = print(AlgebraProblem1().getQuestion())

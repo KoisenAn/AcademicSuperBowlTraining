@@ -331,77 +331,6 @@ class ModProblem4:
     def display(self):
         pass
 
-# 3 gcd problem
-class ModProblem3: 
-
-    def __init__(self):
-
-        self.question = []
-        self.answers = []
-        self.inputTexts = []
-        
-        self.problemDisplayType = "lines"
-
-        self.create()
-
-        pass
-
-    def create(self):
-
-        self.question = []
-        self.answers = []
-        self.inputTexts = []
-
-        self.generateProblem()
-        self.generateQuestionAndAnswer()
-    
-    def generateProblem(self):
-
-        self.factor = random.randint(1,300)
-        self.extra1 = random.randint(1,300)
-        self.extra2 = random.randint(1,300)
-        self.extra3 = random.randint(1,300)
-
-        while (math.gcd(self.extra1, self.extra2) != 1):
-            self.extra2 = random.randint(1,300)
-
-        while (math.gcd(self.extra2, self.extra3) != 1 and math.gcd(self.extra1, self.extra3) != 1):
-            self.extra3 = random.randint(1,300)
-
-        self.answer = self.factor
-        pass
-
-    def generateQuestionAndAnswer(self):
-        
-        self.question.append("Find the gcd of " + str(self.factor*self.extra1) + ", " + str(self.factor*self.extra2) + ", and " + str(self.factor*self.extra3))
-
-        self.answerReceiver = ("textBox",1)
-        self.answers.append(self.answer)
-        self.inputTexts.append("LCM:")
-
-    def checkCorrect(self, answer):
-        correctList = []
-        for i in range(len(answer)):
-            try:
-                #print(abs(float(self.answers[i]) - float(answer[i])))
-                if (abs(float(self.answers[i]) - float(answer[i])) > 0.001):
-                    correctList.append(False)
-                else:
-                    correctList.append(True)
-            except:
-                correctList.append(False)
-
-        return correctList
-        
-    def getQuestion(self):
-        return self.question
-
-    def getAnswer(self):
-        return self.answers
-        
-    def display(self):
-        pass
-
 # 3 lcm problem
 class ModProblem5: 
 
@@ -454,7 +383,7 @@ class ModProblem5:
 
         self.answerReceiver = ("textBox",1)
         self.answers.append(self.answer)
-        self.inputTexts.append("Answer:")
+        self.inputTexts.append("LCM:")
 
     def checkCorrect(self, answer):
         

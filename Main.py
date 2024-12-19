@@ -22,7 +22,7 @@ for i in range(7):
     problemsDoneList.append([0,0,0,0])
 
 while running:
-    #Checks for user interactions
+    #Checks for user interactions*
     for event in pygame.event.get():
         #print(event)
         if event.type == pygame.QUIT:

@@ -845,3 +845,62 @@ class Line:
 
         self.endXOp = Expressions.locationExpressionValue(self.endX, center_X, center_Y)
         self.endYOp = Expressions.locationExpressionValue(self.endY, center_X, center_Y)
+
+class Image:
+
+    def __init__(self, screen, center_X, center_Y, X, Y, imageName, scale, thickness, colors):
+
+        self.screen = screen
+
+        self.center_X = center_X
+        self.center_Y = center_Y
+
+        self.X = X
+        self. Y = Y
+
+        self.imageName = imageName
+
+        self.scale = scale
+        
+        self.thickness = thickness
+        self.colors = colors
+
+        self.XOp = Expressions.locationExpressionValue(self.X, center_X, center_Y)
+        self.YOp = Expressions.locationExpressionValue(self.Y, center_X, center_Y)
+
+        self.image = pygame.image.load(self.imageName)
+        self.image = pygame.transform.scale_by(self.image, self.scale)
+        self.imageRect = self.image.get_rect()
+        self.imageRect.center = (self.XOp, self.YOp)
+
+        self.borderRect = None
+        if (self.thickness > 0):
+            self.borderRect = pygame.Rect(self.XOp+self.imageRect[0]/2, self.YOp+self.imageRect[1]/2, self.imageRect[0]/2, self.imageRect[1]/2)
+            self.border = True
+        else:
+            self.border = False
+
+    def draw(self):
+        
+        self.imageRect = self.image.get_rect()
+        self.imageRect.center = (self.XOp, self.YOp)
+
+        self.screen.blit(self.image, self.imageRect)
+
+        if (self.border):
+            pygame.draw.rect(self.screen, self.colors["darkBlue"], self.borderRect, self.thickness, 0)
+
+    def recenter(self, center_X, center_Y):
+
+        self.center_X = center_X
+        self.center_Y = center_Y
+
+        self.XOp = Expressions.locationExpressionValue(self.X, center_X, center_Y)
+        self.YOp = Expressions.locationExpressionValue(self.Y, center_X, center_Y)
+
+        self.image = pygame.image.load(self.imageName)
+        self.image = pygame.transform.scale_by(self.image, self.scale)
+        self.imageRect = self.image.get_rect()
+        self.imageRect.center = (self.XOp, self.YOp)
+
+        self.borderRect = pygame.Rect(self.XOp+self.imageRect[0]/2, self.YOp+self.imageRect[1]/2, self.imageRect[0]/2, self.imageRect[1]/2)

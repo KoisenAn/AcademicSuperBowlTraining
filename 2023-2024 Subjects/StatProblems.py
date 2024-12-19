@@ -463,7 +463,7 @@ class StatsProblem5:
             while (number == self.mode):
                 number = random.randint(1,100)
 
-            for j in range(random.randint(1, self.maxNumberOfElement-1)):
+            for j in range(random.randint(1, self.maxNumberOfElement)):
                 self.listOfNumbers.append(number)
 
         totalSum = sum(self.listOfNumbers)
