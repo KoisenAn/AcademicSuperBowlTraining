@@ -287,16 +287,17 @@ class problemScreen:
         self.problemsDone = 0
         self.problemsDoneTracker = []
 
+        # Stylistic Stuff
+
         self.colors = {"darkBlue": (53, 63, 112), "screenGrey": (230,230,230), "lightBlue":(38, 176, 237)}
 
         self.titleTextSize = 50
 
         self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
 
-        print(self.problemType)
-        print(Screens.eventDict[self.problemType])
+        # 2023-2024 Year
+        '''
         if (Screens.eventDict[self.problemType] == "algebra"):
-            print(self.problemType)
             self.textDrawer.add("Algebra Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
         elif (Screens.eventDict[self.problemType] == "mod"):
             self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
@@ -304,8 +305,7 @@ class problemScreen:
             self.textDrawer.add("Doomsday Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
         elif (Screens.eventDict[self.problemType] == "statistics"):
             self.textDrawer.add("Statistics Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
-
-        print(self.textDrawer.getTexts())
+        '''
 
         self.topDivider = Elements.divider(screen, "horizontal", center_X, center_Y, 95, 7, self.colors["darkBlue"])
         self.bottomDivider = Elements.divider(screen, "horizontal", center_X, center_Y, "2*cY-175", 7, self.colors["darkBlue"])
@@ -355,7 +355,9 @@ class problemScreen:
             pass
 
         self.problemController.reset(self.problemType)
-
+        
+        #2023-2024 Year
+        '''
         if (Screens.eventDict[self.problemType] == "algebra"):
             self.problem = AlgebraProblems.problemList[random.randint(0, len(AlgebraProblems.problemList)-1)]
             #self.problem = AlgebraProblems.problemList[4]
@@ -368,6 +370,7 @@ class problemScreen:
         elif (Screens.eventDict[self.problemType] == "statistics"):
             self.problem = StatProblems.problemList[random.randint(0, len(StatProblems.problemList)-1)]
             #self.problem = StatProblems.problemList[4]
+        '''
 
         self.problem.create()
         self.problemController.loadProblemDisplay(self.problem)
