@@ -2,6 +2,8 @@ import pygame
 import Elements
 import Expressions
 
+import os
+
 #
 # The following classes are used to draw/create specifics things to display or for users to interact with
 #
@@ -226,6 +228,10 @@ class Label:
 
         elif (type == "image"):
 
+            current_dir = os.path.dirname(__file__)
+            current_dir = os.path.dirname(current_dir)
+            image_dir = os.path.join(current_dir, 'Images')
+
             #Initial Variables
             self.type = "image"
 
@@ -235,7 +241,7 @@ class Label:
             self.X = X
             self.Y = Y
             self.size = initSize
-            self.image = pygame.image.load(otherInformation)
+            self.image = pygame.image.load(os.path.join(image_dir,otherInformation))
             self.image = pygame.transform.scale_by(self.image, initSize)
             self.imageRect = self.image.get_rect()
             self.imageRect.center = (X, Y)
@@ -272,7 +278,12 @@ class Label:
             self.textRect = self.text.get_rect()
             self.textRect.center = (self.X, self.Y)
         elif (self.type == "image"):
-            self.image = pygame.image.load(self.string)
+
+            current_dir = os.path.dirname(__file__)
+            current_dir = os.path.dirname(current_dir)
+            image_dir = os.path.join(current_dir, 'Images')
+
+            self.image = pygame.image.load(os.path.join(image_dir, self.string))
             self.image = pygame.transform.scale_by(self.image, self.size*scale)
             self.imageRect = self.image.get_rect()
             self.imageRect.center = (self.X, self.Y)
@@ -868,7 +879,11 @@ class Image:
         self.XOp = Expressions.locationExpressionValue(self.X, center_X, center_Y)
         self.YOp = Expressions.locationExpressionValue(self.Y, center_X, center_Y)
 
-        self.image = pygame.image.load(self.imageName)
+        current_dir = os.path.dirname(__file__)
+        current_dir = os.path.dirname(current_dir)
+        image_dir = os.path.join(current_dir, 'Images')
+
+        self.image = pygame.image.load(os.path.join(image_dir, self.imageName))
         self.image = pygame.transform.scale_by(self.image, self.scale)
         self.imageRect = self.image.get_rect()
         self.imageRect.center = (self.XOp, self.YOp)
@@ -898,7 +913,11 @@ class Image:
         self.XOp = Expressions.locationExpressionValue(self.X, center_X, center_Y)
         self.YOp = Expressions.locationExpressionValue(self.Y, center_X, center_Y)
 
-        self.image = pygame.image.load(self.imageName)
+        current_dir = os.path.dirname(__file__)
+        current_dir = os.path.dirname(current_dir)
+        image_dir = os.path.join(current_dir, 'Images')
+
+        self.image = pygame.image.load(os.path.join(image_dir, self.imageName))
         self.image = pygame.transform.scale_by(self.image, self.scale)
         self.imageRect = self.image.get_rect()
         self.imageRect.center = (self.XOp, self.YOp)

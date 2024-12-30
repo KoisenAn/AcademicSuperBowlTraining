@@ -1,12 +1,27 @@
 import pygame
-import Elements
+
 import random
+
+import os
+import sys
+
+
+current_dir = os.path.dirname(__file__)
+current_dir = os.path.dirname(current_dir)
+folder_dir = os.path.join(current_dir, '2023-2024 Subjects')
+sys.path.insert(0, folder_dir)
+
+import Elements
+import Expressions
+import Screens
+
+#2023-2024 Year
+'''
 import AlgebraProblems
 import ModProblems
 import DoomProblems
 import StatProblems
-import Expressions
-import Screens
+'''
 
 eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "algebra", 4203: "geometry", 4204: "statistics", 4205: "logarithms", 4206: "calculus", 4207: "mod", 4208: "dooms", 6900: "answerInputted", 6901: "newProblem"}
 
@@ -185,6 +200,24 @@ class practiceSelectScreen:
         practiceSpreadY = 150
         practiceSpreadX = 400
         
+        #Creating Utility Buttons
+        
+        #Adding To Elements
+        self.Elements.append(homeButton)
+        self.Elements.append(settingsButton)
+        self.Elements.append(statsButton)
+        self.Elements.append(helpButton)
+
+        self.Elements.append(self.textDrawer)
+
+        #Adding To Interactive
+        self.Interactive.append(homeButton)
+        self.Interactive.append(settingsButton)
+        self.Interactive.append(statsButton)
+        self.Interactive.append(helpButton)
+
+        #2023-2024 Year
+        '''
         #Creating Practice Buttons
         AlegbraButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, buttonColor, 8, 10, "text", "Algebra", practiceButtonTextSize, center_X, center_Y, 4202, True)
         GeometryButton = Elements.Button(screen, 0, 50-practiceSpreadY, practiceButtonX, practiceButtonY, buttonColor, 8, 10, "text", "Geometry", practiceButtonTextSize, center_X, center_Y, 4203, False)
@@ -205,13 +238,6 @@ class practiceSelectScreen:
         self.Elements.append(ModButton)
         self.Elements.append(DoomsButton)
 
-        self.Elements.append(homeButton)
-        self.Elements.append(settingsButton)
-        self.Elements.append(statsButton)
-        self.Elements.append(helpButton)
-
-        self.Elements.append(self.textDrawer)
-
         #Adding to interactive
         self.Interactive.append(AlegbraButton)
         self.Interactive.append(GeometryButton)
@@ -225,6 +251,7 @@ class practiceSelectScreen:
         self.Interactive.append(settingsButton)
         self.Interactive.append(statsButton)
         self.Interactive.append(helpButton)
+        '''
 
         self.draw()
 
