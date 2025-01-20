@@ -49,7 +49,7 @@ class popUpInPracticeMenu:
         self.popUpRect = popUpRect(screen, center_X, center_Y, self.colors, 400, 400)
         self.Elements.append(self.popUpRect)
 
-        self.screenShader = Elements.screenShader(screen, center_X, center_Y, 3799, self.popUpRect.getRect())
+        self.screenShader = Elements.ScreenShader(screen, center_X, center_Y, 3799, self.popUpRect.getRect())
         self.Elements.append(self.screenShader)
         self.Interactive.append(self.screenShader)
 
@@ -74,8 +74,8 @@ class popUpInPracticeMenu:
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
-        self.exitButton = Elements.Button(screen, 75, 150, 100, 50, buttonColor, 6, 10, "text", "Exit", 30, center_X, center_Y, 4201, True)
-        self.returnButton = Elements.Button(screen, -75, 150, 100, 50, buttonColor, 6, 10, "text", "Done", 30, center_X, center_Y, 3799, True)
+        self.exitButton = Elements.Button(screen, 75, 150, 100, 50, center_X, center_Y, buttonColor, 6, 10, "text", "Exit", 30, 4201)
+        self.returnButton = Elements.Button(screen, -75, 150, 100, 50, center_X, center_Y, buttonColor, 6, 10, "text", "Done", 30, 3799)
 
         self.Elements.append(self.exitButton)
         self.Elements.append(self.returnButton)
@@ -113,7 +113,7 @@ class popUpSettings:
         self.popUpRect = popUpRect(screen, center_X, center_Y, self.colors, 1000, 600)
         self.Elements.append(self.popUpRect)
 
-        self.screenShader = Elements.screenShader(screen, center_X, center_Y, 3799, self.popUpRect.getRect())
+        self.screenShader = Elements.ScreenShader(screen, center_X, center_Y, 3799, self.popUpRect.getRect())
         self.Elements.append(self.screenShader)
         self.Interactive.append(self.screenShader)
 
@@ -125,12 +125,12 @@ class popUpSettings:
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
-        self.exitButton = Elements.Button(screen, 400, 250, 100, 50, buttonColor, 6, 10, "text", "Exit", 30, center_X, center_Y, 4201, True)
-        self.returnButton = Elements.Button(screen, -400, 250, 100, 50, buttonColor, 6, 10, "text", "Done", 30, center_X, center_Y, 3799, True)
+        self.exitButton = Elements.Button(screen, 400, 250, 100, 50, center_X, center_Y, buttonColor, 6, 10, "text", "Exit", 30, 4201)
+        self.returnButton = Elements.Button(screen, -400, 250, 100, 50, center_X, center_Y, buttonColor, 6, 10, "text", "Done", 30, 3799)
 
-        self.MAswitch = Elements.switch(screen, "cX-400", "cY-175", center_X, center_Y, 50, False, "Multiple Attempts", ["right", 30], Elements.colors, 500, True)
-        self.TimerSwitch = Elements.switch(screen, "cX-400", "cY-100", center_X, center_Y, 50, False, "Timer", ["right", 30], Elements.colors, 500, True)
-        self.ShowSolutionSwitch = Elements.switch(screen, "cX-400", "cY-25", center_X, center_Y, 50, True, "Show Solution", ["right", 30], Elements.colors, 500, True)
+        self.MAswitch = Elements.Switch(screen, "cX-400", "cY-175", center_X, center_Y, 50, False, "Multiple Attempts", ["right", 30], Elements.colors, 500)
+        self.TimerSwitch = Elements.Switch(screen, "cX-400", "cY-100", center_X, center_Y, 50, False, "Timer", ["right", 30], Elements.colors, 500)
+        self.ShowSolutionSwitch = Elements.Switch(screen, "cX-400", "cY-25", center_X, center_Y, 50, True, "Show Solution", ["right", 30], Elements.colors, 500)
 
         self.Elements.append(self.exitButton)
         self.Elements.append(self.returnButton)
@@ -174,7 +174,7 @@ class popUpStats:
         self.popUpRect = popUpRect(screen, center_X, center_Y, self.colors, 1200, 675)
         self.Elements.append(self.popUpRect)
 
-        self.screenShader = Elements.screenShader(screen, center_X, center_Y, 3799, self.popUpRect.getRect())
+        self.screenShader = Elements.ScreenShader(screen, center_X, center_Y, 3799, self.popUpRect.getRect())
         self.Elements.append(self.screenShader)
         self.Interactive.append(self.screenShader)
         
@@ -216,8 +216,8 @@ class popUpStats:
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
-        self.exitButton = Elements.Button(screen, 500, 287.5, 100, 50, buttonColor, 6, 10, "text", "Exit", 30, center_X, center_Y, 4201, True)
-        self.returnButton = Elements.Button(screen, -500, 287.5, 100, 50, buttonColor, 6, 10, "text", "Done", 30, center_X, center_Y, 3799, True)
+        self.exitButton = Elements.Button(screen, 500, 287.5, 100, 50, center_X, center_Y, buttonColor, 6, 10, "text", "Exit", 30, 4201)
+        self.returnButton = Elements.Button(screen, -500, 287.5, 100, center_X, center_Y, 50, buttonColor, 6, 10, "text", "Done", 30, 3799)
 
         self.horLine1 = Elements.Line(screen, center_X, center_Y, "cX-550" + "+" + str(spacerX), "cY-200", "cX+550", "cY-200", 5, self.colors["darkBlue"])
         self.horLine2 = Elements.Line(screen, center_X, center_Y, "cX-550", "cY-200" + "+" + str(spacerY), "cX+550", "cY-200" + "+" + str(spacerY), 5, self.colors["darkBlue"])

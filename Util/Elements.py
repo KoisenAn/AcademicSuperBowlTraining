@@ -88,7 +88,7 @@ class TextDrawer:
 class Button:
 
     #Fix: Streamline inputs for button function
-    def __init__(self, screen, X, Y, sizeX, sizeY, color, thickness, curveRadius, labelType, string, labelSize, center_X, center_Y, event, isWorking):
+    def __init__(self, screen, X, Y, sizeX, sizeY, center_X, center_Y, color, thickness, curveRadius, labelType, string, labelSize, event, isWorking=True):
 
         #Initial Variables
         self.runTick = 0
@@ -109,6 +109,7 @@ class Button:
         self.X = X
         self.Y = Y
 
+        # Note that these center variables are of the screen
         self.center_X = center_X
         self.center_Y = center_Y
 
@@ -309,7 +310,7 @@ class Label:
             self.Y = Y
 
 #Note that this is center-based 
-class inputTextBox:
+class InputTextBox:
 
     def __init__(self, screen, center_X, center_Y, X, Y, sizeX, sizeY, textInside):
 
@@ -406,7 +407,7 @@ class inputTextBox:
         self.isCorrect = isCorrect
         pass
 
-class divider:
+class Divider:
 
     def __init__(self, screen, type, center_X, center_Y, cord, thickness, color):
 
@@ -435,7 +436,7 @@ class divider:
         self.center_Y = Y
 
 #origin based
-class problemNumberBox:
+class ProblemNumberBox:
 
     def __init__(self, screen, X, Y, sizeX, sizeY, problemNumber, color):
         
@@ -467,7 +468,7 @@ class problemNumberBox:
     def recenter(self, center_X, center_Y):
         pass
 
-class problemController:
+class ProblemController:
 
     def __init__(self, screen, center_X, center_Y, color):
 
@@ -552,7 +553,7 @@ class problemController:
 
                 lengthTextbox = 2 * self.center_X - 250 - lengthFirstText - 30 #Accounting for difference
 
-                self.textBox1 = Elements.inputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
+                self.textBox1 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
                 self.inputElements.append(self.textBox1)
 
                 self.textBoxLocations.append(currEnd)
@@ -575,7 +576,7 @@ class problemController:
                 currEnd += lengthFirstText
                 currEnd += 20
 
-                self.textBox1 = Elements.inputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
+                self.textBox1 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
                 self.inputElements.append(self.textBox1)
 
                 self.textBoxLocations.append(currEnd)
@@ -588,7 +589,7 @@ class problemController:
                 currEnd += lengthSecondText
                 currEnd += 20
 
-                self.textBox2 = Elements.inputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
+                self.textBox2 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
                 self.inputElements.append(self.textBox2)
 
                 self.textBoxLocations.append(currEnd)
@@ -613,7 +614,7 @@ class problemController:
                 currEnd += lengthFirstText
                 currEnd += 20
 
-                self.textBox1 = Elements.inputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
+                self.textBox1 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
                 self.inputElements.append(self.textBox1)
 
                 self.textBoxLocations.append(currEnd)
@@ -626,7 +627,7 @@ class problemController:
                 currEnd += lengthSecondText
                 currEnd += 20
 
-                self.textBox2 = Elements.inputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
+                self.textBox2 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
                 self.inputElements.append(self.textBox2)
 
                 self.textBoxLocations.append(currEnd)
@@ -639,10 +640,13 @@ class problemController:
                 currEnd += lengthThirdText
                 currEnd += 20
 
-                self.textBox3 = Elements.inputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
+                self.textBox3 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
                 self.inputElements.append(self.textBox3)
 
                 self.textBoxLocations.append(currEnd)
+        elif (type[0] == "mcq"):
+            pass
+        
 
     def checkCorrect(self):
 
@@ -692,7 +696,7 @@ class problemController:
         for element in self.inputElements:
             element.recenter(center_X, center_Y)
 
-class screenShader:
+class ScreenShader:
 
     def __init__(self, screen, center_X, center_Y, event, popUpRect):
 
@@ -725,7 +729,7 @@ class screenShader:
         else:
             return False
         
-class switch:
+class Switch:
 
     def __init__(self, screen, X, Y, center_X, center_Y, size, state, text, locationOfText, colors, event, working):
         
