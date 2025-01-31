@@ -57,17 +57,17 @@ class popUpInPracticeMenu:
         self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
         self.Elements.append(self.popUpRect)
 
-        self.textDrawer.add("Menu", "cX", "cy-155", 50, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("Menu", "cX", "cy-155", 50, self.colors["darkBlue"],"calibri")
         
-        self.textDrawer.add("Correctly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Correctly Answered:", 30, "ariel")/2-170), "cy-90", 30, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Incorrectly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Incorrectly Answered:", 30, "ariel")/2-170), "cy-40", 30, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Timed Correctly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Correctly Answered:", 30, "ariel")/2-170), "cy+10", 30, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Timed Incorrectly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Incorrectly Answered:", 30, "ariel")/2-170), "cy+60", 30, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("Correctly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Correctly Answered:", 30, "calibri")/2-170), "cy-90", 30, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Incorrectly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Incorrectly Answered:", 30, "calibri")/2-170), "cy-40", 30, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Timed Correctly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Correctly Answered:", 30, "calibri")/2-170), "cy+10", 30, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Timed Incorrectly Answered:", "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Incorrectly Answered:", 30, "calibri")/2-170), "cy+60", 30, self.colors["darkBlue"],"calibri")
         
-        self.textDrawer.add(str(practiceInfo[0]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Correctly Answered:", 30, "ariel")-140), "cy-90", 30, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add(str(practiceInfo[1]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Incorrectly Answered:", 30, "ariel")-140), "cy-40", 30, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add(str(practiceInfo[2]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Correctly Answered:", 30, "ariel")-140), "cy+10", 30, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add(str(practiceInfo[3]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Incorrectly Answered:", 30, "ariel")-140), "cy+60", 30, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add(str(practiceInfo[0]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Correctly Answered:", 30, "calibri")-140), "cy-90", 30, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add(str(practiceInfo[1]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Incorrectly Answered:", 30, "calibri")-140), "cy-40", 30, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add(str(practiceInfo[2]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Correctly Answered:", 30, "calibri")-140), "cy+10", 30, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add(str(practiceInfo[3]), "cX" + "+" + str(self.textDrawer.findLengthOfTextRect("Timed Incorrectly Answered:", 30, "calibri")-140), "cy+60", 30, self.colors["darkBlue"],"calibri")
 
         
         self.Elements.append(self.textDrawer)
@@ -120,7 +120,7 @@ class popUpSettings:
         self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
         self.Elements.append(self.popUpRect)
         
-        self.textDrawer.add("Settings", "cX", "cy-245", 70, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("Settings", "cX", "cy-245", 70, self.colors["darkBlue"],"calibri")
         self.Elements.append(self.textDrawer)
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
@@ -187,30 +187,30 @@ class popUpStats:
         sizeAcross = 25
         sizeDown = 25
         
-        self.textDrawer.add("User Statistics", "cX", "cy-282.5", 70, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Correctly", "cX-481.25", "cy-70", sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Answered", "cX-481.25", "cy-90", sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Incorrectly","cX-481.25", "cy-70" + "+" + str(spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Answered","cX-481.25", "cy-90" + "+" + str(spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Correctly", "cX-481.25", "cy-60" + "+" + str(2*spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Answered", "cX-481.25", "cy-80" + "+" + str(2*spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Timed", "cX-481.25", "cy-100" + "+" + str(2*spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Answered", "cX-481.25", "cy-60" + "+" + str(3*spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Incorrectly", "cX-481.25", "cy-80" + "+" + str(3*spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Timed", "cX-481.25", "cy-100" + "+" + str(3*spacerY), sizeDown, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Algebra", "cX-343.75", "cy-160", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Geometry", "cX-343.75"  + "+" + str(spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Statistics", "cX-343.75" + "+" + str(2*spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Logarithms", "cX-343.75" + "+" + str(3*spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Calculus", "cX-343.75" + "+" + str(4*spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Modulo", "cX-343.75" + "+" + str(5*spacerX), "cy-150", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Arithmetic", "cX-343.75" + "+" + str(5*spacerX), "cy-170", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Doomsday", "cX-343.75" + "+" + str(6*spacerX), "cy-170", sizeAcross, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Rule", "cX-343.75" + "+" + str(6*spacerX), "cy-150", sizeAcross, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("User Statistics", "cX", "cy-282.5", 70, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Correctly", "cX-481.25", "cy-70", sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Answered", "cX-481.25", "cy-90", sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Incorrectly","cX-481.25", "cy-70" + "+" + str(spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Answered","cX-481.25", "cy-90" + "+" + str(spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Correctly", "cX-481.25", "cy-60" + "+" + str(2*spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Answered", "cX-481.25", "cy-80" + "+" + str(2*spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Timed", "cX-481.25", "cy-100" + "+" + str(2*spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Answered", "cX-481.25", "cy-60" + "+" + str(3*spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Incorrectly", "cX-481.25", "cy-80" + "+" + str(3*spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Timed", "cX-481.25", "cy-100" + "+" + str(3*spacerY), sizeDown, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Algebra", "cX-343.75", "cy-160", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Geometry", "cX-343.75"  + "+" + str(spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Statistics", "cX-343.75" + "+" + str(2*spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Logarithms", "cX-343.75" + "+" + str(3*spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Calculus", "cX-343.75" + "+" + str(4*spacerX), "cy-160", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Modulo", "cX-343.75" + "+" + str(5*spacerX), "cy-150", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Arithmetic", "cX-343.75" + "+" + str(5*spacerX), "cy-170", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Doomsday", "cX-343.75" + "+" + str(6*spacerX), "cy-170", sizeAcross, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Rule", "cX-343.75" + "+" + str(6*spacerX), "cy-150", sizeAcross, self.colors["darkBlue"],"calibri")
 
         for i in range(7):
             for j in range(4):
-                self.textDrawer.add(str(self.problemDoneList[i][j]), "cX-343.75" + "+" + str(i*spacerX), "cy-80" + "+" + str(j*spacerY), 40, self.colors["darkBlue"],"ariel")
+                self.textDrawer.add(str(self.problemDoneList[i][j]), "cX-343.75" + "+" + str(i*spacerX), "cy-80" + "+" + str(j*spacerY), 40, self.colors["darkBlue"],"calibri")
 
         self.Elements.append(self.textDrawer)
 

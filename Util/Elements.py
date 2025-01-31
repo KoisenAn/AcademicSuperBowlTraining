@@ -125,10 +125,10 @@ class Button:
         self.ButtonRectInside = pygame.Rect(center_X+xOp-sizeX/2, center_Y+yOp-sizeY/2, sizeX, sizeY)
 
         self.labels = []
-        self.label = Elements.Label(screen, labelSize, labelType, center_X+xOp, center_Y+yOp, string, color[2], 'ariel')
+        self.label = Elements.Label(screen, labelSize, labelType, center_X+xOp, center_Y+yOp, string, color[2], 'calibri')
         self.labels.append(self.label)
         if (not isWorking):
-            self.crossLine = Elements.Label(screen, thickness, "line", center_X+xOp, center_Y+yOp, (sizeX, sizeY), color[0], 'ariel')
+            self.crossLine = Elements.Label(screen, thickness, "line", center_X+xOp, center_Y+yOp, (sizeX, sizeY), color[0], 'calibri')
             self.labels.append(self.crossLine)
 
     #Draws everything
@@ -274,7 +274,7 @@ class Label:
     #Just changes the size for label, so the shrinking button animation works
     def changeSize(self, scale):
         if (self.type == "text"):
-            self.font = pygame.font.SysFont('ariel', int(self.labelSize * scale))
+            self.font = pygame.font.SysFont('calibri', int(self.labelSize * scale))
             self.text = self.font.render(self.string, True, self.color)
             self.textRect = self.text.get_rect()
             self.textRect.center = (self.X, self.Y)
@@ -454,7 +454,7 @@ class ProblemNumberBox:
         self.boxOutlineRect = pygame.Rect(X, Y, sizeX, sizeY)
         self.boxFillRect = pygame.Rect(X, Y, sizeX, sizeY)
 
-        self.label = Elements.Label(screen, 30, "text", X+sizeX/2, Y+sizeY/2, problemNumber, color, 'ariel')
+        self.label = Elements.Label(screen, 30, "text", X+sizeX/2, Y+sizeY/2, problemNumber, color, 'calibri')
 
     def draw(self):
         pygame.draw.rect(self.screen, (255,255,255), self.boxOutlineRect, 0, 0)
@@ -463,7 +463,7 @@ class ProblemNumberBox:
 
     def changeNumber(self, number):
 
-        self.label = Elements.Label(self.screen, 30, "text", self.X+self.sizeX/2, self.Y+self.sizeY/2, str(number), self.color, 'ariel')
+        self.label = Elements.Label(self.screen, 30, "text", self.X+self.sizeX/2, self.Y+self.sizeY/2, str(number), self.color, 'calibri')
 
     def recenter(self, center_X, center_Y):
         pass
@@ -514,12 +514,12 @@ class ProblemController:
                 topHieght = -1*float((len(question)-2))/2 * spacing -25
 
                 for i in range(len(question)-1):
-                    self.TextDrawer.add(question[i], "cX", "cY+" + str(topHieght+spacing*i), 60, self.color, "ariel")
+                    self.TextDrawer.add(question[i], "cX", "cY+" + str(topHieght+spacing*i), 60, self.color, "calibri")
 
-                self.TextDrawer.add(question[len(question)-1], 120+(self.TextDrawer.findLengthOfTextRect(question[len(question)-1], 60, "ariel"))/2, 175, 60, self.color, "ariel")
+                self.TextDrawer.add(question[len(question)-1], 120+(self.TextDrawer.findLengthOfTextRect(question[len(question)-1], 60, "calibri"))/2, 175, 60, self.color, "calibri")
             
             else:
-                self.TextDrawer.add(question[0], "cX", "cY", 60, self.color, "ariel")
+                self.TextDrawer.add(question[0], "cX", "cY", 60, self.color, "calibri")
 
     def loadSolutionDisplay(self, problem):
 
@@ -529,7 +529,7 @@ class ProblemController:
 
         for i in range(len(self.textBoxLocations)):
             string = "Answer: " + str(answers[i])
-            self.TextDrawer.add(string, self.textBoxLocations[i]+(self.TextDrawer.findLengthOfTextRect(string, 25, "ariel"))/2+5, "2*cY-43", 25, self.color, "ariel")
+            self.TextDrawer.add(string, self.textBoxLocations[i]+(self.TextDrawer.findLengthOfTextRect(string, 25, "calibri"))/2+5, "2*cY-43", 25, self.color, "calibri")
 
     def loadProblemInput(self, type):
         
@@ -546,8 +546,8 @@ class ProblemController:
                 text = self.problem.inputTexts[0]
 
                 currEnd  = 50
-                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text, font, "ariel")
-                self.TextDrawer.add(text, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "ariel")
+                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text, font, "calibri")
+                self.TextDrawer.add(text, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "calibri")
                 currEnd += lengthFirstText
                 currEnd += 30 #Spacer between outside text and textbox
 
@@ -563,15 +563,15 @@ class ProblemController:
                 #Finding sizes
                 currEnd = 50
                 text1 = text = self.problem.inputTexts[0]
-                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text1, font, "ariel")
+                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text1, font, "calibri")
 
                 text2 = text = self.problem.inputTexts[1]
-                lengthSecondText = self.TextDrawer.findLengthOfTextRect(text2, font, "ariel")
+                lengthSecondText = self.TextDrawer.findLengthOfTextRect(text2, font, "calibri")
 
                 lengthTextbox = (2 * self.center_X - 250 - lengthFirstText - lengthSecondText - 20*2 - 50)/2
 
                 #Drawing texts and boxes
-                self.TextDrawer.add(text1, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "ariel")
+                self.TextDrawer.add(text1, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "calibri")
 
                 currEnd += lengthFirstText
                 currEnd += 20
@@ -584,7 +584,7 @@ class ProblemController:
                 currEnd += lengthTextbox
                 currEnd += 50
 
-                self.TextDrawer.add(text2, currEnd + lengthSecondText/2, "2*cY-88", font, self.color, "ariel")
+                self.TextDrawer.add(text2, currEnd + lengthSecondText/2, "2*cY-88", font, self.color, "calibri")
 
                 currEnd += lengthSecondText
                 currEnd += 20
@@ -598,18 +598,18 @@ class ProblemController:
                 #Finding sizes
                 currEnd = 50
                 text1 = text = self.problem.inputTexts[0]
-                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text1, font, "ariel")
+                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text1, font, "calibri")
 
                 text2 = text = self.problem.inputTexts[1]
-                lengthSecondText = self.TextDrawer.findLengthOfTextRect(text2, font, "ariel")
+                lengthSecondText = self.TextDrawer.findLengthOfTextRect(text2, font, "calibri")
 
                 text3 = text = self.problem.inputTexts[2]
-                lengthThirdText = self.TextDrawer.findLengthOfTextRect(text3, font, "ariel")
+                lengthThirdText = self.TextDrawer.findLengthOfTextRect(text3, font, "calibri")
 
                 lengthTextbox = (2 * self.center_X - 250 - lengthFirstText - lengthSecondText - lengthThirdText - 20*3 - 50*2)/3
 
                 #Drawing texts and boxes
-                self.TextDrawer.add(text1, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "ariel")
+                self.TextDrawer.add(text1, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "calibri")
 
                 currEnd += lengthFirstText
                 currEnd += 20
@@ -622,7 +622,7 @@ class ProblemController:
                 currEnd += lengthTextbox
                 currEnd += 50
 
-                self.TextDrawer.add(text2, currEnd + lengthSecondText/2, "2*cY-88", font, self.color, "ariel")
+                self.TextDrawer.add(text2, currEnd + lengthSecondText/2, "2*cY-88", font, self.color, "calibri")
 
                 currEnd += lengthSecondText
                 currEnd += 20
@@ -635,7 +635,7 @@ class ProblemController:
                 currEnd += lengthTextbox
                 currEnd += 50
 
-                self.TextDrawer.add(text3, currEnd + lengthThirdText/2, "2*cY-88", font, self.color, "ariel")
+                self.TextDrawer.add(text3, currEnd + lengthThirdText/2, "2*cY-88", font, self.color, "calibri")
 
                 currEnd += lengthThirdText
                 currEnd += 20
@@ -765,9 +765,9 @@ class Switch:
 
         self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
 
-        self.textDrawer.add("OFF", str(self.X) + "-" + str(self.size/2) + "+" + "5", self.Y, self.fontSize, (100,100,100), "ariel")
+        self.textDrawer.add("OFF", str(self.X) + "-" + str(self.size/2) + "+" + "5", self.Y, self.fontSize, (100,100,100), "calibri")
 
-        self.textDrawer.add("ON", str(self.X) + "+" + str(self.size/2-5), self.Y, self.fontSize, (240,240,240), "ariel")
+        self.textDrawer.add("ON", str(self.X) + "+" + str(self.size/2-5), self.Y, self.fontSize, (240,240,240), "calibri")
 
         self.text = text
         self.locationOfText = locationOfText
@@ -775,17 +775,17 @@ class Switch:
         self.labelSize = int(1.5*self.fontSize)
         if (type(locationOfText) == str):
             if (locationOfText == "left"):
-                self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "ariel")/2-30), self.Y, self.labelSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2-30), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
             elif (locationOfText == "right"):
-                self.textDrawer.add(self.text, str(self.X) + "+" + str(self.size+self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "ariel")/2+30), self.Y, self.labelSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add(self.text, str(self.X) + "+" + str(self.size+self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2+30), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
         elif (type(locationOfText) == list):
             if (locationOfText[0] == "left"):
-                self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "ariel")/2-locationOfText[1]), self.Y, self.labelSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2-locationOfText[1]), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
             elif (locationOfText[0] == "right"):
-                self.textDrawer.add(self.text, str(self.X) + "+" + str(self.size+self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "ariel")/2+locationOfText[1]), self.Y, self.labelSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add(self.text, str(self.X) + "+" + str(self.size+self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2+locationOfText[1]), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
 
         else: # Default parameters are to the left and with a 30 pixel spacer
-            self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "ariel")/2-30), self.Y, self.labelSize, self.colors["darkBlue"], "ariel")
+            self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2-30), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
 
 
     def draw(self):

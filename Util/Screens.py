@@ -88,8 +88,8 @@ class homescreen:
         self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
 
         titleTextSize = 70
-        self.textDrawer.add("2023-2024 BHSS Academic Super Bowl", "cX", "cY-260", titleTextSize, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Math Training Tool", "cX", "cY-200", titleTextSize, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("2023-2024 BHSS Academic Super Bowl", "cX", "cY-260", titleTextSize, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Math Training Tool", "cX", "cY-200", titleTextSize, self.colors["darkBlue"],"calibri")
 
         ButtonTextSize = 50
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
@@ -144,20 +144,20 @@ class creditsScreen:
         self.Interactive.append(homeButton)
 
         titleTextSize = 70
-        self.textDrawer.add("Created by:", 50+(self.textDrawer.findLengthOfTextRect("Created by:", titleTextSize, "ariel"))/2, 50, titleTextSize, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("Created by:", 50+(self.textDrawer.findLengthOfTextRect("Created by:", titleTextSize, "calibri"))/2, 50, titleTextSize, self.colors["darkBlue"],"calibri")
 
         normalTextSize = 30
-        self.textDrawer.add("- An Kieu", 50+(self.textDrawer.findLengthOfTextRect("- An Kieu", normalTextSize, "ariel"))/2, 100, normalTextSize, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("- An Kieu", 50+(self.textDrawer.findLengthOfTextRect("- An Kieu", normalTextSize, "calibri"))/2, 100, normalTextSize, self.colors["darkBlue"],"calibri")
 
-        self.textDrawer.add("BHSS 2023-2024 Math Team: ", 50+(self.textDrawer.findLengthOfTextRect("BHSS 2023-2024 Math Team:", titleTextSize, "ariel"))/2, 200, titleTextSize, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("- An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond,", 50+(self.textDrawer.findLengthOfTextRect("- An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond,", normalTextSize, "ariel"))/2, 270, normalTextSize, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou", 50+(self.textDrawer.findLengthOfTextRect("Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou", normalTextSize, "ariel"))/2, 320, normalTextSize, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("BHSS 2023-2024 Math Team: ", 50+(self.textDrawer.findLengthOfTextRect("BHSS 2023-2024 Math Team:", titleTextSize, "calibri"))/2, 200, titleTextSize, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("- An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond,", 50+(self.textDrawer.findLengthOfTextRect("- An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond,", normalTextSize, "calibri"))/2, 270, normalTextSize, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou", 50+(self.textDrawer.findLengthOfTextRect("Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou", normalTextSize, "calibri"))/2, 320, normalTextSize, self.colors["darkBlue"],"calibri")
 
-        self.textDrawer.add("Notes Link:", 50+(self.textDrawer.findLengthOfTextRect("Notes Link:", titleTextSize, "ariel"))/2, 430, titleTextSize, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("- https://docs.google.com/document/d/1ockbV0BvivHAAlEOwTlSEGRIsPMJ869TA_Aa0GmViF4/edit?usp=sharing", 50+(self.textDrawer.findLengthOfTextRect("- https://docs.google.com/document/d/1ockbV0BvivHAAlEOwTlSEGRIsPMJ869TA_Aa0GmViF4/edit?usp=sharing", normalTextSize, "ariel"))/2, 490, normalTextSize, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("Notes Link:", 50+(self.textDrawer.findLengthOfTextRect("Notes Link:", titleTextSize, "calibri"))/2, 430, titleTextSize, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("- https://docs.google.com/document/d/1ockbV0BvivHAAlEOwTlSEGRIsPMJ869TA_Aa0GmViF4/edit?usp=sharing", 50+(self.textDrawer.findLengthOfTextRect("- https://docs.google.com/document/d/1ockbV0BvivHAAlEOwTlSEGRIsPMJ869TA_Aa0GmViF4/edit?usp=sharing", normalTextSize, "calibri"))/2, 490, normalTextSize, self.colors["darkBlue"],"calibri")
 
-        self.textDrawer.add("Assigned Subjects:", 50+(self.textDrawer.findLengthOfTextRect("Assigned Subjects:", titleTextSize, "ariel"))/2, 590, titleTextSize, self.colors["darkBlue"],"ariel")
-        self.textDrawer.add("- https://docs.google.com/spreadsheets/d/18DLC50YC8_uU0_lGhbcC9ZMmexmqa_q2V47GzfwVNSE/edit#gid=0", 50+(self.textDrawer.findLengthOfTextRect("- https://docs.google.com/spreadsheets/d/18DLC50YC8_uU0_lGhbcC9ZMmexmqa_q2V47GzfwVNSE/edit#gid=0", normalTextSize, "ariel"))/2, 650, normalTextSize, self.colors["darkBlue"],"ariel")
+        self.textDrawer.add("Assigned Subjects:", 50+(self.textDrawer.findLengthOfTextRect("Assigned Subjects:", titleTextSize, "calibri"))/2, 590, titleTextSize, self.colors["darkBlue"],"calibri")
+        self.textDrawer.add("- https://docs.google.com/spreadsheets/d/18DLC50YC8_uU0_lGhbcC9ZMmexmqa_q2V47GzfwVNSE/edit#gid=0", 50+(self.textDrawer.findLengthOfTextRect("- https://docs.google.com/spreadsheets/d/18DLC50YC8_uU0_lGhbcC9ZMmexmqa_q2V47GzfwVNSE/edit#gid=0", normalTextSize, "calibri"))/2, 650, normalTextSize, self.colors["darkBlue"],"calibri")
 
 
         self.draw()
@@ -193,7 +193,7 @@ class practiceSelectScreen:
         self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
 
         titleTextSize = 70
-        self.textDrawer.add("Select Practice", "cX", 100, titleTextSize, self.colors["darkBlue"], "ariel")
+        self.textDrawer.add("Select Practice", "cX", 100, titleTextSize, self.colors["darkBlue"], "calibri")
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
         
@@ -315,19 +315,19 @@ class problemScreen:
         '''
         match (Screens.eventDict[self.problemType]):
             case "algebra":
-                self.textDrawer.add("Algebra Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add("Algebra Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
             case "mod":
-                self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
             case "doom":
-                self.textDrawer.add("Doomsday Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add("Doomsday Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
             case "statistics":
-                self.textDrawer.add("Statistics Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add("Statistics Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
         '''
 
         # 2024-2025 Year
         match (Screens.eventDict[self.problemType]):
             case "history":
-                self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "ariel")
+                self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
 
         # Stylistic Stuff
         self.topDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, 95, 7, self.colors["darkBlue"])
