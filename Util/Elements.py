@@ -8,11 +8,11 @@ import os
 # The following classes are used to draw/create specifics things to display or for users to interact with
 #
 
-#Draws text on a given screen
-#Used for miscellaneous text
-#X and Y are operations relative to the center
+# Draws text on a given screen
+# Used for miscellaneous text
+# X and Y are operations relative to the center
 
-colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
+colors = {"white":(255,255,255), "black":(0,0,0), "darkBlue":(53,63,112), "screenGrey":(230,230,230), "highlightMCQGrey": (210,210,210), "highlightBlue": (55, 190, 245, 0.5)}
 
 class TextDrawer:
 
@@ -199,7 +199,71 @@ class Button:
         if (change == "image"):
             self.label.changeImage(otherInformation)
 
-#Creates a label object which can be stuck on things like buttons
+class MCQButton():
+
+    def __init__(self, screen, X, Y, center_X, center_Y, sizeX, sizeY, labelType, string, labelSize):
+        
+        self.X = X
+        self.Y = Y
+
+        self.color = [colors["highlightMCQGrey"], colors["screenGrey"], colors["highlightBlue"]]
+        self.colorState = 0
+
+        self.screen = screen
+        self.centerX = center_X
+        self.centerY = center_Y
+
+        self.isMouseOver = False
+        self.selected = False
+
+        xOp = Expressions.locationExpressionValue(X, self.centerX, self.centerY)
+        yOp = Expressions.locationExpressionValue(Y, self.centerX, self.centerY)
+        
+        self.ButtonRectInside = pygame.Rect(center_X+xOp-sizeX/2, center_Y+yOp-sizeY/2, sizeX, sizeY)
+        
+        self.label = Elements.Label(screen, labelSize, labelType, center_X+xOp, center_Y+yOp, string, colors["black"], 'calibri')
+        self.label.recenter(center_X + xOp -sizeX/2 + self.label.getTextRect().width/2 + 20, center_Y+yOp)
+
+    def draw(self):
+        if (self.selected):
+            self.colorState = 2
+        pygame.draw.rect(self.screen, self.color[self.colorState], self.ButtonRectInside, 0, 0)
+
+        self.label.draw()
+
+    def clicked(self, mousePos):
+        isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
+        if (isMouseOver):
+
+            if (self.selected):
+                CUSTOMEVENT = pygame.event.Event(6901)
+                pygame.event.post(CUSTOMEVENT)
+
+            self.selected = not self.selected
+        else:
+            self.selected = False
+
+    def mouseOver(self, mousePos):
+        isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
+        if (not self.selected):
+            if (isMouseOver):
+                self.colorState = 0
+            else:
+                self.colorState = 1
+
+    def recenter(self, center_X, center_Y):
+        self.center_X = center_X
+        self.center_Y = center_Y
+        xOp = Expressions.locationExpressionValue(self.X, self.center_X, self.center_Y)
+        yOp = Expressions.locationExpressionValue(self.Y, self.center_X, self.center_Y)    
+
+    def isSelected(self):
+        return self.selected
+
+    def deselect(self):
+        self.selected = False
+
+# Creates a label object which can be stuck on things like buttons
 # not center or origin based, you put in the cords of the center of where you want to put the label
 class Label:
 
@@ -295,6 +359,9 @@ class Label:
     def changeImage(self, imagePath):
         self.string = imagePath
 
+    def getTextRect(self):
+        return self.textRect
+
     def changeColor(self, color):
         self.color = color
 
@@ -309,7 +376,7 @@ class Label:
             self.X = X
             self.Y = Y
 
-#Note that this is center-based 
+# Note that this is center-based 
 class InputTextBox:
 
     def __init__(self, screen, center_X, center_Y, X, Y, sizeX, sizeY, textInside):
@@ -435,7 +502,7 @@ class Divider:
         self.center_X = X
         self.center_Y = Y
 
-#origin based
+# Origin based
 class ProblemNumberBox:
 
     def __init__(self, screen, X, Y, sizeX, sizeY, problemNumber, color):

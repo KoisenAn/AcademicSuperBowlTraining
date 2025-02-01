@@ -133,9 +133,11 @@ while running:
                     else:
                         problemsDoneList[answerRecorder[1]-4202][3] += 1
 
+                currScreen.swapButton()
+
             elif (Screens.eventDict[event.type] == "newProblem"):
                 currScreen.loadProblem()
-            currScreen.swapButton()
+                currScreen.swapButton()  
 
 
     #print("-----------")   

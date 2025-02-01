@@ -32,8 +32,7 @@ sys.path.insert(0, folder_dir)
 
 import HistoryProblems
 
-eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "history", 6900: "answerInputted", 6901: "newProblem"}
-
+eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "history", 6900: "answerInputted", 6901: "answerSelected", 6902: "newProblem"}
 
 class testScreen:
 
@@ -54,23 +53,39 @@ class testScreen:
         self.Interactive.append(self.Switch)
         '''
 
-        self.imageTest = Elements.Image(screen, center_X, center_Y, 300, 300, "IntegralSymbol.png", 1, 2, Elements.colors)
-        self.Elements.append(self.imageTest)
+        self.mcqbutton = Elements.MCQButton(screen, 0, 0, center_X, center_Y, 800, 80, "text", "1. test", 30)
+        self.Elements.append(self.mcqbutton)
+        self.Interactive.append(self.mcqbutton)
+
+        self.mcqbutton = Elements.MCQButton(screen, 0, 80, center_X, center_Y, 800, 80, "text", "2. test", 30)
+        self.Elements.append(self.mcqbutton)
+        self.Interactive.append(self.mcqbutton)
+
+        #self.imageTest = Elements.Image(screen, center_X, center_Y, 300, 300, "IntegralSymbol.png", 1, 2, Elements.colors)
+        #self.Elements.append(self.imageTest)
 
     def run(self):
         self.draw()
+        self.checkInteractive()
 
-    def draw(self):
-        
+    def draw(self): 
         for element in self.Elements:
             element.draw()
         
+    def checkInteractive(self):
+        for element in self.Interactive:
+            element.mouseOver(pygame.mouse.get_pos())
 
     def recenter(self, center_X, center_Y):
         self.center_X = center_X
         self.center_Y = center_Y
-        for Elements in self.Elements:
-            Elements.recenter(center_X, center_Y)
+        for element in self.Elements:
+            element.recenter(center_X, center_Y)
+
+    def resetMCQs(self):
+        for element in self.Elements:
+            if (type(element) == Elements.MCQButton):
+                element.deselect()
         
 class homescreen:
 
