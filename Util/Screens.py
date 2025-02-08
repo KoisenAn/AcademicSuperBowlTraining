@@ -2,6 +2,7 @@ import pygame
 import Elements
 import Expressions
 import Screens
+import Controllers
 
 import random
 
@@ -53,11 +54,11 @@ class testScreen:
         self.Interactive.append(self.Switch)
         '''
 
-        self.mcqbutton = Elements.MCQButton(screen, 0, 0, center_X, center_Y, 800, 80, "text", "1. test", 30)
+        self.mcqbutton = Elements.MCQButton(screen, 0, 0, center_X, center_Y, 800, 80, 0, "text", "1. test", 30)
         self.Elements.append(self.mcqbutton)
         self.Interactive.append(self.mcqbutton)
 
-        self.mcqbutton = Elements.MCQButton(screen, 0, 80, center_X, center_Y, 800, 80, "text", "2. test", 30)
+        self.mcqbutton = Elements.MCQButton(screen, 0, 80, center_X, center_Y, 800, 80, 1, "text", "2. test", 30)
         self.Elements.append(self.mcqbutton)
         self.Interactive.append(self.mcqbutton)
 
@@ -342,15 +343,15 @@ class problemScreen:
         # 2024-2025 Year
         match (Screens.eventDict[self.problemType]):
             case "history":
-                self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
+                self.textDrawer.add("History Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
 
         # Stylistic Stuff
-        self.topDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, 95, 7, self.colors["darkBlue"])
-        self.bottomDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, "2*cY-175", 7, self.colors["darkBlue"])
+        #self.topDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, 95, 7, self.colors["darkBlue"])
+        #self.bottomDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, "2*cY-175", 7, self.colors["darkBlue"])
         self.problemNumberBox = Elements.ProblemNumberBox(screen, 25, 140, 60, 60, str(self.problemsDone), self.colors["darkBlue"])
 
         # Creates Problem Controller
-        self.problemController = Elements.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"])
+        self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"])
         self.loadProblem()
         self.Elements.append(self.problemController)
 
@@ -368,18 +369,24 @@ class problemScreen:
         self.Interactive.append(self.checkButton)
 
         self.Elements.append(self.textDrawer)
-        self.Elements.append(self.topDivider)
-        self.Elements.append(self.bottomDivider)
+        #self.Elements.append(self.topDivider)
+        #self.Elements.append(self.bottomDivider)
         self.Elements.append(self.problemNumberBox)
 
         self.draw()
 
     def run(self):
         self.draw()
+        self.checkInteractive()
 
     def draw(self):
         for element in self.Elements:
             element.draw()
+
+    def checkInteractive(self):
+        for element in self.Interactive:
+            if (type(element) == Elements.MCQButton):
+                element.mouseOver(pygame.mouse.get_pos())
 
     def loadProblem(self):
 

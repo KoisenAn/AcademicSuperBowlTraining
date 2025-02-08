@@ -37,11 +37,11 @@ for i in range(7):
 while running:
     #Checks for user interactions*
     for event in pygame.event.get():
-        #print(event)
+        # print(event)
         if event.type == pygame.QUIT:
             running = False
 
-        #Window size is changed
+        # Window size is changed
         if event.type == 32778:
             if (pygame.display.get_window_size()[0] < 1280):
                 center_X = 640
@@ -58,10 +58,10 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             mousePos = pygame.mouse.get_pos()
             if (popUpActive):
-                for interactive in popUp.Interactive:
+                for interactive in popUp.Interactive: #TODO: Combine popUp interactive and screen interactive
                     interactive.clicked(mousePos)
             else:
-                for interactive in currScreen.Interactive:
+                for interactive in currScreen.Interactive: 
                     interactive.clicked(mousePos)
 
         if event.type == pygame.KEYDOWN:
@@ -87,9 +87,9 @@ while running:
             if (event.key == pygame.K_LCTRL or event.key == pygame.K_LCTRL):
                 tabDown = False
 
-        #Custom events
+        # Custom events
             
-        #Pop Ups
+        # Pop Ups
         if event.type >= 3700 and event.type <= 3900:
             popUpActive = True
             if (Screens.eventDict[event.type] == "popUpExit"):
@@ -101,7 +101,7 @@ while running:
             elif (Screens.eventDict[event.type] == "popUpStats"):
                 popUp = PopUp.popUpStats(screen, center_X, center_Y, problemsDoneList)
 
-        #Screens
+        # Screens
         if event.type >= 4100 and event.type <= 4300:
             popUpActive = False
             if Screens.eventDict[event.type] == "home":

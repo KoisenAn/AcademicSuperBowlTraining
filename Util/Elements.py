@@ -201,7 +201,7 @@ class Button:
 
 class MCQButton():
 
-    def __init__(self, screen, X, Y, center_X, center_Y, sizeX, sizeY, labelType, string, labelSize):
+    def __init__(self, screen, X, Y, center_X, center_Y, sizeX, sizeY, number, labelType, string, labelSize):
         
         self.X = X
         self.Y = Y
@@ -215,6 +215,8 @@ class MCQButton():
 
         self.isMouseOver = False
         self.selected = False
+
+        self.number = number
 
         xOp = Expressions.locationExpressionValue(X, self.centerX, self.centerY)
         yOp = Expressions.locationExpressionValue(Y, self.centerX, self.centerY)
@@ -234,7 +236,6 @@ class MCQButton():
     def clicked(self, mousePos):
         isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
         if (isMouseOver):
-
             if (self.selected):
                 CUSTOMEVENT = pygame.event.Event(6901)
                 pygame.event.post(CUSTOMEVENT)
@@ -259,6 +260,9 @@ class MCQButton():
 
     def isSelected(self):
         return self.selected
+
+    def getNumber(self):
+        return self.number
 
     def deselect(self):
         self.selected = False
@@ -598,9 +602,9 @@ class ProblemController:
             string = "Answer: " + str(answers[i])
             self.TextDrawer.add(string, self.textBoxLocations[i]+(self.TextDrawer.findLengthOfTextRect(string, 25, "calibri"))/2+5, "2*cY-43", 25, self.color, "calibri")
 
-    def loadProblemInput(self, type):
+    def loadProblemInput(self, inputType):
         
-        self.inputType = type
+        self.inputType = inputType
 
         del self.inputElements[:]
 
@@ -608,8 +612,10 @@ class ProblemController:
 
         self.textBoxLocations = []
 
-        if (type[0] == "textBox"):
-            if (type[1] == 1):
+        print(inputType)
+
+        if (inputType[0] == "textBox"):
+            if (inputType[1] == 1):
                 text = self.problem.inputTexts[0]
 
                 currEnd  = 50
@@ -625,7 +631,7 @@ class ProblemController:
 
                 self.textBoxLocations.append(currEnd)
 
-            elif (type[1] == 2):
+            elif (inputType[1] == 2):
                 
                 #Finding sizes
                 currEnd = 50
@@ -660,7 +666,7 @@ class ProblemController:
                 self.inputElements.append(self.textBox2)
 
                 self.textBoxLocations.append(currEnd)
-            elif (type[1] == 3):
+            elif (inputType[1] == 3):
 
                 #Finding sizes
                 currEnd = 50
@@ -711,7 +717,12 @@ class ProblemController:
                 self.inputElements.append(self.textBox3)
 
                 self.textBoxLocations.append(currEnd)
-        elif (type[0] == "mcq"):
+        elif (inputType[0] == "mcq"):
+            if (inputType[1] == 2):
+                self.choice1 = Elements.MCQButton(self.screen, 0, 0, self.center_X, self.center_Y, 800, 100, 0, "text", "1. test1", 30)
+                self.inputElements.append(self.choice1) 
+                self.choice2 = Elements.MCQButton(self.screen, 0, 100, self.center_X, self.center_Y, 800, 100, 1, "text", "2. test2", 30)
+                self.inputElements.append(self.choice2)
             pass
         
 
@@ -722,31 +733,43 @@ class ProblemController:
         passToProblemRecorder = None # A tuple to be passed into problem recorder (Is the problem correct, type of problem, timed or not timed)
 
         self.answer = []
-        for textbox in self.inputElements:
-            self.answer.append(textbox.inputtedText)
-        self.answer.reverse()
-        self.correctList = self.problem.checkCorrect(self.answer)
-        if (type(self.correctList) == bool):
-            for i in range(len(self.inputElements)):
-                (self.inputElements[i]).submit(self.correctList)
 
-            if (self.correctList):
-                passToProblemRecorder = (True, self.problemType, 0)
-            else: 
-                passToProblemRecorder = (False, self.problemType, 0)
-        else:
-            correct = True
-            for i in range(len(self.correctList)):
-                (self.inputElements[i]).submit(self.correctList[i])
-                if (correct and not self.correctList[i]):
-                    correct = False
+        if (self.inputType[0] == "textbox"):
+            for textbox in self.inputElements:
+                self.answer.append(textbox.inputtedText)
+            self.answer.reverse()
+            self.correctList = self.problem.checkCorrect(self.answer)
+            if (type(self.correctList) == bool):
+                for i in range(len(self.inputElements)):
+                    (self.inputElements[i]).submit(self.correctList)
+
+                if (self.correctList):
+                    passToProblemRecorder = (True, self.problemType, 0)
+                else: 
                     passToProblemRecorder = (False, self.problemType, 0)
+            else:
+                correct = True
+                for i in range(len(self.correctList)):
+                    (self.inputElements[i]).submit(self.correctList[i])
+                    if (correct and not self.correctList[i]):
+                        correct = False
+                        passToProblemRecorder = (False, self.problemType, 0)
 
-            if (correct):
-                passToProblemRecorder = (True, self.problemType, 0)
+                if (correct):
+                    passToProblemRecorder = (True, self.problemType, 0)
 
-        self.loadSolutionDisplay(self.problem)
+        elif (self.inputType[0] == "mcq"):
+            for mcq in self.inputElements:
+                print(mcq.isSelected())
+                if (mcq.isSelected()):
+                    self.answer.append(mcq.getNumber())
+
+        print(self.answer)
+        passToProblemRecorder = (True, self.problemType, 0)
+
+        #self.loadSolutionDisplay(self.problem)        
         return passToProblemRecorder
+
     
     def draw(self):
         if (self.questionDisplayType == "lines"):

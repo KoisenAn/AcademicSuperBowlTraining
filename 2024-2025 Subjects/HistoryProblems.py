@@ -89,13 +89,13 @@ class HistoryProblem1:
         self.generateQuestionAndAnswer()
     
     def generateProblem(self):
-        choice1 = self.answerReceiver = ("textBox",1)
+        self.answerReceiver = ("mcq",2)
         pass
 
     def generateQuestionAndAnswer(self):
     
-        self.answerReceiver = ("textBox",1)
-        self.answers = ["8in"]
+        self.answerReceiver = ("mcq",2)
+        self.answers = ["super amazing"]
         self.question = ["How amazing is An"]
 
         pass
