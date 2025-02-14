@@ -1,10 +1,17 @@
-
 class Question:
 
     def __init__(self, text):
         self.text = text
 
-class ProblemTypes:
+class Answer:
+    pass
+
+class ProblemDisplayType:
+
+    class Lines:
+        pass
+
+class ProblemInputType:
 
     class TextBox:
 

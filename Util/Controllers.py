@@ -3,7 +3,7 @@ import Elements
 
 class ProblemController:
 
-    def __init__(self, screen, center_X, center_Y, color):
+    def __init__(self, screen, center_X, center_Y, color, elementList, interactiveList):
 
         self.screen = screen
         self.color = color
@@ -16,9 +16,14 @@ class ProblemController:
 
         self.textBoxLocations = []
 
+        self.elementList = elementList
+        self.interactiveList = interactiveList
+
         self.center_X = center_X
         self.center_Y = center_Y
+
         self.TextDrawer = Elements.TextDrawer(screen, center_X, center_Y)
+        self.MCQController = MCQController(screen, center_X, center_Y, self.elementList, self.interactiveList)
         pass
 
     def reset(self, problemType):
@@ -181,10 +186,7 @@ class ProblemController:
                 self.textBoxLocations.append(currEnd)
         elif (inputType[0] == "mcq"):
             if (inputType[1] == 2):
-                self.choice1 = Elements.MCQButton(self.screen, 0, 0, self.center_X, self.center_Y, 800, 100, 0, "text", "1. test1", 30)
-                self.inputElements.append(self.choice1) 
-                self.choice2 = Elements.MCQButton(self.screen, 0, 100, self.center_X, self.center_Y, 800, 100, 1, "text", "2. test2", 30)
-                self.inputElements.append(self.choice2)
+                self.inputElements = self.MCQController.createChoices(2, 100, True)
             pass
         
 
@@ -247,3 +249,30 @@ class ProblemController:
 
         for element in self.inputElements:
             element.recenter(center_X, center_Y)
+
+class MCQController:
+
+    def __init__(self, screen, centerX, centerY, elementsList, interactiveList):
+
+        self.screen = screen
+        self.centerX = centerX
+        self.centerY = centerY
+
+        self.elementsList = elementsList
+        self.interactiveList = interactiveList
+
+        self.MCQElementList = []
+
+    def createChoices(self, numMCQs, y, choiceType,):
+
+        self.MCQElementList = []
+
+        for i in range(numMCQs):
+            MCQButton = Elements.MCQButton(self.screen, 100, y+100*i, self.centerX, self.centerY, 800, 80, i, "text", "test " + str(i), 30)
+            self.MCQElementList.append(MCQButton)
+
+        return self.MCQElementList
+
+#TODO: Hella big project redoing all the positioning. Include anchors, condensed formatting, and whatnot
+class PositionController:
+    pass

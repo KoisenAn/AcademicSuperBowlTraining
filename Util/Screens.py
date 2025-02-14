@@ -346,12 +346,10 @@ class problemScreen:
                 self.textDrawer.add("History Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
 
         # Stylistic Stuff
-        #self.topDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, 95, 7, self.colors["darkBlue"])
-        #self.bottomDivider = Elements.Divider(screen, "horizontal", center_X, center_Y, "2*cY-175", 7, self.colors["darkBlue"])
         self.problemNumberBox = Elements.ProblemNumberBox(screen, 25, 140, 60, 60, str(self.problemsDone), self.colors["darkBlue"])
 
         # Creates Problem Controller
-        self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"])
+        self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.Elements, self.Interactive)
         self.loadProblem()
         self.Elements.append(self.problemController)
 
@@ -369,8 +367,6 @@ class problemScreen:
         self.Interactive.append(self.checkButton)
 
         self.Elements.append(self.textDrawer)
-        #self.Elements.append(self.topDivider)
-        #self.Elements.append(self.bottomDivider)
         self.Elements.append(self.problemNumberBox)
 
         self.draw()
@@ -424,9 +420,14 @@ class problemScreen:
         self.problemController.loadProblemDisplay(self.problem)
         self.problemController.loadProblemInput(self.problem.answerReceiver)
 
-        for textbox in self.problemController.inputElements:
-            self.Interactive.append(textbox)
-            self.InteractiveText.append(textbox)
+        print("run2")
+
+        print(self.Interactive)
+        print(self.Elements)
+
+        for inputElement in self.problemController.inputElements:
+            self.Interactive.append(inputElement)
+            self.InteractiveText.append(inputElement)
 
     def swapButton(self):
         if (self.checkButton in self.Elements):

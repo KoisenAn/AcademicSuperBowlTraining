@@ -11,7 +11,6 @@ current_dir = os.path.dirname(__file__)
 folder_dir = os.path.join(current_dir, '2023-2024 Subjects')
 sys.path.insert(0, folder_dir)
 
-
 import Elements
 import Screens
 import PopUp

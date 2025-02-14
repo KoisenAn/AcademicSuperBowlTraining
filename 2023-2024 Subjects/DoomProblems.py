@@ -296,7 +296,6 @@ class DoomProblem2:
     def display(self):
         pass
 
-
 #Find the anchor day for a given year in the Julian calcender
 class DoomProblem3: 
 
@@ -504,7 +503,7 @@ class DoomProblem4:
     def display(self):
         pass
 
-problemList = [DoomProblem1(),DoomProblem2(),DoomProblem3(),DoomProblem4()]
+problemList = [DoomProblem1(), DoomProblem2(), DoomProblem3(), DoomProblem4()]
 
 #Jtest = DoomProblem4()
 #Gtest = DoomProblem2()
