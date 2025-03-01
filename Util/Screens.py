@@ -374,6 +374,7 @@ class problemScreen:
     def run(self):
         self.draw()
         self.checkInteractive()
+        self.MCQController.update()
 
     def draw(self):
         for element in self.Elements:
@@ -419,11 +420,6 @@ class problemScreen:
         self.problem.create()
         self.problemController.loadProblemDisplay(self.problem)
         self.problemController.loadProblemInput(self.problem.answerReceiver)
-
-        print("run2")
-
-        print(self.Interactive)
-        print(self.Elements)
 
         for inputElement in self.problemController.inputElements:
             self.Interactive.append(inputElement)

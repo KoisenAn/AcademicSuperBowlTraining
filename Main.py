@@ -43,16 +43,17 @@ while running:
         # Window size is changed
         if event.type == 32778:
             if (pygame.display.get_window_size()[0] < 1280):
-                center_X = 640
+                width = 1280
             else:
-                center_X = pygame.display.get_window_size()[0]/2
+                width = pygame.display.get_window_size()[0]
             if (pygame.display.get_window_size()[1] < 720):
-                center_Y = 360
+                height = 720
             else:
-                center_Y = pygame.display.get_window_size()[1]/2
-            currScreen.recenter(center_X,center_Y)
+                height = pygame.display.get_window_size()[1]
+            currScreen.recenter(width//2, height//2)
+            screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
             if (popUp != None):
-                popUp.recenter(center_X, center_Y)
+                popUp.recenter(width//2, height//2)
 
         if event.type == pygame.MOUSEBUTTONUP:
             mousePos = pygame.mouse.get_pos()
@@ -61,7 +62,10 @@ while running:
                     interactive.clicked(mousePos)
             else:
                 for interactive in currScreen.Interactive: 
-                    interactive.clicked(mousePos)
+                    interactive.clicked(mousePos) 
+
+            if (type(currScreen) == Screens.problemScreen):
+                currScreen.updateProblem()
 
         if event.type == pygame.KEYDOWN:
             for textbox in currScreen.InteractiveText:
