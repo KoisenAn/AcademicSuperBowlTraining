@@ -45,3 +45,32 @@ class ProblemInputType:
         
         def getChoicesTextList(self):
             return self.choicesTextList
+        
+class Anchor:
+
+    class Center:
+        pass
+
+    class TopRight:
+        pass
+
+    class TopLeft:
+        pass
+
+    class BottomRight:
+        pass
+
+    class BottomLeft:
+        pass
+
+    class TopCenter:
+        pass
+
+    class BottomCenter:
+        pass
+
+    class RightCenter:
+        pass
+
+    class LeftCenter:
+        pass

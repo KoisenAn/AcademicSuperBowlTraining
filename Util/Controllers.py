@@ -1,5 +1,6 @@
 import pygame
 import Elements
+import Enums
 
 class ProblemController:
 
@@ -189,7 +190,6 @@ class ProblemController:
                 self.inputElements = self.MCQController.createChoices(2, 100, True)
             pass
         
-
     def checkCorrect(self):
 
         self.submitted = True
@@ -234,7 +234,9 @@ class ProblemController:
         #self.loadSolutionDisplay(self.problem)        
         return passToProblemRecorder
 
-    
+    def updateMCQController(self):
+        self.MCQController.updateMCQStates()
+
     def draw(self):
         if (self.questionDisplayType == "lines"):
             self.TextDrawer.draw()
@@ -272,7 +274,42 @@ class MCQController:
             self.MCQElementList.append(MCQButton)
 
         return self.MCQElementList
+    
+    def updateMCQStates(self):
+        pass
 
-#TODO: Hella big project redoing all the positioning. Include anchors, condensed formatting, and whatnot
 class PositionController:
-    pass
+
+    def __init__(self, xOffset = 0, yOffset = 0, anchor = Enums.Anchor.Center, referenceObject = Enums.Screen):
+
+        self.xOffset = xOffset
+        self.yOffset = yOffset
+        self.anchor = anchor
+
+        if (type(referenceObject) == Enums.Screen):
+            self.width = pygame.display.get_window_size()[0]
+            self.hieght = pygame.display.get_window_size()[0]
+    
+    def recenter(self):
+        pass
+    
+    def getPosition(self):
+        match type(self.anchor):
+            case Enums.Anchor.Center:
+                return (self.width/2 + self.xOffset, self.hieght/2 + self.yOffset)
+            case Enums.Anchor.TopRight:
+                return (self.width + self.xOffset, self.yOffset)
+            case Enums.Anchor.TopLeft:
+                return (self.xOffset, self.yOffset)  
+            case Enums.Anchor.BottomRight:
+                return (self.width + self.xOffset, self.hieght + self.yOffset)
+            case Enums.Anchor.BottomLeft:
+                return (self.xOffset, self.hieght + self.yOffset)
+            case Enums.Anchor.TopCenter:
+                return (self.width/2 + self.xOffset, self.yOffset)
+            case Enums.Anchor.BottomCenter:
+                return (self.width/2 + self.xOffset, self.hieght + self.yOffset)  
+            case Enums.Anchor.RightCenter:
+                return (self.xOffset, self.hieght/2 + self.yOffset)
+            case Enums.Anchor.LeftCenter:
+                return (self.width + self.xOffset, self.hieght/2 + self.yOffset)
