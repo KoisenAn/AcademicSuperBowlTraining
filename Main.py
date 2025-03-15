@@ -77,11 +77,11 @@ while running:
                 homeScreenOperPart1 = True
 
             if (tabDown and event.key == pygame.K_t):
-                currScreen = Screens.testScreen(screen, center_X, center_Y)
+                currScreen = Screens.TestScreen(screen, center_X, center_Y)
             elif (tabDown and event.key == pygame.K_h):
-                currScreen = Screens.homescreen(screen, center_X, center_Y)
+                currScreen = Screens.Homescreen(screen, center_X, center_Y)
             elif (tabDown and event.key == pygame.K_p):
-                currScreen = Screens.practiceSelectScreen(screen, center_X, center_Y)
+                currScreen = Screens.PracticeSelectScreen(screen, center_X, center_Y)
             elif (tabDown and event.key == pygame.K_q):
                 running = False
                 continue
@@ -108,16 +108,16 @@ while running:
         if event.type >= 4100 and event.type <= 4300:
             popUpActive = False
             if Screens.eventDict[event.type] == "home":
-                currScreen = Screens.homescreen(screen, center_X, center_Y)
+                currScreen = Screens.Homescreen(screen, center_X, center_Y)
                 continue
             elif Screens.eventDict[event.type] == "credits":
-                currScreen = Screens.creditsScreen(screen, center_X, center_Y)
+                currScreen = Screens.CreditsScreen(screen, center_X, center_Y)
                 continue
             elif Screens.eventDict[event.type] == "pracSelect":
-                currScreen = Screens.practiceSelectScreen(screen, center_X, center_Y) 
+                currScreen = Screens.PracticeSelectScreen(screen, center_X, center_Y) 
                 continue
             elif event.type >= 4202 and event.type <= 4208:
-                currScreen = Screens.problemScreen(screen, center_X, center_Y, event.type)
+                currScreen = Screens.ProblemScreen(screen, center_X, center_Y, event.type)
                 continue
 
         if event.type >= 6900 and event.type <= 7000:

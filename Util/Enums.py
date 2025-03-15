@@ -77,3 +77,14 @@ class Anchor:
 
 class Screen:
     pass
+
+class Label:
+    
+    class Text:
+        pass
+
+    class Image:
+        pass
+
+    class Inactive:
+        pass

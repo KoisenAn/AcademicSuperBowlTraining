@@ -10,22 +10,6 @@ import random
 import os
 import sys
 
-#2023-2024 Year
-'''
-current_dir = os.path.dirname(__file__)
-current_dir = os.path.dirname(current_dir)
-folder_dir = os.path.join(current_dir, '2023-2024 Subjects')
-sys.path.insert(0, folder_dir)
-
-
-import AlgebraProblems
-import ModProblems
-import DoomProblems
-import StatProblems
-
-eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "algebra", 4203: "geometry", 4204: "statistics", 4205: "logarithms", 4206: "calculus", 4207: "mod", 4208: "dooms", 6900: "answerInputted", 6901: "newProblem"}
-'''
-
 # 2024-2025 Year
 current_dir = os.path.dirname(__file__)
 current_dir = os.path.dirname(current_dir)
@@ -271,42 +255,20 @@ class practiceSelectScreen:
         #self.Interactive.append(statsButton)
         #self.Interactive.append(helpButton)
 
-        #2023-2024 Year
-        '''
         #Creating Practice Buttons
-        AlegbraButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Algebra", practicebuttonTextSize, 4202)
-        GeometryButton = Elements.Button(screen, 0, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Geometry", practicebuttonTextSize, 4203)
-        StatisticsButton = Elements.Button(screen, 0+practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Statistics", practicebuttonTextSize, 4204)
-        LogarithmButton = Elements.Button(screen, 0-practiceSpreadX, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Logarithms", practicebuttonTextSize, 4205)
-        CalculusButton = Elements.Button(screen, 0, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Calculus", practicebuttonTextSize, 4206)
-        ModButton = Elements.Button(screen, 0+practiceSpreadX, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Modulo Arithemtic", practicebuttonTextSize, 4207)
-        DoomsButton = Elements.Button(screen, 0, 50+practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Doomsday Rule", practicebuttonTextSize, 4208)
-        
-        #Creating Utility Buttons
-
-        #Adding to Elements
-        self.Elements.append(AlegbraButton)
-        self.Elements.append(GeometryButton)
-        self.Elements.append(StatisticsButton)
-        self.Elements.append(LogarithmButton)
-        self.Elements.append(CalculusButton)
-        self.Elements.append(ModButton)
-        self.Elements.append(DoomsButton)
-
-        #Adding to interactive
-        self.Interactive.append(AlegbraButton)
-        self.Interactive.append(GeometryButton)
-        self.Interactive.append(StatisticsButton)
-        self.Interactive.append(LogarithmButton)
-        self.Interactive.append(CalculusButton)
-        self.Interactive.append(ModButton)
-        self.Interactive.append(DoomsButton)
-        '''
-
-        #Creating Practice Buttons
-        HistoryButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "History", practicebuttonTextSize, 4202)
-                
-        #Creating Utility Buttons
+        HistoryButton = Elements.Button(screen=screen, 
+                                        event=4202, 
+                                        sizeX=practiceButtonX, 
+                                        sizeY=practiceButtonY, 
+                                        positionController=Controllers.PositionController(objectLength=practiceButtonX,
+                                                                                          objectHeight=practiceButtonY, 
+                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          xOffset=-practiceSpreadX, 
+                                                                                          yOffset=-practiceSpreadY, 
+                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                        color=buttonColor, 
+                                        labelInformation="History", 
+                                        labelSize = practicebuttonTextSize)
 
         #Adding to Elements
         self.Elements.append(HistoryButton)
@@ -426,19 +388,6 @@ class problemScreen:
             pass
 
         self.problemController.reset(self.problemType)
-        
-        # 2023-2024 Year
-        '''
-        match (Screens.eventDict[self.problemType]):
-            case "algebra":
-                self.problem = AlgebraProblems.problemList[random.randint(0, len(AlgebraProblems.problemList)-1)]
-            case "mod":
-                self.problem = ModProblems.problemList[random.randint(0, len(ModProblems.problemList)-1)]
-            case "doom":
-                self.problem = DoomProblems.problemList[random.randint(0, len(DoomProblems.problemList)-1)]
-            case "statistics":
-                self.problem = StatProblems.problemList[random.randint(0, len(StatProblems.problemList)-1)]
-        '''
 
         # 2024-2025 Year
         match (Screens.eventDict[self.problemType]):
