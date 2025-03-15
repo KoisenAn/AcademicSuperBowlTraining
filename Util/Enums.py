@@ -50,7 +50,7 @@ class Anchor:
 
     class Center:
         pass
-
+    
     class TopRight:
         pass
 
@@ -74,3 +74,6 @@ class Anchor:
 
     class LeftCenter:
         pass
+
+class Screen:
+    pass

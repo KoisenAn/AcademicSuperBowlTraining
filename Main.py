@@ -46,8 +46,8 @@ while running:
                 width = 1280
             else:
                 width = pygame.display.get_window_size()[0]
-            if (pygame.display.get_window_size()[1] < 720):
-                height = 720
+            if (pygame.display.get_window_size()[1] < 400):
+                height = 400
             else:
                 height = pygame.display.get_window_size()[1]
             currScreen.recenter(width//2, height//2)

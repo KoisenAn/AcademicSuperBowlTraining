@@ -3,6 +3,7 @@ import Elements
 import Expressions
 import Screens
 import Controllers
+import Enums
 
 import random
 
@@ -107,11 +108,34 @@ class homescreen:
         self.textDrawer.add("2023-2024 BHSS Academic Super Bowl", "cX", "cY-260", titleTextSize, self.colors["darkBlue"],"calibri")
         self.textDrawer.add("Math Training Tool", "cX", "cY-200", titleTextSize, self.colors["darkBlue"],"calibri")
 
-        ButtonTextSize = 50
+        buttonTextSize = 50
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
-        StartButton = Elements.Button(screen, 0, 0, 300, 150, center_X, center_Y, buttonColor, 8, 10, "text", "Start", ButtonTextSize, 4201)
-        creditsHelpButton = Elements.Button(screen, 0, 185, 300, 150, center_X, center_Y, buttonColor, 8, 10, "text", "Credits/Help", ButtonTextSize, 4199)
+        StartButton = Elements.Button(screen=screen, 
+                                      event=4201, 
+                                      sizeX=300, 
+                                      sizeY=150, 
+                                      positionController=Controllers.PositionController(objectLength=300,
+                                                                                        objectHeight=150, 
+                                                                                        drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                        xOffset=0, 
+                                                                                        yOffset=0, 
+                                                                                        refAnchor=Enums.Anchor.Center()), 
+                                      color=buttonColor, labelInformation="Start", 
+                                      labelSize = buttonTextSize)
+        creditsHelpButton = Elements.Button(screen=screen, 
+                                            event=4199, 
+                                            positionController=Controllers.PositionController(objectLength=300,
+                                                                                        objectHeight=150, 
+                                                                                        drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                        xOffset=0, 
+                                                                                        yOffset=150, 
+                                                                                        refAnchor=Enums.Anchor.Center()), 
+                                            sizeX=300, 
+                                            sizeY=150, 
+                                            color=buttonColor, 
+                                            labelInformation="Credits/Help", 
+                                            labelSize=buttonTextSize)
 
         self.Elements.append(self.textDrawer)
         self.Elements.append(StartButton)
@@ -124,6 +148,11 @@ class homescreen:
 
     def run(self):
         self.draw()
+        self.checkInteractive()
+
+    def checkInteractive(self):
+        for element in self.Interactive:
+            element.mouseOver(pygame.mouse.get_pos())    
 
     def draw(self):
         for element in self.Elements:
@@ -214,13 +243,13 @@ class practiceSelectScreen:
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
         
         #Utility Button Sizes
-        homeButton = Elements.Button(screen, "cX-100", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "homeButton.png", 0.23, 4200)
-        settingsButton = Elements.Button(screen, "cX-100", "cY-100", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "settingsButton.png", 0.9, 3802)
-        statsButton = Elements.Button(screen, "100-cX", "cY-100", 100, 100, center_X, center_Y,buttonColor, 8, 10, "image", "statsButton.png", 0.9, 3798)
-        helpButton = Elements.Button(screen, "100-cX", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "text", "?", 70, 3798, False)
+        #homeButton = Elements.Button(screen, "cX-100", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "homeButton.png", 0.23, 4200)
+        #settingsButton = Elements.Button(screen, "cX-100", "cY-100", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "settingsButton.png", 0.9, 3802)
+        #statsButton = Elements.Button(screen, "100-cX", "cY-100", 100, 100, center_X, center_Y,buttonColor, 8, 10, "image", "statsButton.png", 0.9, 3798)
+        #helpButton = Elements.Button(screen, "100-cX", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "text", "?", 70, 3798, False)
 
         #Practice Button Sizes
-        practiceButtonTextSize = 40
+        practicebuttonTextSize = 40
         practiceButtonX = 350
         practiceButtonY = 100
         practiceSpreadY = 150
@@ -229,29 +258,29 @@ class practiceSelectScreen:
         #Creating Utility Buttons
         
         #Adding To Elements
-        self.Elements.append(homeButton)
-        self.Elements.append(settingsButton)
-        self.Elements.append(statsButton)
-        self.Elements.append(helpButton)
+        #self.Elements.append(homeButton)
+        #self.Elements.append(settingsButton)
+        #self.Elements.append(statsButton)
+        #self.Elements.append(helpButton)
 
         self.Elements.append(self.textDrawer)
 
         #Adding To Interactive
-        self.Interactive.append(homeButton)
-        self.Interactive.append(settingsButton)
-        self.Interactive.append(statsButton)
-        self.Interactive.append(helpButton)
+        #self.Interactive.append(homeButton)
+        #self.Interactive.append(settingsButton)
+        #self.Interactive.append(statsButton)
+        #self.Interactive.append(helpButton)
 
         #2023-2024 Year
         '''
         #Creating Practice Buttons
-        AlegbraButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Algebra", practiceButtonTextSize, 4202)
-        GeometryButton = Elements.Button(screen, 0, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Geometry", practiceButtonTextSize, 4203)
-        StatisticsButton = Elements.Button(screen, 0+practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Statistics", practiceButtonTextSize, 4204)
-        LogarithmButton = Elements.Button(screen, 0-practiceSpreadX, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Logarithms", practiceButtonTextSize, 4205)
-        CalculusButton = Elements.Button(screen, 0, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Calculus", practiceButtonTextSize, 4206)
-        ModButton = Elements.Button(screen, 0+practiceSpreadX, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Modulo Arithemtic", practiceButtonTextSize, 4207)
-        DoomsButton = Elements.Button(screen, 0, 50+practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Doomsday Rule", practiceButtonTextSize, 4208)
+        AlegbraButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Algebra", practicebuttonTextSize, 4202)
+        GeometryButton = Elements.Button(screen, 0, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Geometry", practicebuttonTextSize, 4203)
+        StatisticsButton = Elements.Button(screen, 0+practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Statistics", practicebuttonTextSize, 4204)
+        LogarithmButton = Elements.Button(screen, 0-practiceSpreadX, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Logarithms", practicebuttonTextSize, 4205)
+        CalculusButton = Elements.Button(screen, 0, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Calculus", practicebuttonTextSize, 4206)
+        ModButton = Elements.Button(screen, 0+practiceSpreadX, 50, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Modulo Arithemtic", practicebuttonTextSize, 4207)
+        DoomsButton = Elements.Button(screen, 0, 50+practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "Doomsday Rule", practicebuttonTextSize, 4208)
         
         #Creating Utility Buttons
 
@@ -275,7 +304,7 @@ class practiceSelectScreen:
         '''
 
         #Creating Practice Buttons
-        HistoryButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "History", practiceButtonTextSize, 4202)
+        HistoryButton = Elements.Button(screen, 0-practiceSpreadX, 50-practiceSpreadY, practiceButtonX, practiceButtonY, center_X, center_Y, buttonColor, 8, 10, "text", "History", practicebuttonTextSize, 4202)
                 
         #Creating Utility Buttons
 
@@ -374,7 +403,6 @@ class problemScreen:
     def run(self):
         self.draw()
         self.checkInteractive()
-        self.MCQController.update()
 
     def draw(self):
         for element in self.Elements:

@@ -268,4 +268,3 @@ class popUpStats:
         self.center_Y = center_Y
         for element in self.Elements:
             element.recenter(center_X,center_Y)
-

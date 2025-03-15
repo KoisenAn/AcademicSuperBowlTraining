@@ -1,6 +1,7 @@
 import pygame
 import Elements
 import Expressions
+import Enums
 
 import os
 
@@ -87,105 +88,80 @@ class TextDrawer:
 # Note the drawing of the button is center based    
 class Button:
 
-    #Fix: Streamline inputs for button function
-    def __init__(self, screen, X, Y, sizeX, sizeY, center_X, center_Y, color, thickness, curveRadius, labelType, string, labelSize, event, isWorking=True):
-
-        #Initial Variables
-        self.runTick = 0
+    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True):
 
         # Inputed variables stored in the object
         self.screen = screen
-        self.color = color
+        self.color = [colors["highlightMCQGrey"], colors["screenGrey"], colors["highlightBlue"]]
+        self.colorState = 0
         self.curveRadius = curveRadius
         self.thickness = thickness
-        self.sizeY = sizeY
-        self.string = string
+        self.string = labelInformation
         self.labelSize = labelSize
         self.labelType = labelType
         self.event = event
         self.isWorking = isWorking
 
-        #Location variables
-        self.X = X
-        self.Y = Y
-
-        # Note that these center variables are of the screen
-        self.center_X = center_X
-        self.center_Y = center_Y
-
-        xOp = Expressions.locationExpressionValue(X, self.center_X, self.center_Y)
-        yOp = Expressions.locationExpressionValue(Y, self.center_X, self.center_Y)
         self.sizeX = sizeX
+        self.sizeY = sizeY
+        self.positionController = positionController
 
         #Button Creation
-        self.hasThickness = False
-        if (thickness > 0):
-            self.ButtonRectOutside = pygame.Rect(center_X+xOp-sizeX/2, center_Y+yOp-sizeY/2, sizeX, sizeY)
-            self.hasThickness = True
-        self.ButtonRectInside = pygame.Rect(center_X+xOp-sizeX/2, center_Y+yOp-sizeY/2, sizeX, sizeY)
+        self.ButtonRectInside = pygame.Rect(self.positionController.getPosition()[0], self.positionController.getPosition()[1], self.sizeX, self.sizeY)
 
         self.labels = []
-        self.label = Elements.Label(screen, labelSize, labelType, center_X+xOp, center_Y+yOp, string, color[2], 'calibri')
+        self.label = Elements.Label(screen, 
+                                    labelSize, 
+                                    labelType, 
+                                    self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[0], 
+                                    self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[1], 
+                                    labelInformation, 
+                                    color[2], 
+                                    'calibri')
         self.labels.append(self.label)
         if (not isWorking):
-            self.crossLine = Elements.Label(screen, thickness, "line", center_X+xOp, center_Y+yOp, (sizeX, sizeY), color[0], 'calibri')
+            self.crossLine = Elements.Label(screen, 
+                                            thickness, 
+                                            "line", 
+                                            self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[0],
+                                            self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[1], 
+                                            (sizeX, sizeY), 
+                                            color[0], 
+                                            'calibri')
             self.labels.append(self.crossLine)
 
     #Draws everything
     def draw(self):
-        pygame.draw.rect(self.screen, self.color[1], self.ButtonRectInside, 0, self.curveRadius)
-        if (self.hasThickness):
-            pygame.draw.rect(self.screen, self.color[0], self.ButtonRectOutside, self.thickness, self.curveRadius)
+        pygame.draw.rect(self.screen, self.color[self.colorState], self.ButtonRectInside, 0, self.curveRadius)
         for label in self.labels:
             label.draw()
 
-        #Button waiting after pressed and growing again
-        if (self.runTick > 0):
-            self.runTick += 1
-            if (self.runTick == 10):
-                #Makes button large again
-                if (self.hasThickness):
-                    self.ButtonRectOutside = self.ButtonRectOutside.scale_by(10/9)
-                self.ButtonRectInside = self.ButtonRectInside.scale_by(10/9)
-                self.label.changeSize(10/9)
-
-                #Creates event to change screen
-                #Fix: event creater/processing, don't know how to carry information with events, only can change the event type
-                CUSTOMEVENT = pygame.event.Event(self.event)
-                pygame.event.post(CUSTOMEVENT)
-                self.runTick = 0
-        else: 
-            xOp = Expressions.locationExpressionValue(self.X, self.center_X, self.center_Y)
-            yOp = Expressions.locationExpressionValue(self.Y, self.center_X, self.center_Y)
-            self.ButtonRectOutside = pygame.Rect(self.center_X+xOp-self.sizeX/2, self.center_Y+yOp-self.sizeY/2, self.sizeX, self.sizeY)
-            self.ButtonRectInside= pygame.Rect(self.center_X+xOp-self.sizeX/2, self.center_Y+yOp-self.sizeY/2, self.sizeX, self.sizeY)
-
     #Runs/check if clicked
     def clicked(self, mousePos):
-        if (self.ButtonRectOutside.collidepoint(mousePos) and self.runTick == 0):
+        if (self.ButtonRectInside.collidepoint(mousePos)):
             if (self.isWorking):
-                self.runTick += 1
-                self.changeSize(9/10)
+                CUSTOMEVENT = pygame.event.Event(self.event)
+                pygame.event.post(CUSTOMEVENT)
             return True
         else:
             return False
+        
+    def mouseOver(self, mousePos):
+        isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
+        if (isMouseOver):
+            self.colorState = 0
+            return True
+        else:
+            self.colorState = 1
+            return False
 
-    #Changes size of button
-    def changeSize(self, scale):
-        self.ButtonRectOutside = self.ButtonRectOutside.scale_by(scale)
-        self.ButtonRectInside = self.ButtonRectInside.scale_by(scale)
-        self.label.changeSize(scale)
-
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        xOp = Expressions.locationExpressionValue(self.X, self.center_X, self.center_Y)
-        yOp = Expressions.locationExpressionValue(self.Y, self.center_X, self.center_Y)
+    def recenter(self, x, y):
+        self.positionController.recenter()
         for label in self.labels:
-            label.recenter(center_X+xOp, center_Y+yOp)
+            label.recenter(x, y)
      
     def getPosition(self):
-        return self.X, self.Y
+        return self.positionController
 
     def getSize(self):
         return self.sizeX, self.sizeY
@@ -236,20 +212,20 @@ class MCQButton():
     def clicked(self, mousePos):
         isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
         if (isMouseOver):
-            if (self.selected):
-                CUSTOMEVENT = pygame.event.Event(6901)
-                pygame.event.post(CUSTOMEVENT)
-
-            self.selected = not self.selected
+            CUSTOMEVENT = pygame.event.Event(6901)
+            pygame.event.post(CUSTOMEVENT)
+            return True
         else:
-            self.selected = False
+            return False
 
     def mouseOver(self, mousePos):
         isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
         if (not self.selected):
             if (isMouseOver):
+                return True
                 self.colorState = 0
             else:
+                return False
                 self.colorState = 1
 
     def recenter(self, center_X, center_Y):
