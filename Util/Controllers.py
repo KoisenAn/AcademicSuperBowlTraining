@@ -280,55 +280,69 @@ class MCQController:
 
 class PositionController:
 
-    def __init__(self, objectLength, objectHeight, xOffset = 0, yOffset = 0, drawAnchor = Enums.Anchor.Center(), refAnchor = Enums.Anchor.Center(), referenceObject = Enums.Screen()):
+    def __init__(self, objectLength, objectHeight, xOffset = 0, yOffset = 0, drawAnchor = Enums.Anchor.Center(), refObject = Enums.Screen(), refAnchor = Enums.Anchor.Center()):
 
-        self.objectHeight = objectHeight
         self.objectLength = objectLength
+        self.objectHeight = objectHeight
         self.drawAnchor = drawAnchor
         
         self.xOffset = xOffset
         self.yOffset = yOffset
 
+        self.refObject = refObject
         self.refAnchor = refAnchor
-        self.referenceObject = referenceObject
 
-        if (type(self.referenceObject) == Enums.Screen):
-            self.width = pygame.display.get_window_size()[0]
-            self.hieght = pygame.display.get_window_size()[1]
+        self.recenter()
     
     def recenter(self):
-        if (type(self.referenceObject) == Enums.Screen):
-            self.width = pygame.display.get_window_size()[0]
-            self.hieght = pygame.display.get_window_size()[1]
+        if (type(self.refObject) == Enums.Screen):
+            self.refLength, self.refHeight = pygame.display.get_window_size()
+        elif (type(self.refObject) == PositionController):
+            self.refLength, self.refHeight = self.refObject.getSize()
 
     def getPosition(self, positionOnObject = None):
 
+        if (type(self.refObject) == Enums.Screen):
+            position = [0,0]
+        elif (type(self.refObject) == PositionController):
+            position = [self.refObject.getPosition(positionOnObject=Enums.Anchor.TopLeft())[0], 
+                        self.refObject.getPosition(positionOnObject=Enums.Anchor.TopLeft())[1]]
+
         # Finding center position
         if (type(self.refAnchor) == Enums.Anchor.Center):
-            position = [self.width/2 + self.xOffset, self.hieght/2 + self.yOffset]
+            position[0] += self.refLength/2 + self.xOffset
+            position[1] += self.refHeight/2 + self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.TopRight):
-            position = [self.width + self.xOffset, self.yOffset]
+            position[0] += self.refLength + self.xOffset
+            position[1] += self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.TopLeft):
-            position = [self.xOffset, self.yOffset]  
+            position[0] += self.xOffset
+            position[1] += self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.BottomRight):
-            position = [self.width + self.xOffset, self.hieght + self.yOffset]
+            position[0] += self.refLength + self.xOffset
+            position[1] += self.refHeight + self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.BottomLeft):
-            position = [self.xOffset, self.hieght + self.yOffset]
+            position[0] += self.xOffset
+            position[1] += self.refHeight + self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.TopCenter):
-            position = [self.width/2 + self.xOffset, self.yOffset]
+            position[0] += self.refLength/2 + self.xOffset
+            position[1] += self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.BottomCenter):
-            position = [self.width/2 + self.xOffset, self.hieght + self.yOffset]  
+            position[0] += self.refLength/2 + self.xOffset
+            position[1] += self.refHeight + self.yOffset  
         elif (type(self.refAnchor) == Enums.Anchor.RightCenter):
-            position = [self.xOffset, self.hieght/2 + self.yOffset]
+            position[0] += self.refLength + self.xOffset
+            position[1] += self.refHeight/2 + self.yOffset
         elif (type(self.refAnchor) == Enums.Anchor.LeftCenter):
-            position = [self.width + self.xOffset, self.hieght/2 + self.yOffset]
+            position[0] += self.xOffset
+            position[1] += self.refHeight/2 + self.yOffset
 
         # Offsetting by initial draw anchor
 
         if (positionOnObject == None):
             return position
         else:
-            if (type(self.drawAnchor) == Enums.Anchor.Center):
+            if (type(self.drawAnchor) == Enums.Anchor.Center): #TODO: Given a drawAnchor, calculate center position and then calculate all other positions
                 if (type(positionOnObject) == Enums.Anchor.Center):
                     pass
                 elif (type(positionOnObject) == Enums.Anchor.TopRight):

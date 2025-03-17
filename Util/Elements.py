@@ -108,6 +108,8 @@ class Text:
 # Drawing is center-based    
 class Button:
 
+    positionController: Controllers.PositionController
+
     def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True, **kwargs):
 
         # Inputed variables stored in the object
@@ -131,15 +133,18 @@ class Button:
 
         self.labels = []
         if (type(self.labelType) == Enums.Label.Text):
-            self.label = Elements.Label(screen=screen, 
+            self.label = Elements.Label(screen=self.screen, 
                                         size=labelSize, 
                                         labelType=labelType, 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
                                                                                           objectHeight=self.positionController.getSize()[1],
-                                                                                          xOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[0],
-                                                                                          yOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[1],
+                                                                                          #xOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[0],
+                                                                                          #yOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[1],
+                                                                                          xOffset=0,
+                                                                                          yOffset=0,
                                                                                           drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                          refAnchor=Enums.Anchor.TopLeft()), 
+                                                                                          refObject=self.positionController,
+                                                                                          refAnchor=Enums.Anchor.Center()), 
                                         labelInformation=labelInformation,
                                         font = kwargs.get("font"),
                                         color = kwargs.get("labelColor"))
@@ -327,7 +332,6 @@ class Label:
         self.color = color
 
     def recenter(self):
-        print("aye")
         self.positionController.recenter()
 
 # Note that this is center-based 
