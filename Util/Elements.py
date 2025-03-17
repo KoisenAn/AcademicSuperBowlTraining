@@ -11,6 +11,8 @@ import os
 #
 
 colors = {"white":(255,255,255), "black":(0,0,0), "darkBlue":(53,63,112), "screenGrey":(230,230,230), "highlightMCQGrey": (210,210,210), "highlightBlue": (55, 190, 245, 0.5)}
+# TODO: Add color class, fix all color stuff
+
 
 # An object that displays text on the screen
 class Text:
@@ -114,8 +116,8 @@ class Button:
 
         # Inputed variables stored in the object
         self.screen = screen
-        self.color = [colors["highlightMCQGrey"], colors["screenGrey"], colors["highlightBlue"]]
-        self.colorState = 0
+        self.color = [colors["highlightMCQGrey"], colors["screenGrey"], colors["highlightBlue"]] # TODO: Fix button color stuff
+        self.colorState = 1
         self.curveRadius = curveRadius
         self.thickness = thickness
         self.string = labelInformation
@@ -138,8 +140,6 @@ class Button:
                                         labelType=labelType, 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
                                                                                           objectHeight=self.positionController.getSize()[1],
-                                                                                          #xOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[0],
-                                                                                          #yOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[1],
                                                                                           xOffset=0,
                                                                                           yOffset=0,
                                                                                           drawAnchor=Enums.Anchor.TopLeft(),
@@ -154,10 +154,11 @@ class Button:
                                         labelType=labelType, 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
                                                                                           objectHeight=self.positionController.getSize()[1],
-                                                                                          xOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[0],
-                                                                                          yOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[1],
+                                                                                          xOffset=0,
+                                                                                          yOffset=0,
                                                                                           drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                          refAnchor=Enums.Anchor.TopLeft()), 
+                                                                                          refObject=self.positionController,
+                                                                                          refAnchor=Enums.Anchor.Center()), 
                                         labelInformation=labelInformation)
         self.labels.append(self.label)
         if (not isWorking):
@@ -313,11 +314,14 @@ class Label:
             self.image = pygame.image.load(os.path.join(image_dir,self.labelInfromation))
             self.image = pygame.transform.scale_by(self.image, self.labelSize)
             self.labelRect = self.image.get_rect()
-            self.labelRect.center = (self.positionController.getPosition()[0], self.positionController.getPosition()[1])
     
     def draw(self):
-        self.labelRect.center = (self.positionController.getPosition()[0], self.positionController.getPosition()[1])
-        self.screen.blit(self.text, self.labelRect)
+        self.labelRect.center = (self.positionController.getPosition(positionOnObject=Enums.Anchor.TopLeft())[0], 
+                                 self.positionController.getPosition(positionOnObject=Enums.Anchor.TopLeft())[1])
+        if (type(self.type) == Enums.Label.Text):
+            self.screen.blit(self.text, self.labelRect)
+        elif (type(self.type) == Enums.Label.Image):
+            self.screen.blit(self.image, self.labelRect)
             
     def changeText(self, text):
         self.text = self.loadedFont.render(text, True, self.color)

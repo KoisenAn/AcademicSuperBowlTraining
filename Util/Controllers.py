@@ -402,13 +402,16 @@ class PositionController:
     
 class TextController:
 
-    def __init__(self, screen):
+    def __init__(self, screen=None):
         self.screen = screen
         self.texts = []
 
     def draw(self):
         for text in self.texts:
             text.draw()
+
+    def add(self, text):
+        self.texts.append(text)
 
     def getTexts(self):
         for text in self.texts:

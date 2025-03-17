@@ -23,7 +23,7 @@ Buttons = []
 
 center_X = 640
 center_Y = 360
-currScreen = Screens.HomeScreen(screen, center_X, center_Y)
+currScreen = Screens.HomeScreen(screen)
 popUp = None
 
 tabDown = False
@@ -58,10 +58,10 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             mousePos = pygame.mouse.get_pos()
             if (popUpActive):
-                for interactive in popUp.Interactive: #TODO: Combine popUp interactive and screen interactive
+                for interactive in popUp.interactive: #TODO: Combine popUp interactive and screen interactive
                     interactive.clicked(mousePos)
             else:
-                for interactive in currScreen.Interactive: 
+                for interactive in currScreen.interactive: 
                     interactive.clicked(mousePos) 
 
             if (type(currScreen) == Screens.ProblemScreen):
@@ -108,13 +108,13 @@ while running:
         if event.type >= 4100 and event.type <= 4300:
             popUpActive = False
             if Screens.eventDict[event.type] == "home":
-                currScreen = Screens.HomeScreen(screen, center_X, center_Y)
+                currScreen = Screens.HomeScreen(screen=screen)
                 continue
             elif Screens.eventDict[event.type] == "credits":
-                currScreen = Screens.CreditsScreen(screen, center_X, center_Y)
+                currScreen = Screens.CreditsScreen(screen=screen)
                 continue
             elif Screens.eventDict[event.type] == "pracSelect":
-                currScreen = Screens.PracticeSelectScreen(screen, center_X, center_Y) 
+                currScreen = Screens.PracticeSelectScreen(screen=screen) 
                 continue
             elif event.type >= 4202 and event.type <= 4208:
                 currScreen = Screens.ProblemScreen(screen, center_X, center_Y, event.type)

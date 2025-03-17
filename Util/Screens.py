@@ -26,67 +26,64 @@ class TestScreen:
 
         self.screen = screen
 
-        self.Elements = []
-        self.Interactive = []
-        self.InteractiveText = []
+        self.elements = []
+        self.interactive = []
+        self.interactiveText = []
 
         self.center_X = center_X
         self.center_Y = center_Y
 
         '''
         self.Switch = Elements.Switch(screen, 500, 500, center_X, center_Y, 50, True, "Multiple Attempts", ["right", 30], Elements.colors, 500, True)
-        self.Elements.append(self.Switch)
-        self.Interactive.append(self.Switch)
+        self.elements.append(self.Switch)
+        self.interactive.append(self.Switch)
         '''
 
         self.mcqbutton = Elements.MCQButton(screen, 0, 0, center_X, center_Y, 800, 80, 0, "text", "1. test", 30)
-        self.Elements.append(self.mcqbutton)
-        self.Interactive.append(self.mcqbutton)
+        self.elements.append(self.mcqbutton)
+        self.interactive.append(self.mcqbutton)
 
         self.mcqbutton = Elements.MCQButton(screen, 0, 80, center_X, center_Y, 800, 80, 1, "text", "2. test", 30)
-        self.Elements.append(self.mcqbutton)
-        self.Interactive.append(self.mcqbutton)
+        self.elements.append(self.mcqbutton)
+        self.interactive.append(self.mcqbutton)
 
         #self.imageTest = Elements.Image(screen, center_X, center_Y, 300, 300, "IntegralSymbol.png", 1, 2, Elements.colors)
-        #self.Elements.append(self.imageTest)
+        #self.elements.append(self.imageTest)
 
     def run(self):
         self.draw()
         self.checkInteractive()
 
     def draw(self): 
-        for element in self.Elements:
+        for element in self.elements:
             element.draw()
         
     def checkInteractive(self):
-        for element in self.Interactive:
+        for element in self.interactive:
             element.mouseOver(pygame.mouse.get_pos())
 
     def recenter(self, center_X, center_Y):
         self.center_X = center_X
         self.center_Y = center_Y
-        for element in self.Elements:
+        for element in self.elements:
             element.recenter(center_X, center_Y)
 
     def resetMCQs(self):
-        for element in self.Elements:
+        for element in self.elements:
             if (type(element) == Elements.MCQButton):
                 element.deselect()
         
 class HomeScreen:
 
-    def __init__(self, screen, center_X, center_Y):
+    def __init__(self, screen=None):
 
-        self.Elements = []
-        self.Interactive = []
-        self.InteractiveText = []
+        self.screen = screen
 
-        self.center_X = center_X
-        self.center_Y = center_Y
+        self.elements = []
+        self.interactive = []
+        self.interactiveText = []
 
-        self.colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
-
-        self.text = Elements.Text(screen=screen,
+        self.text = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
                                                                                     drawAnchor=Enums.Anchor.Center(),
@@ -100,14 +97,14 @@ class HomeScreen:
                                   showingTextBox=False)
 
         buttonTextSize = 50
-        buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
+        buttonColor = ((53, 63, 112), (230,230,230))
 
-        startButton = Elements.Button(screen=screen, 
+        startButton = Elements.Button(screen=self.screen, 
                                       event=4201, 
-                                      sizeX=300, 
-                                      sizeY=150, 
-                                      positionController=Controllers.PositionController(objectLength=300,
-                                                                                        objectHeight=150, 
+                                      sizeX=175, 
+                                      sizeY=125, 
+                                      positionController=Controllers.PositionController(objectLength=175,
+                                                                                        objectHeight=125, 
                                                                                         drawAnchor=Enums.Anchor.Center(),
                                                                                         xOffset=0, 
                                                                                         yOffset=0, 
@@ -118,16 +115,16 @@ class HomeScreen:
                                       labelSize = buttonTextSize,
                                       font = "calibri",
                                       labelColor = (0,0,0))
-        creditsHelpButton = Elements.Button(screen=screen, 
+        creditsHelpButton = Elements.Button(screen=self.screen, 
                                             event=4199, 
                                             positionController=Controllers.PositionController(objectLength=300,
-                                                                                        objectHeight=150, 
+                                                                                        objectHeight=125, 
                                                                                         drawAnchor=Enums.Anchor.Center(),
                                                                                         xOffset=0, 
                                                                                         yOffset=150, 
                                                                                         refAnchor=Enums.Anchor.Center()), 
                                             sizeX=300, 
-                                            sizeY=150, 
+                                            sizeY=125, 
                                             color=buttonColor, 
                                             labelInformation="Credits/Help", 
                                             labelType=Enums.Label.Text(),
@@ -135,12 +132,12 @@ class HomeScreen:
                                             font = "calibri",
                                             labelColor = (0,0,0))
 
-        self.Elements.append(self.text)
-        self.Elements.append(startButton)
-        self.Elements.append(creditsHelpButton)
+        self.elements.append(self.text)
+        self.elements.append(startButton)
+        self.elements.append(creditsHelpButton)
 
-        self.Interactive.append(startButton)
-        self.Interactive.append(creditsHelpButton)
+        self.interactive.append(startButton)
+        self.interactive.append(creditsHelpButton)
 
         self.draw()
 
@@ -149,158 +146,350 @@ class HomeScreen:
         self.checkInteractive()
 
     def checkInteractive(self):
-        for element in self.Interactive:
+        for element in self.interactive:
             element.mouseOver(pygame.mouse.get_pos())    
 
     def draw(self):
-        for element in self.Elements:
+        for element in self.elements:
             element.draw()
 
     def recenter(self):
-        for Elements in self.Elements:
-            Elements.recenter()
+        for element in self.elements:
+            element.recenter()
 
 class CreditsScreen:
 
-    def __init__(self, screen, center_X, center_Y):
+    def __init__(self, screen=None):
 
-        self.Elements = []
-        self.Interactive = []
-        self.InteractiveText = []
+        self.screen = screen
 
-        self.center_X = center_X
-        self.center_Y = center_Y
+        self.elements = []
+        self.interactive = []
+        self.interactiveText = []
 
         self.colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
 
-        self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
-        self.Elements.append(self.textDrawer)
-
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
-        homeButton = Elements.Button(screen, "cX-100", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "homeButton.png", 0.23, 4200)
+        homeButton = Elements.Button(screen=screen, 
+                                     event=4200, 
+                                     sizeX=100, 
+                                     sizeY=100, 
+                                     positionController=Controllers.PositionController(objectLength=100,
+                                                                                       objectHeight=100, 
+                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       xOffset=-125, 
+                                                                                       yOffset=-125, 
+                                                                                       refAnchor=Enums.Anchor.BottomRight()), 
+                                     color=buttonColor, 
+                                     labelInformation="homeIcon.png", 
+                                     labelSize = 0.25,
+                                     labelType=Enums.Label.Image())        
 
-        self.Elements.append(homeButton)
-        self.Interactive.append(homeButton)
+        self.elements.append(homeButton)
+        self.interactive.append(homeButton)
 
-        titleTextSize = 70
-        self.textDrawer.add("Created by:", 50+(self.textDrawer.findLengthOfTextRect("Created by:", titleTextSize, "calibri"))/2, 50, titleTextSize, self.colors["darkBlue"],"calibri")
+        self.textController = Controllers.TextController(screen=self.screen)
 
-        normalTextSize = 30
-        self.textDrawer.add("- An Kieu", 50+(self.textDrawer.findLengthOfTextRect("- An Kieu", normalTextSize, "calibri"))/2, 100, normalTextSize, self.colors["darkBlue"],"calibri")
+        self.developedByHeading = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    xOffset=20, 
+                                                                                    yOffset=20, 
+                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                  string="Created By: ",
+                                  font="calibri",
+                                  fontSize=50,
+                                  alignment=Enums.TextAlignment.Left(),
+                                  showingTextBox=False) 
+        self.developerNames = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    xOffset=20, 
+                                                                                    yOffset=85, 
+                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                  string=" An Kieu",
+                                  font="calibri",
+                                  fontSize=30,
+                                  alignment=Enums.TextAlignment.Left(),
+                                  showingTextBox=False) 
+        self.team2324Heading = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    xOffset=20, 
+                                                                                    yOffset=135, 
+                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                  string="BHSS 2023-2024 Math Team: ",
+                                  font="calibri",
+                                  fontSize=50,
+                                  alignment=Enums.TextAlignment.Left(),
+                                  showingTextBox=False) 
+        self.team2324Names = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    xOffset=22, 
+                                                                                    yOffset=200, 
+                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                  string="An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond, Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou",
+                                  font="calibri",
+                                  fontSize=30,
+                                  lineSpacing=1.5,
+                                  alignment=Enums.TextAlignment.Left(),
+                                  showingTextBox=False) 
+        self.team2425Heading = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    xOffset=20, 
+                                                                                    yOffset=300, 
+                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                  string="BHSS 2024-2025 Math Team: ",
+                                  font="calibri",
+                                  fontSize=50,
+                                  alignment=Enums.TextAlignment.Left(),
+                                  showingTextBox=False) 
+        self.team2425Names = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    xOffset=22, 
+                                                                                    yOffset=365, 
+                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                  string="An Kieu (Captain), Bach Kieu, Edward Choi, Jackson Fries, Jacob Hammond, Will Yi, Jachary Yang, Yelena Zhou, Yucelin Zhou",
+                                  font="calibri",
+                                  fontSize=30,
+                                  alignment=Enums.TextAlignment.Left(),
+                                  lineSpacing=1.5,
+                                  showingTextBox=False) 
+        
+        self.textController.add(self.developedByHeading)
+        self.textController.add(self.developerNames)
+        self.textController.add(self.team2324Heading)
+        self.textController.add(self.team2324Names)
+        self.textController.add(self.team2425Heading)
+        self.textController.add(self.team2425Names)
 
-        self.textDrawer.add("BHSS 2023-2024 Math Team: ", 50+(self.textDrawer.findLengthOfTextRect("BHSS 2023-2024 Math Team:", titleTextSize, "calibri"))/2, 200, titleTextSize, self.colors["darkBlue"],"calibri")
-        self.textDrawer.add("- An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond,", 50+(self.textDrawer.findLengthOfTextRect("- An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond,", normalTextSize, "calibri"))/2, 270, normalTextSize, self.colors["darkBlue"],"calibri")
-        self.textDrawer.add("Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou", 50+(self.textDrawer.findLengthOfTextRect("Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou", normalTextSize, "calibri"))/2, 320, normalTextSize, self.colors["darkBlue"],"calibri")
+        self.elements.append(self.textController)
 
-        self.textDrawer.add("Notes Link:", 50+(self.textDrawer.findLengthOfTextRect("Notes Link:", titleTextSize, "calibri"))/2, 430, titleTextSize, self.colors["darkBlue"],"calibri")
-        self.textDrawer.add("- https://docs.google.com/document/d/1ockbV0BvivHAAlEOwTlSEGRIsPMJ869TA_Aa0GmViF4/edit?usp=sharing", 50+(self.textDrawer.findLengthOfTextRect("- https://docs.google.com/document/d/1ockbV0BvivHAAlEOwTlSEGRIsPMJ869TA_Aa0GmViF4/edit?usp=sharing", normalTextSize, "calibri"))/2, 490, normalTextSize, self.colors["darkBlue"],"calibri")
-
-        self.textDrawer.add("Assigned Subjects:", 50+(self.textDrawer.findLengthOfTextRect("Assigned Subjects:", titleTextSize, "calibri"))/2, 590, titleTextSize, self.colors["darkBlue"],"calibri")
-        self.textDrawer.add("- https://docs.google.com/spreadsheets/d/18DLC50YC8_uU0_lGhbcC9ZMmexmqa_q2V47GzfwVNSE/edit#gid=0", 50+(self.textDrawer.findLengthOfTextRect("- https://docs.google.com/spreadsheets/d/18DLC50YC8_uU0_lGhbcC9ZMmexmqa_q2V47GzfwVNSE/edit#gid=0", normalTextSize, "calibri"))/2, 650, normalTextSize, self.colors["darkBlue"],"calibri")
-
-
-        self.draw()
 
     def run(self):
         self.draw()
+        self.checkInteractive()
 
     def draw(self):
-        for element in self.Elements:
+        for element in self.elements:
             element.draw()
 
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        self.textDrawer.recenter(center_X, center_Y)
-        for Elements in self.Elements:
-            Elements.recenter(center_X, center_Y)
+    def recenter(self):
+        for elements in self.elements:
+            elements.recenter()
+
+    def checkInteractive(self):
+        for element in self.interactive:
+            element.mouseOver(pygame.mouse.get_pos())  
 
 class PracticeSelectScreen:
 
-    def __init__(self, screen, center_X, center_Y):
+    def __init__(self, screen=None):
 
-        self.Elements = []
-        self.Interactive = []
+        self.screen = screen
+        self.elements = []
+        self.interactive = []
 
-        self.InteractiveText = []
+        self.interactiveText = []
 
-        self.center_X = center_X
-        self.center_Y = center_Y
+        self.colors = {"darkBlue":(53,63,112), "screenGrey": (230,230,230)}
 
-        self.colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
+        self.text = Elements.Text(screen=self.screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.Center(),
+                                                                                    xOffset=0, 
+                                                                                    yOffset=-225, 
+                                                                                    refAnchor=Enums.Anchor.Center()),
+                                  string="Select Practice",
+                                  font="calibri",
+                                  fontSize=60,
+                                  alignment=Enums.TextAlignment.Center(),
+                                  showingTextBox=False) 
+        self.elements.append(self.text)       
 
-        self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
-
-        titleTextSize = 70
-        self.textDrawer.add("Select Practice", "cX", 100, titleTextSize, self.colors["darkBlue"], "calibri")
-
-        buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
+        buttonColor = ((53,63,112), (230,230,230))
         
         #Utility Button Sizes
-        #homeButton = Elements.Button(screen, "cX-100", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "homeButton.png", 0.23, 4200)
-        #settingsButton = Elements.Button(screen, "cX-100", "cY-100", 100, 100, center_X, center_Y, buttonColor, 8, 10, "image", "settingsButton.png", 0.9, 3802)
-        #statsButton = Elements.Button(screen, "100-cX", "cY-100", 100, 100, center_X, center_Y,buttonColor, 8, 10, "image", "statsButton.png", 0.9, 3798)
-        #helpButton = Elements.Button(screen, "100-cX", "100-cY", 100, 100, center_X, center_Y, buttonColor, 8, 10, "text", "?", 70, 3798, False)
+        homeButton = Elements.Button(screen=screen, 
+                                     event=4200, 
+                                     sizeX=100, 
+                                     sizeY=100, 
+                                     positionController=Controllers.PositionController(objectLength=100,
+                                                                                       objectHeight=100, 
+                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       xOffset=-275, 
+                                                                                       yOffset=225, 
+                                                                                       refAnchor=Enums.Anchor.Center()), 
+                                     color=buttonColor, 
+                                     labelInformation="homeIcon.png", 
+                                     labelSize = 0.25,
+                                     labelType=Enums.Label.Image())
+        settingsButton = Elements.Button(screen=screen, 
+                                     event=3802, 
+                                     sizeX=100, 
+                                     sizeY=100, 
+                                     positionController=Controllers.PositionController(objectLength=100,
+                                                                                       objectHeight=100, 
+                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       xOffset=-125, 
+                                                                                       yOffset=225, 
+                                                                                       refAnchor=Enums.Anchor.Center()), 
+                                     color=buttonColor, 
+                                     labelInformation="settingsIcon.png", 
+                                     labelSize = 0.25,
+                                     labelType=Enums.Label.Image())
+        helpButton = Elements.Button(screen=screen, 
+                                     event=3798, 
+                                     sizeX=100, 
+                                     sizeY=100, 
+                                     positionController=Controllers.PositionController(objectLength=100,
+                                                                                       objectHeight=100, 
+                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       xOffset=25, 
+                                                                                       yOffset=225, 
+                                                                                       refAnchor=Enums.Anchor.Center()), 
+                                     color=buttonColor, 
+                                     labelInformation="questionIcon.png", 
+                                     labelSize = 0.25,
+                                     labelType=Enums.Label.Image())    
+        statsButton = Elements.Button(screen=screen, 
+                                     event=3798, 
+                                     sizeX=100, 
+                                     sizeY=100, 
+                                     positionController=Controllers.PositionController(objectLength=100,
+                                                                                       objectHeight=100, 
+                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       xOffset=175, 
+                                                                                       yOffset=225, 
+                                                                                       refAnchor=Enums.Anchor.Center()), 
+                                     color=buttonColor, 
+                                     labelInformation="questionIcon.png", 
+                                     labelSize = 0.25,
+                                     labelType=Enums.Label.Image())      
+
+        #Adding Utility Buttons
+        
+        #Adding To Elements
+        self.elements.append(homeButton)
+        self.elements.append(settingsButton)
+        self.elements.append(statsButton)
+        self.elements.append(helpButton)
+
+        #Adding To Interactive
+        self.interactive.append(homeButton)
+        self.interactive.append(settingsButton)
+        self.interactive.append(statsButton)
+        self.interactive.append(helpButton)
 
         #Practice Button Sizes
         practicebuttonTextSize = 40
-        practiceButtonX = 350
-        practiceButtonY = 100
-        practiceSpreadY = 150
-        practiceSpreadX = 400
-        
-        #Creating Utility Buttons
-        
-        #Adding To Elements
-        #self.Elements.append(homeButton)
-        #self.Elements.append(settingsButton)
-        #self.Elements.append(statsButton)
-        #self.Elements.append(helpButton)
-
-        self.Elements.append(self.textDrawer)
-
-        #Adding To Interactive
-        #self.Interactive.append(homeButton)
-        #self.Interactive.append(settingsButton)
-        #self.Interactive.append(statsButton)
-        #self.Interactive.append(helpButton)
 
         #Creating Practice Buttons
-        HistoryButton = Elements.Button(screen=screen, 
+        quaternionButton = Elements.Button(screen=screen, 
                                         event=4202, 
-                                        sizeX=practiceButtonX, 
-                                        sizeY=practiceButtonY, 
-                                        positionController=Controllers.PositionController(objectLength=practiceButtonX,
-                                                                                          objectHeight=practiceButtonY, 
-                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                          xOffset=-practiceSpreadX, 
-                                                                                          yOffset=-practiceSpreadY, 
+                                        sizeX=230, 
+                                        sizeY=100, 
+                                        positionController=Controllers.PositionController(objectLength=230,
+                                                                                          objectHeight=100, 
+                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          xOffset=0, 
+                                                                                          yOffset=-150, 
+                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                        color=buttonColor, 
+                                        labelInformation="Quaternions", 
+                                        labelSize = practicebuttonTextSize,
+                                        labelType=Enums.Label.Text(),
+                                        font = "calibri",
+                                        labelColor = (0,0,0))        
+        graphButton = Elements.Button(screen=screen, 
+                                        event=4202, 
+                                        sizeX=250, 
+                                        sizeY=100, 
+                                        positionController=Controllers.PositionController(objectLength=250,
+                                                                                          objectHeight=100, 
+                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          xOffset=0, 
+                                                                                          yOffset=-50, 
+                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                        color=buttonColor, 
+                                        labelInformation="Graph Theory", 
+                                        labelSize = practicebuttonTextSize,
+                                        labelType=Enums.Label.Text(),
+                                        font = "calibri",
+                                        labelColor = (0,0,0))
+        moduloButton = Elements.Button(screen=screen, 
+                                        event=4202, 
+                                        sizeX=345, 
+                                        sizeY=100, 
+                                        positionController=Controllers.PositionController(objectLength=345,
+                                                                                          objectHeight=100, 
+                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          xOffset=0, 
+                                                                                          yOffset=50, 
+                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                        color=buttonColor, 
+                                        labelInformation="Modulo Arithmetic", 
+                                        labelSize = practicebuttonTextSize,
+                                        labelType=Enums.Label.Text(),
+                                        font = "calibri",
+                                        labelColor = (0,0,0))
+        historyButton = Elements.Button(screen=screen, 
+                                        event=4202, 
+                                        sizeX=155, 
+                                        sizeY=100, 
+                                        positionController=Controllers.PositionController(objectLength=155,
+                                                                                          objectHeight=100, 
+                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          xOffset=0, 
+                                                                                          yOffset=150, 
                                                                                           refAnchor=Enums.Anchor.Center()), 
                                         color=buttonColor, 
                                         labelInformation="History", 
-                                        labelSize = practicebuttonTextSize)
-
+                                        labelSize = practicebuttonTextSize,
+                                        labelType=Enums.Label.Text(),
+                                        font = "calibri",
+                                        labelColor = (0,0,0))
+        
         #Adding to Elements
-        self.Elements.append(HistoryButton)
+        self.elements.append(quaternionButton)
+        self.elements.append(graphButton)
+        self.elements.append(moduloButton)
+        self.elements.append(historyButton)
 
         #Adding to interactive
-        self.Interactive.append(HistoryButton)
+        self.interactive.append(quaternionButton)
+        self.interactive.append(graphButton)
+        self.interactive.append(moduloButton)
+        self.interactive.append(historyButton)
         
         self.draw()
 
     def run(self):
         self.draw()
+        self.checkInteractive()
 
     def draw(self):
-        for element in self.Elements:
+        for element in self.elements:
             element.draw()
 
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        for Elements in self.Elements:
-            Elements.recenter(center_X, center_Y)
+    def checkInteractive(self):
+        for element in self.interactive:
+            element.mouseOver(pygame.mouse.get_pos())  
+
+    def recenter(self):
+        for elements in self.elements:
+            elements.recenter()
 
 class ProblemScreen:
 
@@ -308,10 +497,10 @@ class ProblemScreen:
 
         self.screen = screen
 
-        self.Elements = []
-        self.Interactive = []
+        self.elements = []
+        self.interactive = []
 
-        self.InteractiveText = []
+        self.interactiveText = []
 
         self.problemType = problemType
 
@@ -351,25 +540,25 @@ class ProblemScreen:
         self.problemNumberBox = Elements.ProblemNumberBox(screen, 25, 140, 60, 60, str(self.problemsDone), self.colors["darkBlue"])
 
         # Creates Problem Controller
-        self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.Elements, self.Interactive)
+        self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.elements, self.interactive)
         self.loadProblem()
-        self.Elements.append(self.problemController)
+        self.elements.append(self.problemController)
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
         menuButton = Elements.Button(screen, "cX-50", "50-cY", 68, 68, center_X, center_Y, buttonColor, 6, 10, "image", "menuButton.png", 0.6, 3800)
 
-        self.Elements.append(menuButton)
-        self.Interactive.append(menuButton)
+        self.elements.append(menuButton)
+        self.interactive.append(menuButton)
 
         self.checkButton = Elements.Button(screen, "cX-100", "cY-88", 100, 68, center_X, center_Y, buttonColor, 6, 10, "text", "Submit", 30, 6900)
         self.nextButton = Elements.Button(screen, "cX-100", "cY-88", 100, 68, center_X, center_Y, buttonColor, 6, 10, "image", "arrowButton.png", 0.3, 6901)
 
-        self.Elements.append(self.checkButton)
-        self.Interactive.append(self.checkButton)
+        self.elements.append(self.checkButton)
+        self.interactive.append(self.checkButton)
 
-        self.Elements.append(self.textDrawer)
-        self.Elements.append(self.problemNumberBox)
+        self.elements.append(self.textDrawer)
+        self.elements.append(self.problemNumberBox)
 
         self.draw()
 
@@ -378,11 +567,11 @@ class ProblemScreen:
         self.checkInteractive()
 
     def draw(self):
-        for element in self.Elements:
+        for element in self.elements:
             element.draw()
 
     def checkInteractive(self):
-        for element in self.Interactive:
+        for element in self.interactive:
             if (type(element) == Elements.MCQButton):
                 element.mouseOver(pygame.mouse.get_pos())
 
@@ -393,8 +582,8 @@ class ProblemScreen:
         
         try:
             for textbox in self.problemController.inputElements:
-                self.Interactive.append(textbox)
-                self.InteractiveText.append(textbox)
+                self.interactive.append(textbox)
+                self.interactiveText.append(textbox)
         except:
             pass
 
@@ -410,25 +599,25 @@ class ProblemScreen:
         self.problemController.loadProblemInput(self.problem.answerReceiver)
 
         for inputElement in self.problemController.inputElements:
-            self.Interactive.append(inputElement)
-            self.InteractiveText.append(inputElement)
+            self.interactive.append(inputElement)
+            self.interactiveText.append(inputElement)
 
     def swapButton(self):
-        if (self.checkButton in self.Elements):
-            self.Elements.remove(self.checkButton)
-            self.Interactive.remove(self.checkButton)
-            self.Elements.append(self.nextButton)
-            self.Interactive.append(self.nextButton)
+        if (self.checkButton in self.elements):
+            self.elements.remove(self.checkButton)
+            self.interactive.remove(self.checkButton)
+            self.elements.append(self.nextButton)
+            self.interactive.append(self.nextButton)
         else:
-            self.Elements.remove(self.nextButton)
-            self.Interactive.remove(self.nextButton)
-            self.Elements.append(self.checkButton)
-            self.Interactive.append(self.checkButton)
+            self.elements.remove(self.nextButton)
+            self.interactive.remove(self.nextButton)
+            self.elements.append(self.checkButton)
+            self.interactive.append(self.checkButton)
 
     def recenter(self, center_X, center_Y):
         self.center_X = center_X
         self.center_Y = center_Y
-        for element in self.Elements:
+        for element in self.elements:
             element.recenter(center_X, center_Y)
         self.checkButton.recenter(center_X, center_Y)
         self.nextButton.recenter(center_X, center_Y)
