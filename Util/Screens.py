@@ -20,7 +20,7 @@ import HistoryProblems
 
 eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "history", 6900: "answerInputted", 6901: "answerSelected", 6902: "newProblem"}
 
-class testScreen:
+class TestScreen:
 
     def __init__(self, screen, center_X, center_Y):
 
@@ -73,7 +73,7 @@ class testScreen:
             if (type(element) == Elements.MCQButton):
                 element.deselect()
         
-class homescreen:
+class HomeScreen:
 
     def __init__(self, screen, center_X, center_Y):
 
@@ -86,32 +86,43 @@ class homescreen:
 
         self.colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
 
-        self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
-
-        titleTextSize = 70
-        self.textDrawer.add("2023-2024 BHSS Academic Super Bowl", "cX", "cY-260", titleTextSize, self.colors["darkBlue"],"calibri")
-        self.textDrawer.add("Math Training Tool", "cX", "cY-200", titleTextSize, self.colors["darkBlue"],"calibri")
+        self.text = Elements.Text(screen=screen,
+                                  positionController=Controllers.PositionController(objectLength=1100,
+                                                                                    objectHeight=200,
+                                                                                    drawAnchor=Enums.Anchor.Center(),
+                                                                                    xOffset=0, 
+                                                                                    yOffset=-175, 
+                                                                                    refAnchor=Enums.Anchor.Center()),
+                                  string="2024-2025 BHSS Academic Super Bowl Math Training Tool",
+                                  font="calibri",
+                                  fontSize=60,
+                                  alignment=Enums.TextAlignment.Center(),
+                                  showingTextBox=False)
 
         buttonTextSize = 50
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
 
-        StartButton = Elements.Button(screen=screen, 
+        startButton = Elements.Button(screen=screen, 
                                       event=4201, 
                                       sizeX=300, 
                                       sizeY=150, 
                                       positionController=Controllers.PositionController(objectLength=300,
                                                                                         objectHeight=150, 
-                                                                                        drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                        drawAnchor=Enums.Anchor.Center(),
                                                                                         xOffset=0, 
                                                                                         yOffset=0, 
                                                                                         refAnchor=Enums.Anchor.Center()), 
-                                      color=buttonColor, labelInformation="Start", 
-                                      labelSize = buttonTextSize)
+                                      color=buttonColor, 
+                                      labelInformation="Start", 
+                                      labelType=Enums.Label.Text(),
+                                      labelSize = buttonTextSize,
+                                      font = "calibri",
+                                      labelColor = (0,0,0))
         creditsHelpButton = Elements.Button(screen=screen, 
                                             event=4199, 
                                             positionController=Controllers.PositionController(objectLength=300,
                                                                                         objectHeight=150, 
-                                                                                        drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                        drawAnchor=Enums.Anchor.Center(),
                                                                                         xOffset=0, 
                                                                                         yOffset=150, 
                                                                                         refAnchor=Enums.Anchor.Center()), 
@@ -119,13 +130,16 @@ class homescreen:
                                             sizeY=150, 
                                             color=buttonColor, 
                                             labelInformation="Credits/Help", 
-                                            labelSize=buttonTextSize)
+                                            labelType=Enums.Label.Text(),
+                                            labelSize=buttonTextSize,
+                                            font = "calibri",
+                                            labelColor = (0,0,0))
 
-        self.Elements.append(self.textDrawer)
-        self.Elements.append(StartButton)
+        self.Elements.append(self.text)
+        self.Elements.append(startButton)
         self.Elements.append(creditsHelpButton)
 
-        self.Interactive.append(StartButton)
+        self.Interactive.append(startButton)
         self.Interactive.append(creditsHelpButton)
 
         self.draw()
@@ -142,14 +156,11 @@ class homescreen:
         for element in self.Elements:
             element.draw()
 
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        self.textDrawer.recenter(center_X, center_Y)
+    def recenter(self):
         for Elements in self.Elements:
-            Elements.recenter(center_X, center_Y)
+            Elements.recenter()
 
-class creditsScreen:
+class CreditsScreen:
 
     def __init__(self, screen, center_X, center_Y):
 
@@ -205,7 +216,7 @@ class creditsScreen:
         for Elements in self.Elements:
             Elements.recenter(center_X, center_Y)
 
-class practiceSelectScreen:
+class PracticeSelectScreen:
 
     def __init__(self, screen, center_X, center_Y):
 
@@ -291,7 +302,7 @@ class practiceSelectScreen:
         for Elements in self.Elements:
             Elements.recenter(center_X, center_Y)
 
-class problemScreen:
+class ProblemScreen:
 
     def __init__(self, screen, center_X, center_Y, problemType):
 

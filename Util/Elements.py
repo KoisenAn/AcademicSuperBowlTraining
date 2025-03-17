@@ -2,6 +2,7 @@ import pygame
 import Elements
 import Expressions
 import Enums
+import Controllers
 
 import os
 
@@ -9,86 +10,105 @@ import os
 # The following classes are used to draw/create specifics things to display or for users to interact with
 #
 
-# Draws text on a given screen
-# Used for miscellaneous text
-# X and Y are operations relative to the center
-
 colors = {"white":(255,255,255), "black":(0,0,0), "darkBlue":(53,63,112), "screenGrey":(230,230,230), "highlightMCQGrey": (210,210,210), "highlightBlue": (55, 190, 245, 0.5)}
 
-class TextDrawer:
+# An object that displays text on the screen
+class Text:
 
-    def __init__(self, screen, center_X, center_Y):
+    def __init__(self, screen = None, positionController=None, string=None, lineSpacing = 1, leftMargin = 20, rightMargin = 20, topMargin = 20, alignment = Enums.TextAlignment.Left, fontSize = 12, color = (0,0,0), font = "calibri", showingTextBox = False):
+        
         self.screen = screen
-        self.Texts = []
-        self.center_X = center_X
-        self.center_Y = center_Y
-    
-    #Creates a tuple that holds information about individual texts to draw
-    def add(self, string, X, Y, size, color, font):
-        lines = string.split("\n")
-        for i in range(len(lines)):
-            if (type(Y) == int):
-                width = self.findWidthOfTextRect(lines[i], size, font) * 1.5
-                self.Texts.append((lines[i], X, Y-(len(lines)-1)*width/2+i*(width), size, color, font))
-            elif (type(Y) == str):
-                width = self.findWidthOfTextRect(lines[i], size, font) * 1.5
-                self.Texts.append((lines[i], X, Y + "-" + str((len(lines)-1)*width/2) + "+" + str(i*(width)), size, color, font))
 
-    def drawOne(self, string, X, Y, size, color, font):
+        self.positionController = positionController
 
+        self.string = string
+
+        self.lineSpacing = lineSpacing
+        self.leftMargin = leftMargin
+        self.rightMargin = rightMargin
+        self.topMargin = topMargin
+        self.alignment = alignment
+
+        self.maxLength = positionController.getSize()[0] - self.leftMargin - self.rightMargin
+
+        self.fontSize = fontSize
+        self.color = color
+        self.font = font
+
+        self.showingTextBox = showingTextBox
+
+        self.loadFont(self.font, self.fontSize)
+
+        self.text = []
+
+        self.processText()
+
+        self.outsideTextBoxRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0]-2.5, 
+                                              self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1]-2.5, 
+                                              self.positionController.getSize()[0]+5,
+                                              self.positionController.getSize()[1]+5)
+
+        self.insideTextBoxRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0], 
+                                             self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
+                                             self.positionController.getSize()[0],
+                                             self.positionController.getSize()[1])
+
+
+    def loadFont(self, font, fontSize):
         if (font.endswith("ttf")):
-            self.font = pygame.font.Font(font, size)
+            self.loadedFont = pygame.font.Font(font, fontSize)
+            return pygame.font.Font(font, fontSize)
         else:
-            self.font = pygame.font.SysFont(font, size)
-        text = self.font.render(string, True, color)
-        textRect = text.get_rect()
-    
-        xOp = Expressions.locationExpressionValue(X, self.center_X, self.center_Y)
-        yOp = Expressions.locationExpressionValue(Y, self.center_X, self.center_Y)
+            self.loadedFont = pygame.font.SysFont(font, fontSize)
+            return pygame.font.SysFont(font, fontSize)
 
-        textRect.center = (xOp,yOp)
-        self.screen.blit(text, textRect)
+    def findLengthOfTextRect(self, string):
 
-    def draw(self):
-        #print(self.Texts)
-        for i in range(len(self.Texts)):
-            self.drawOne(self.Texts[i][0],self.Texts[i][1],self.Texts[i][2],self.Texts[i][3],self.Texts[i][4],self.Texts[i][5])
-
-    def getTexts(self):
-        for textTuple in self.Texts:
-            print(textTuple)
-        return self.Texts
-    
-    def findLengthOfTextRect(self, string, size, font):
-
-        testFont = pygame.font.SysFont(font, size)
-
-        text = testFont.render(string, True, (0,0,0))
+        text = self.loadedFont.render(string, True, (0,0,0))
         textRect = text.get_rect()
 
         return textRect.size[0]
+
+    def processText(self):
+        
+        wordList = self.string.split(" ")
+
+        line = "" 
+        for i in range(len(wordList)):
+            if (self.findLengthOfTextRect(line + wordList[i]) > self.maxLength):
+                self.text.append(line)
+                line = ""
+            line += wordList[i] + " "
+
+        self.text.append(line)
+
+        print(self.text)
+        
+    def draw(self):
+
+        if (self.showingTextBox):
+            pygame.draw.rect(self.screen, colors["black"], self.outsideTextBoxRect, 0)
+            pygame.draw.rect(self.screen, colors["screenGrey"], self.insideTextBoxRect, 0)
+
+        for i in range(len(self.text)):
+            textLine = self.loadedFont.render(self.text[i], True, self.color)
+            textLineRect = textLine.get_rect()
+            if (type(self.alignment) == Enums.TextAlignment.Left):
+                textLineRect.topleft = (self.positionController.getPosition(positionOnObject=Enums.Anchor.TopLeft())[0] + self.leftMargin, 
+                                        self.positionController.getPosition(positionOnObject=Enums.Anchor.TopLeft())[1] + self.topMargin + textLineRect.height * i * self.lineSpacing)
+            elif (type(self.alignment) == Enums.TextAlignment.Center):
+                textLineRect.midtop = (self.positionController.getPosition(positionOnObject=Enums.Anchor.TopCenter())[0], 
+                                       self.positionController.getPosition(positionOnObject=Enums.Anchor.TopCenter())[1] + self.topMargin + textLineRect.height * i * self.lineSpacing)
+            self.screen.blit(textLine, textLineRect)
     
-    def findWidthOfTextRect(self, string, size, font):
-
-        testFont = pygame.font.SysFont(font, size)
-
-        text = testFont.render(string, True, (0,0,0))
-        textRect = text.get_rect()
-
-        return textRect.size[1]
-
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-    
-    def clear(self):
-        self.Texts = []
-
-# Creates a Button object which returns a event when pressed
-# Note the drawing of the button is center based    
+    def recenter(self):
+        self.positionController.recenter()
+        
+# An object which returns a event when pressed
+# Drawing is center-based    
 class Button:
 
-    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True):
+    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True, **kwargs):
 
         # Inputed variables stored in the object
         self.screen = screen
@@ -107,38 +127,46 @@ class Button:
         self.positionController = positionController
 
         #Button Creation
-        self.ButtonRectInside = pygame.Rect(self.positionController.getPosition()[0], self.positionController.getPosition()[1], self.sizeX, self.sizeY)
+        self.ButtonRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0], self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], self.sizeX, self.sizeY)
 
         self.labels = []
-        self.label = Elements.Label(screen, 
-                                    labelSize, 
-                                    labelType, 
-                                    self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[0], 
-                                    self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[1], 
-                                    labelInformation, 
-                                    color[2], 
-                                    'calibri')
+        if (type(self.labelType) == Enums.Label.Text):
+            self.label = Elements.Label(screen=screen, 
+                                        size=labelSize, 
+                                        labelType=labelType, 
+                                        positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
+                                                                                          objectHeight=self.positionController.getSize()[1],
+                                                                                          xOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[0],
+                                                                                          yOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[1],
+                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          refAnchor=Enums.Anchor.TopLeft()), 
+                                        labelInformation=labelInformation,
+                                        font = kwargs.get("font"),
+                                        color = kwargs.get("labelColor"))
+        elif (type(self.labelType) == Enums.Label.Image):
+            self.label = Elements.Label(screen=screen, 
+                                        size=labelSize, 
+                                        labelType=labelType, 
+                                        positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
+                                                                                          objectHeight=self.positionController.getSize()[1],
+                                                                                          xOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[0],
+                                                                                          yOffset=self.positionController.getPosition(positionOnObject = Enums.Anchor.Center())[1],
+                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          refAnchor=Enums.Anchor.TopLeft()), 
+                                        labelInformation=labelInformation)
         self.labels.append(self.label)
         if (not isWorking):
-            self.crossLine = Elements.Label(screen, 
-                                            thickness, 
-                                            "line", 
-                                            self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[0],
-                                            self.positionController.getPosition(drawAnchor = Enums.Anchor.Center)[1], 
-                                            (sizeX, sizeY), 
-                                            color[0], 
-                                            'calibri')
-            self.labels.append(self.crossLine)
+            pass # TODO: Add some kind of visual thing for not working stuff
 
     #Draws everything
     def draw(self):
-        pygame.draw.rect(self.screen, self.color[self.colorState], self.ButtonRectInside, 0, self.curveRadius)
+        pygame.draw.rect(self.screen, self.color[self.colorState], self.ButtonRect, 0, self.curveRadius)
         for label in self.labels:
             label.draw()
 
     #Runs/check if clicked
     def clicked(self, mousePos):
-        if (self.ButtonRectInside.collidepoint(mousePos)):
+        if (self.ButtonRect.collidepoint(mousePos)):
             if (self.isWorking):
                 CUSTOMEVENT = pygame.event.Event(self.event)
                 pygame.event.post(CUSTOMEVENT)
@@ -147,7 +175,7 @@ class Button:
             return False
         
     def mouseOver(self, mousePos):
-        isMouseOver = self.ButtonRectInside.collidepoint(mousePos)
+        isMouseOver = self.ButtonRect.collidepoint(mousePos)
         if (isMouseOver):
             self.colorState = 0
             return True
@@ -155,10 +183,11 @@ class Button:
             self.colorState = 1
             return False
 
-    def recenter(self, x, y):
+    def recenter(self):
         self.positionController.recenter()
+        self.ButtonRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0], self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], self.sizeX, self.sizeY)
         for label in self.labels:
-            label.recenter(x, y)
+            label.recenter()
      
     def getPosition(self):
         return self.positionController
@@ -175,7 +204,7 @@ class Button:
         if (change == "image"):
             self.label.changeImage(otherInformation)
 
-class MCQButton():
+class MCQButton:
 
     def __init__(self, screen, X, Y, center_X, center_Y, sizeX, sizeY, number, labelType, string, labelSize):
         
@@ -248,113 +277,58 @@ class MCQButton():
 class Label:
 
     #Initializing function for labels of text and images 
-    def __init__(self, screen, initSize, type, X, Y, otherInformation, color, font):
-        if (type == "text"):
+    def __init__(self, screen=None, positionController = None, size=10, labelType=None, labelInformation = None, **kwargs):
 
-            #Initial Variables
-            self.type = "text"
+        self.screen = screen
+        self.positionController = positionController
+        self.type = labelType
+        self.labelSize = size
 
-            # Inputed variables stored in the object
-            self.screen = screen
-            self.string = otherInformation
-            self.labelSize = initSize
-            self.X = X
-            self.Y = Y
+        self.labelInfromation = labelInformation
+        
+        if (type(self.type) == Enums.Label.Text):
+            self.font = kwargs.get("font")
+            self.color = kwargs.get("color")
 
-            if (font.endswith("ttf")):
-                self.font = pygame.font.Font(font, initSize)
+            # TODO: Turn this into a text element
+            if (self.font.endswith("ttf")):
+                self.loadedFont = pygame.font.Font(self.font, self.labelSize)
             else:
-                self.font = pygame.font.SysFont(font, initSize)
+                self.loadedFont = pygame.font.SysFont(self.font, self.labelSize)
 
-            self.color = color
-            self.text = self.font.render(otherInformation, True, color)
-            self.textRect = self.text.get_rect()
-            self.textRect.center = (X, Y)
+            self.text = self.loadedFont.render(self.labelInfromation, True, self.color)
+            self.labelRect = self.text.get_rect()
 
-        elif (type == "image"):
+        elif (type(self.type) == Enums.Label.Image):
 
             current_dir = os.path.dirname(__file__)
             current_dir = os.path.dirname(current_dir)
             image_dir = os.path.join(current_dir, 'Images')
 
-            #Initial Variables
-            self.type = "image"
-
-            # Inputed variables stored in the object
-            self.screen = screen
-            self.string = otherInformation
-            self.X = X
-            self.Y = Y
-            self.size = initSize
-            self.image = pygame.image.load(os.path.join(image_dir,otherInformation))
-            self.image = pygame.transform.scale_by(self.image, initSize)
-            self.imageRect = self.image.get_rect()
-            self.imageRect.center = (X, Y)
-
-        #I really only used this label to cross out buttons that don't work
-        #The other information in this case is the size of button
-        elif (type == "line"):
-
-            self.screen = screen
-            self.thickness = initSize
-            self.type = "line"
-            self.color = color
-
-            self.X = X
-            self.Y = Y
-            self.horiDis = int(otherInformation[0]/2)
-            self.vertDis = int(otherInformation[1]/2)
+            self.image = pygame.image.load(os.path.join(image_dir,self.labelInfromation))
+            self.image = pygame.transform.scale_by(self.image, self.labelSize)
+            self.labelRect = self.image.get_rect()
+            self.labelRect.center = (self.positionController.getPosition()[0], self.positionController.getPosition()[1])
     
     def draw(self):
-        if (self.type == "text"):
-            self.textRect.center = (self.X, self.Y)
-            self.screen.blit(self.text, self.textRect)
-        elif (self.type == "image"):
-            self.imageRect.center = (self.X, self.Y)
-            self.screen.blit(self.image, self.imageRect)
-        if (self.type == "line"):
-            pygame.draw.line(self.screen, self.color, (self.X - self.horiDis +  6, self.Y - self.vertDis + 6), (self.X + self.horiDis -  6, self.Y + self.vertDis - 6), self.thickness)
-
-    #Just changes the size for label, so the shrinking button animation works
-    def changeSize(self, scale):
-        if (self.type == "text"):
-            self.font = pygame.font.SysFont('calibri', int(self.labelSize * scale))
-            self.text = self.font.render(self.string, True, self.color)
-            self.textRect = self.text.get_rect()
-            self.textRect.center = (self.X, self.Y)
-        elif (self.type == "image"):
-
-            current_dir = os.path.dirname(__file__)
-            current_dir = os.path.dirname(current_dir)
-            image_dir = os.path.join(current_dir, 'Images')
-
-            self.image = pygame.image.load(os.path.join(image_dir, self.string))
-            self.image = pygame.transform.scale_by(self.image, self.size*scale)
-            self.imageRect = self.image.get_rect()
-            self.imageRect.center = (self.X, self.Y)
-    
+        self.labelRect.center = (self.positionController.getPosition()[0], self.positionController.getPosition()[1])
+        self.screen.blit(self.text, self.labelRect)
+            
     def changeText(self, text):
-        self.text = self.font.render(text, True, self.color)
+        self.text = self.loadedFont.render(text, True, self.color)
     
     def changeImage(self, imagePath):
         self.string = imagePath
 
-    def getTextRect(self):
-        return self.textRect
+    def getRect(self):
+        return self.labelRect
 
     def changeColor(self, color):
         self.color = color
 
-    def recenter(self, X, Y):
-        if (self.type == "text"):
-            self.X = X
-            self.Y = Y
-        elif (self.type == "image"):
-            self.X = X
-            self.Y = Y
-        if (self.type == "line"):
-            self.X = X
-            self.Y = Y
+    def recenter(self):
+        print("aye")
+        self.positionController.recenter()
 
 # Note that this is center-based 
 class InputTextBox:

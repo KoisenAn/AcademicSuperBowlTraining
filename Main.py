@@ -8,7 +8,7 @@ folder_dir = os.path.join(current_dir, 'Util')
 sys.path.insert(0, folder_dir)
 
 current_dir = os.path.dirname(__file__)
-folder_dir = os.path.join(current_dir, '2023-2024 Subjects')
+folder_dir = os.path.join(current_dir, '2024-2025 Subjects')
 sys.path.insert(0, folder_dir)
 
 import Elements
@@ -23,7 +23,7 @@ Buttons = []
 
 center_X = 640
 center_Y = 360
-currScreen = Screens.homescreen(screen, center_X, center_Y)
+currScreen = Screens.HomeScreen(screen, center_X, center_Y)
 popUp = None
 
 tabDown = False
@@ -50,10 +50,10 @@ while running:
                 height = 400
             else:
                 height = pygame.display.get_window_size()[1]
-            currScreen.recenter(width//2, height//2)
+            currScreen.recenter()
             screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
             if (popUp != None):
-                popUp.recenter(width//2, height//2)
+                popUp.recenter()
 
         if event.type == pygame.MOUSEBUTTONUP:
             mousePos = pygame.mouse.get_pos()
@@ -64,7 +64,7 @@ while running:
                 for interactive in currScreen.Interactive: 
                     interactive.clicked(mousePos) 
 
-            if (type(currScreen) == Screens.problemScreen):
+            if (type(currScreen) == Screens.ProblemScreen):
                 currScreen.updateProblem()
 
         if event.type == pygame.KEYDOWN:
@@ -79,7 +79,7 @@ while running:
             if (tabDown and event.key == pygame.K_t):
                 currScreen = Screens.TestScreen(screen, center_X, center_Y)
             elif (tabDown and event.key == pygame.K_h):
-                currScreen = Screens.Homescreen(screen, center_X, center_Y)
+                currScreen = Screens.HomeScreen(screen, center_X, center_Y)
             elif (tabDown and event.key == pygame.K_p):
                 currScreen = Screens.PracticeSelectScreen(screen, center_X, center_Y)
             elif (tabDown and event.key == pygame.K_q):
@@ -108,7 +108,7 @@ while running:
         if event.type >= 4100 and event.type <= 4300:
             popUpActive = False
             if Screens.eventDict[event.type] == "home":
-                currScreen = Screens.Homescreen(screen, center_X, center_Y)
+                currScreen = Screens.HomeScreen(screen, center_X, center_Y)
                 continue
             elif Screens.eventDict[event.type] == "credits":
                 currScreen = Screens.CreditsScreen(screen, center_X, center_Y)

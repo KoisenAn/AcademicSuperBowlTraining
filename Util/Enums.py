@@ -88,3 +88,14 @@ class Label:
 
     class Inactive:
         pass
+
+class TextAlignment:
+
+    class Left:
+        pass
+
+    class Right:
+        pass
+
+    class Center:
+        pass

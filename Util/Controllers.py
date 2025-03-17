@@ -301,7 +301,7 @@ class PositionController:
             self.width = pygame.display.get_window_size()[0]
             self.hieght = pygame.display.get_window_size()[1]
 
-    def getPosition(self, drawAnchor = None):
+    def getPosition(self, positionOnObject = None):
 
         # Finding center position
         if (type(self.refAnchor) == Enums.Anchor.Center):
@@ -325,30 +325,84 @@ class PositionController:
 
         # Offsetting by initial draw anchor
 
-        if (drawAnchor == None):
-            drawAnchor = self.drawAnchor
-
-        if (type(drawAnchor) == Enums.Anchor.Center):
-            pass
-        elif (type(drawAnchor) == Enums.Anchor.TopRight):
-            position[0] += self.objectLength/2
-            position[1] += -self.objectHeight/2
-        elif (type(drawAnchor) == Enums.Anchor.TopLeft):
-            position[0] += -self.objectLength/2
-            position[1] += -self.objectHeight/2
-        elif (type(drawAnchor) == Enums.Anchor.BottomRight):
-            position[0] += self.objectLength/2
-            position[1] += self.objectHeight/2
-        elif (type(drawAnchor) == Enums.Anchor.BottomLeft):
-            position[0] += -self.objectLength/2
-            position[1] += self.objectHeight/2
-        elif (type(drawAnchor) == Enums.Anchor.TopCenter):
-            position[1] += -self.objectHeight/2
-        elif (type(drawAnchor) == Enums.Anchor.BottomCenter):
-            position[1] += self.objectHeight/2
-        elif (type(drawAnchor) == Enums.Anchor.RightCenter):
-            position[0] += self.objectLength/2
-        elif (type(drawAnchor) == Enums.Anchor.LeftCenter):
-            position[0] += -self.objectLength/2
+        if (positionOnObject == None):
+            return position
+        else:
+            if (type(self.drawAnchor) == Enums.Anchor.Center):
+                if (type(positionOnObject) == Enums.Anchor.Center):
+                    pass
+                elif (type(positionOnObject) == Enums.Anchor.TopRight):
+                    position[0] += self.objectLength/2
+                    position[1] += -self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.TopLeft):
+                    position[0] += -self.objectLength/2
+                    position[1] += -self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.BottomRight):
+                    position[0] += self.objectLength/2
+                    position[1] += self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.BottomLeft):
+                    position[0] += -self.objectLength/2
+                    position[1] += self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.TopCenter):
+                    position[1] += -self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.BottomCenter):
+                    position[1] += self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.RightCenter):
+                    position[0] += self.objectLength/2
+                elif (type(positionOnObject) == Enums.Anchor.LeftCenter):
+                    position[0] += -self.objectLength/2
+            elif (type(self.drawAnchor) == Enums.Anchor.TopLeft):
+                if (type(positionOnObject) == Enums.Anchor.Center):
+                    position[0] += self.objectLength/2
+                    position[1] += self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.TopRight):
+                    position[0] += self.objectLength/2
+                elif (type(positionOnObject) == Enums.Anchor.TopLeft):
+                    pass
+                elif (type(positionOnObject) == Enums.Anchor.BottomRight):
+                    position[0] += self.objectLength
+                    position[1] += self.objectHeight
+                elif (type(positionOnObject) == Enums.Anchor.BottomLeft):
+                    position[1] += self.objectHeight
+                elif (type(positionOnObject) == Enums.Anchor.TopCenter):
+                    position[0] += self.objectLength/2
+                elif (type(positionOnObject) == Enums.Anchor.BottomCenter):
+                    position[0] += self.objectLength/2
+                    position[1] += self.objectHeight
+                elif (type(positionOnObject) == Enums.Anchor.RightCenter):
+                    position[0] += self.objectLength
+                    position[1] += self.objectHeight/2
+                elif (type(positionOnObject) == Enums.Anchor.LeftCenter):
+                    position[1] += self.objectHeight/2
         
-        return position
+            return position
+        
+    def getSize(self):
+        return self.objectLength, self.objectHeight
+    
+    def changeSize(self, newLength = None, newHeight = None):
+        if (newLength != None):
+            self.objectLength = newLength
+        if (newHeight != None):
+            self.objectHeight = newHeight
+    
+class TextController:
+
+    def __init__(self, screen):
+        self.screen = screen
+        self.texts = []
+
+    def draw(self):
+        for text in self.texts:
+            text.draw()
+
+    def getTexts(self):
+        for text in self.texts:
+            print(text)
+        return self.texts
+    
+    def clear(self):
+        self.texts = []
+
+    def recenter(self):
+        pass
