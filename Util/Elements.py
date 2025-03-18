@@ -31,7 +31,7 @@ class Text:
         self.topMargin = topMargin
         self.alignment = alignment
 
-        self.maxLength = positionController.getSize()[0] - self.leftMargin - self.rightMargin
+        self.maxLength = (lambda x: x if not callable(x) else x())(positionController.getSize()[0]) - self.leftMargin - self.rightMargin
 
         self.fontSize = fontSize
         self.color = color
@@ -54,6 +54,8 @@ class Text:
                                              self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                              self.positionController.getSize()[0],
                                              self.positionController.getSize()[1])
+
+        print(self.positionController.getSize())
 
 
     def loadFont(self, font, fontSize):
@@ -83,8 +85,6 @@ class Text:
             line += wordList[i] + " "
 
         self.text.append(line)
-
-        print(self.text)
         
     def draw(self):
 
@@ -105,9 +105,9 @@ class Text:
     
     def recenter(self):
         self.positionController.recenter()
+        print(self.positionController.getSize())
         
-# An object which returns a event when pressed
-# Drawing is center-based    
+# An object which returns a event when pressed   
 class Button:
 
     positionController: Controllers.PositionController
@@ -279,7 +279,6 @@ class MCQButton:
         self.selected = False
 
 # Creates a label object which can be stuck on things like buttons
-# not center or origin based, you put in the cords of the center of where you want to put the label
 class Label:
 
     #Initializing function for labels of text and images 

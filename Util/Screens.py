@@ -20,24 +20,40 @@ import HistoryProblems
 
 eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "history", 6900: "answerInputted", 6901: "answerSelected", 6902: "newProblem"}
 
-class TestScreen:
-
-    def __init__(self, screen, center_X, center_Y):
-
+class Screen:
+    def __init__(self, screen = None):
         self.screen = screen
-
         self.elements = []
         self.interactive = []
         self.interactiveText = []
 
-        self.center_X = center_X
-        self.center_Y = center_Y
+    def run(self):
+        self.checkInteractive()
+        self.draw()
+
+    def checkInteractive(self):
+        for element in self.interactive:
+            element.mouseOver(pygame.mouse.get_pos())   
+
+    def draw(self):
+        for element in self.elements:
+            element.draw()
+
+    def recenter(self):
+        for elements in self.elements:
+            elements.recenter() 
+
+class TestScreen(Screen):
+
+    def __init__(self, screen):
+
+        super().__init__(screen)
 
         '''
         self.Switch = Elements.Switch(screen, 500, 500, center_X, center_Y, 50, True, "Multiple Attempts", ["right", 30], Elements.colors, 500, True)
         self.elements.append(self.Switch)
         self.interactive.append(self.Switch)
-        '''
+        
 
         self.mcqbutton = Elements.MCQButton(screen, 0, 0, center_X, center_Y, 800, 80, 0, "text", "1. test", 30)
         self.elements.append(self.mcqbutton)
@@ -47,41 +63,20 @@ class TestScreen:
         self.elements.append(self.mcqbutton)
         self.interactive.append(self.mcqbutton)
 
-        #self.imageTest = Elements.Image(screen, center_X, center_Y, 300, 300, "IntegralSymbol.png", 1, 2, Elements.colors)
-        #self.elements.append(self.imageTest)
-
-    def run(self):
-        self.draw()
-        self.checkInteractive()
-
-    def draw(self): 
-        for element in self.elements:
-            element.draw()
-        
-    def checkInteractive(self):
-        for element in self.interactive:
-            element.mouseOver(pygame.mouse.get_pos())
-
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        for element in self.elements:
-            element.recenter(center_X, center_Y)
+        self.imageTest = Elements.Image(screen, center_X, center_Y, 300, 300, "IntegralSymbol.png", 1, 2, Elements.colors)
+        self.elements.append(self.imageTest)
+        '''
 
     def resetMCQs(self):
         for element in self.elements:
             if (type(element) == Elements.MCQButton):
                 element.deselect()
         
-class HomeScreen:
+class HomeScreen(Screen):
 
     def __init__(self, screen=None):
 
-        self.screen = screen
-
-        self.elements = []
-        self.interactive = []
-        self.interactiveText = []
+        super().__init__(screen)
 
         self.text = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
@@ -141,31 +136,11 @@ class HomeScreen:
 
         self.draw()
 
-    def run(self):
-        self.draw()
-        self.checkInteractive()
-
-    def checkInteractive(self):
-        for element in self.interactive:
-            element.mouseOver(pygame.mouse.get_pos())    
-
-    def draw(self):
-        for element in self.elements:
-            element.draw()
-
-    def recenter(self):
-        for element in self.elements:
-            element.recenter()
-
-class CreditsScreen:
+class CreditsScreen(Screen):
 
     def __init__(self, screen=None):
 
-        self.screen = screen
-
-        self.elements = []
-        self.interactive = []
-        self.interactiveText = []
+        super().__init__(screen)
 
         self.colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
 
@@ -228,7 +203,7 @@ class CreditsScreen:
                                   alignment=Enums.TextAlignment.Left(),
                                   showingTextBox=False) 
         self.team2324Names = Elements.Text(screen=self.screen,
-                                  positionController=Controllers.PositionController(objectLength=1100,
+                                  positionController=Controllers.PositionController(objectLength=(lambda: pygame.display.get_window_size()[0]-62),
                                                                                     objectHeight=200,
                                                                                     drawAnchor=Enums.Anchor.TopLeft(),
                                                                                     xOffset=22, 
@@ -275,32 +250,11 @@ class CreditsScreen:
 
         self.elements.append(self.textController)
 
-
-    def run(self):
-        self.draw()
-        self.checkInteractive()
-
-    def draw(self):
-        for element in self.elements:
-            element.draw()
-
-    def recenter(self):
-        for elements in self.elements:
-            elements.recenter()
-
-    def checkInteractive(self):
-        for element in self.interactive:
-            element.mouseOver(pygame.mouse.get_pos())  
-
-class PracticeSelectScreen:
+class PracticeSelectScreen(Screen):
 
     def __init__(self, screen=None):
 
-        self.screen = screen
-        self.elements = []
-        self.interactive = []
-
-        self.interactiveText = []
+        super().__init__(screen)
 
         self.colors = {"darkBlue":(53,63,112), "screenGrey": (230,230,230)}
 
@@ -475,37 +429,13 @@ class PracticeSelectScreen:
         
         self.draw()
 
-    def run(self):
-        self.draw()
-        self.checkInteractive()
+class ProblemScreen(Screen):
 
-    def draw(self):
-        for element in self.elements:
-            element.draw()
+    def __init__(self, screen, problemType):
 
-    def checkInteractive(self):
-        for element in self.interactive:
-            element.mouseOver(pygame.mouse.get_pos())  
-
-    def recenter(self):
-        for elements in self.elements:
-            elements.recenter()
-
-class ProblemScreen:
-
-    def __init__(self, screen, center_X, center_Y, problemType):
-
-        self.screen = screen
-
-        self.elements = []
-        self.interactive = []
-
-        self.interactiveText = []
+        super().__init__(screen)
 
         self.problemType = problemType
-
-        self.center_X = center_X
-        self.center_Y = center_Y
 
         self.problemsDone = 0
         self.problemsDoneTracker = []
@@ -515,8 +445,6 @@ class ProblemScreen:
         self.colors = {"darkBlue": (53, 63, 112), "screenGrey": (230,230,230), "lightBlue":(38, 176, 237)}
 
         self.titleTextSize = 50
-
-        self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
 
         # 2023-2024 Year
         '''
@@ -545,7 +473,8 @@ class ProblemScreen:
         self.elements.append(self.problemController)
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
-
+        
+        '''
         menuButton = Elements.Button(screen, "cX-50", "50-cY", 68, 68, center_X, center_Y, buttonColor, 6, 10, "image", "menuButton.png", 0.6, 3800)
 
         self.elements.append(menuButton)
@@ -558,22 +487,10 @@ class ProblemScreen:
         self.interactive.append(self.checkButton)
 
         self.elements.append(self.textDrawer)
+        '''
         self.elements.append(self.problemNumberBox)
 
         self.draw()
-
-    def run(self):
-        self.draw()
-        self.checkInteractive()
-
-    def draw(self):
-        for element in self.elements:
-            element.draw()
-
-    def checkInteractive(self):
-        for element in self.interactive:
-            if (type(element) == Elements.MCQButton):
-                element.mouseOver(pygame.mouse.get_pos())
 
     def loadProblem(self):
 
@@ -602,6 +519,7 @@ class ProblemScreen:
             self.interactive.append(inputElement)
             self.interactiveText.append(inputElement)
 
+    '''
     def swapButton(self):
         if (self.checkButton in self.elements):
             self.elements.remove(self.checkButton)
@@ -613,14 +531,12 @@ class ProblemScreen:
             self.interactive.remove(self.nextButton)
             self.elements.append(self.checkButton)
             self.interactive.append(self.checkButton)
+    '''
 
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        for element in self.elements:
-            element.recenter(center_X, center_Y)
-        self.checkButton.recenter(center_X, center_Y)
-        self.nextButton.recenter(center_X, center_Y)
+    def recenter(self):
+        super().recenter()
+        #self.checkButton.recenter(center_X, center_Y)
+        #self.nextButton.recenter(center_X, center_Y)
 
     def getType(self):
         return self.problemType    
