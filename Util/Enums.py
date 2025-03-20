@@ -1,14 +1,18 @@
-class Question:
+class QuestionGenerationType:
 
-    def __init__(self, text):
-        self.text = text
+    class Fixed:
+        pass
 
-class Answer:
-    pass
+    class Generate:
+        pass
+
 
 class ProblemDisplayType:
 
-    class Lines:
+    class Text:
+        pass
+
+    class Custom:
         pass
 
 class ProblemInputType:
@@ -30,21 +34,11 @@ class ProblemInputType:
 
     class MCQ:
 
-        def __init__(self, numChoices, firstChoiceText, secondChoiceText, thirdChoiceText=None, fourthChoiceText=None, fifthChoiceText=None, sixthChoiceText=None):
-            self.numChoices = numChoices
-            self.firstChoiceText = firstChoiceText
-            self.secondChoiceText = secondChoiceText
-            self.thirdChoiceText = thirdChoiceText
-            self.fourthChoiceText = fourthChoiceText
-            self.fifthChoiceText = fifthChoiceText
-            self.sixthChoiceText = sixthChoiceText
-            self.choicesTextList = [firstChoiceText, secondChoiceText, thirdChoiceText, fourthChoiceText, fifthChoiceText, sixthChoiceText][:numChoices-1]
+        def __init__(self, numMCQs):
+            self.numMCQs = numMCQs
 
-        def getNumChoices(self):
-            return self.numChoices    
-        
-        def getChoicesTextList(self):
-            return self.choicesTextList
+        def getNumMCQs(self):
+            return self.numMCQs
         
 class Anchor:
 

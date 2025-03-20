@@ -12,104 +12,16 @@ print(folder_dir)
 sys.path.insert(0, folder_dir)
 
 import Elements
-
+import Enums
 
 problemList = []
 
-#Problem template
 '''
-class ExampleProblem1: 
-
-    def __init__(self):
-
-        self.question = []
-        self.answers = []
-        self.inputTexts = []
-
-        self.problemDisplayType = "lines"
-
-        self.create()
-
-        pass
-
-    def create(self):
-
-        self.question = []
-        self.answers = []
-        self.inputTexts = []
-
-        self.generateProblem()
-        self.generateQuestionAndAnswer()
-    
-    def generateProblem(self):
-        pass
-
-    def generateQuestionAndAnswer(self):
-    
-        self.answers = []
-        self.question = []
-
-        pass
-
-    def checkCorrect(self):
-        pass
-        
-    def getQuestion(self):
-        return self.question
-
-    def getAnswer(self):
-        return self.answers
-        
-    def display(self):
-        pass
+historyProblem1 = Elements.Problem(questionType = Enums.QuestionType.Generate(),
+                                   question = Elements.Question(),
+                                   answer = Elements.Answer(),
+                                   problemDisplayType = Enums.ProblemDisplayType.Text(),
+                                   problemInputType = Enums.ProblemInputType.MCQ())
 '''
 
-
-class HistoryProblem1: 
-
-    def __init__(self):
-
-        self.question = []
-        self.answers = []
-        self.inputTexts = []
-
-        self.problemDisplayType = "lines"
-
-        self.create()
-
-        pass
-
-    def create(self):
-
-        self.question = []
-        self.answers = []
-        self.inputTexts = ["hi"]
-
-        self.generateProblem()
-        self.generateQuestionAndAnswer()
-    
-    def generateProblem(self):
-        self.answerReceiver = ("mcq",2)
-        pass
-
-    def generateQuestionAndAnswer(self):
-    
-        self.answerReceiver = ("mcq",2)
-        self.answers = ["super amazing"]
-        self.question = ["How amazing is An"]
-
-        pass
-
-    def checkCorrect(self):
-        pass
-        
-    def getQuestion(self):
-        return self.question
-
-    def getAnswer(self):
-        return self.answers
-        
-    def display(self):
-        pass
-
-problemList = [HistoryProblem1()]
+problemList = []

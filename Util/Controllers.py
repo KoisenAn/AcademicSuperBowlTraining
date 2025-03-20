@@ -4,10 +4,9 @@ import Enums
 
 class ProblemController:
 
-    def __init__(self, screen, center_X, center_Y, color, elementList, interactiveList):
+    def __init__(self, screen = None, elementList = None, interactiveList = None):
 
         self.screen = screen
-        self.color = color
         self.submitted = False
 
         self.problemType = None
@@ -20,18 +19,13 @@ class ProblemController:
         self.elementList = elementList
         self.interactiveList = interactiveList
 
-        self.center_X = center_X
-        self.center_Y = center_Y
-
-        self.TextDrawer = Elements.TextDrawer(screen, center_X, center_Y)
-        self.MCQController = MCQController(screen, center_X, center_Y, self.elementList, self.interactiveList)
+        #self.MCQController = MCQController(screen, center_X, center_Y, self.elementList, self.interactiveList)
         pass
 
     def reset(self, problemType):
 
         self.answer = []
         del self.inputElements[:]
-        self.TextDrawer.clear()
         self.problemType = problemType
 
     def loadProblemDisplay(self, problem):
@@ -45,20 +39,7 @@ class ProblemController:
         self.questionDisplayType = type
 
         if (type == "lines"):
-
-            if (len(question) > 1):
-
-                spacing = 100
-
-                topHieght = -1*float((len(question)-2))/2 * spacing -25
-
-                for i in range(len(question)-1):
-                    self.TextDrawer.add(question[i], "cX", "cY+" + str(topHieght+spacing*i), 60, self.color, "calibri")
-
-                self.TextDrawer.add(question[len(question)-1], 120+(self.TextDrawer.findLengthOfTextRect(question[len(question)-1], 60, "calibri"))/2, 175, 60, self.color, "calibri")
-            
-            else:
-                self.TextDrawer.add(question[0], "cX", "cY", 60, self.color, "calibri")
+            pass
 
     def loadSolutionDisplay(self, problem):
 
@@ -254,23 +235,39 @@ class ProblemController:
 
 class MCQController:
 
-    def __init__(self, screen, centerX, centerY, elementsList, interactiveList):
+    def __init__(self, screen, **kwargs):
 
         self.screen = screen
-        self.centerX = centerX
-        self.centerY = centerY
 
-        self.elementsList = elementsList
-        self.interactiveList = interactiveList
-
-        self.MCQElementList = []
+        self.MCQButtonList = []
 
     def createChoices(self, numMCQs, y, choiceType,):
 
         self.MCQElementList = []
 
         for i in range(numMCQs):
-            MCQButton = Elements.MCQButton(self.screen, 100, y+100*i, self.centerX, self.centerY, 800, 80, i, "text", "test " + str(i), 30)
+            MCQButton = Elements.MCQButton()
+            self.MCQElementList.append(MCQButton)
+
+        return self.MCQElementList
+    
+    def updateMCQStates(self):
+        pass
+
+class TextBoxController:
+
+    def __init__(self, screen, **kwargs):
+
+        self.screen = screen
+
+        self.MCQButtonList = []
+
+    def createChoices(self, numMCQs, y, choiceType,):
+
+        self.MCQElementList = []
+
+        for i in range(numMCQs):
+            MCQButton = Elements.MCQButton()
             self.MCQElementList.append(MCQButton)
 
         return self.MCQElementList

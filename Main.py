@@ -34,9 +34,8 @@ for i in range(7):
     problemsDoneList.append([0,0,0,0])
 
 while running:
-    #Checks for user interactions*
+    #Checks for user interactions
     for event in pygame.event.get():
-        # print(event)
         if event.type == pygame.QUIT:
             running = False
 
@@ -62,13 +61,10 @@ while running:
                     interactive.clicked(mousePos)
             else:
                 for interactive in currScreen.interactive: 
-                    interactive.clicked(mousePos) 
-
-            if (type(currScreen) == Screens.ProblemScreen):
-                currScreen.updateProblem()
+                    interactive.clicked(mousePos)
 
         if event.type == pygame.KEYDOWN:
-            for textbox in currScreen.InteractiveText:
+            for textbox in currScreen.interactiveText:
                 if (textbox.isActive):
                     textbox.inputText(event)
 
@@ -90,8 +86,10 @@ while running:
             if (event.key == pygame.K_LCTRL or event.key == pygame.K_LCTRL):
                 tabDown = False
 
+        #
         # Custom events
-            
+        #
+    
         # Pop Ups
         if event.type >= 3700 and event.type <= 3900:
             popUpActive = True
@@ -117,7 +115,7 @@ while running:
                 currScreen = Screens.PracticeSelectScreen(screen=screen) 
                 continue
             elif event.type >= 4202 and event.type <= 4208:
-                currScreen = Screens.ProblemScreen(screen, center_X, center_Y, event.type)
+                currScreen = Screens.ProblemScreen(screen=screen, problemType=event.type)
                 continue
 
         if event.type >= 6900 and event.type <= 7000:

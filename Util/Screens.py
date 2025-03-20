@@ -78,7 +78,7 @@ class HomeScreen(Screen):
 
         super().__init__(screen)
 
-        self.text = Elements.Text(screen=self.screen,
+        self.title = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
                                                                                     drawAnchor=Enums.Anchor.Center(),
@@ -127,7 +127,7 @@ class HomeScreen(Screen):
                                             font = "calibri",
                                             labelColor = (0,0,0))
 
-        self.elements.append(self.text)
+        self.elements.append(self.title)
         self.elements.append(startButton)
         self.elements.append(creditsHelpButton)
 
@@ -258,7 +258,7 @@ class PracticeSelectScreen(Screen):
 
         self.colors = {"darkBlue":(53,63,112), "screenGrey": (230,230,230)}
 
-        self.text = Elements.Text(screen=self.screen,
+        self.title = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
                                                                                     drawAnchor=Enums.Anchor.Center(),
@@ -270,7 +270,7 @@ class PracticeSelectScreen(Screen):
                                   fontSize=60,
                                   alignment=Enums.TextAlignment.Center(),
                                   showingTextBox=False) 
-        self.elements.append(self.text)       
+        self.elements.append(self.title)       
 
         buttonColor = ((53,63,112), (230,230,230))
         
@@ -431,7 +431,7 @@ class PracticeSelectScreen(Screen):
 
 class ProblemScreen(Screen):
 
-    def __init__(self, screen, problemType):
+    def __init__(self, screen=None, problemType=None):
 
         super().__init__(screen)
 
@@ -446,31 +446,52 @@ class ProblemScreen(Screen):
 
         self.titleTextSize = 50
 
-        # 2023-2024 Year
-        '''
-        match (Screens.eventDict[self.problemType]):
-            case "algebra":
-                self.textDrawer.add("Algebra Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
-            case "mod":
-                self.textDrawer.add("Modular Arithmetic Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
-            case "doom":
-                self.textDrawer.add("Doomsday Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
-            case "statistics":
-                self.textDrawer.add("Statistics Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
-        '''
-
         # 2024-2025 Year
         match (Screens.eventDict[self.problemType]):
             case "history":
-                self.textDrawer.add("History Practice", "cX", 95/2, self.titleTextSize, self.colors["darkBlue"], "calibri")
+                self.title = Elements.Text(screen=self.screen,
+                                           positionController=Controllers.PositionController(objectLength=1100,
+                                                                                             objectHeight=200,
+                                                                                             drawAnchor=Enums.Anchor.TopCenter(),
+                                                                                             xOffset=0, 
+                                                                                             yOffset=10, 
+                                                                                             refAnchor=Enums.Anchor.TopCenter()),
+                                           string="History Practice",
+                                           font="calibri",
+                                           fontSize=self.titleTextSize,
+                                           alignment=Enums.TextAlignment.Center(),
+                                           showingTextBox=False)    
+                self.elements.append(self.title)            
 
         # Stylistic Stuff
-        self.problemNumberBox = Elements.ProblemNumberBox(screen, 25, 140, 60, 60, str(self.problemsDone), self.colors["darkBlue"])
+        self.problemNumberBox = Elements.ProblemNumberBox(screen=self.screen, 
+                                                          positionController=Controllers.PositionController(objectLength=60,
+                                                                                             objectHeight=60,
+                                                                                             drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                             xOffset=30, 
+                                                                                             yOffset=95, 
+                                                                                             refAnchor=Enums.Anchor.TopLeft()),
+                                                          problemNumber=str(self.problemsDone))
+        
+        self.inputTextBox = Elements.InputTextBox(screen=self.screen,
+                                                  length=200,
+                                                  height=50,
+                                                  positionController=Controllers.PositionController(objectLength=200,
+                                                                                                    objectHeight=50,
+                                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                                    xOffset=0, 
+                                                                                                    yOffset=200, 
+                                                                                                    refAnchor=Enums.Anchor.Center()),
+                                                  labelText="Your mom: ")
+
+        self.elements.append(self.inputTextBox)
+        self.interactive.append(self.inputTextBox)
+        self.interactiveText.append(self.inputTextBox)
 
         # Creates Problem Controller
-        self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.elements, self.interactive)
-        self.loadProblem()
-        self.elements.append(self.problemController)
+        #self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.elements, self.interactive)
+        #self.loadProblem()
+        #self.elements.append(self.problemController)
 
         buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
         

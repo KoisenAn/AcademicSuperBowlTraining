@@ -1,11 +1,19 @@
+import pygame
+
+#
+# A class that calculates the value of a string expression
+#
+
 def locationExpressionValue(expression, center_X = int, center_Y = int):
+
+    screenLength, screenHeight = pygame.display.get_window_size()
 
     if (type(expression) is str):
         if (expression in ["cX", "cx", "centerX", "centerx", "CenterX", "Centerx", "Cx", "CX", "center_X", "center_x", "Center_X", "Center_x"]):
-            return center_X
+            return screenLength/2
         elif (expression in ["cY", "cy", "centerY", "centery", "CenterY", "Centery", "y", "CY", "center_Y", "center_y", "Center_Y", "Center_y"]):
-            return center_Y
-        formatList = locationExpressionFormatter(expression, center_X, center_Y)
+            return screenHeight/2
+        formatList = locationExpressionFormatter(expression, screenLength/2, screenHeight/2)
     else:
         return expression
     
