@@ -111,7 +111,7 @@ class Button:
 
     positionController: Controllers.PositionController
 
-    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True, **kwargs):
+    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, thickness=0, curveRadius=0, labelType=Enums.Label.Text(), labelInformation=None, labelSize=10, isWorking=True, **kwargs):
 
         # Inputed variables stored in the object
         self.screen = screen
@@ -141,7 +141,7 @@ class Button:
                                                                                           objectHeight=self.positionController.getSize()[1],
                                                                                           xOffset=0,
                                                                                           yOffset=0,
-                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          drawAnchor=Enums.Anchor.Center(),
                                                                                           refObject=self.positionController,
                                                                                           refAnchor=Enums.Anchor.Center()), 
                                         labelInformation=labelInformation,
@@ -155,7 +155,7 @@ class Button:
                                                                                           objectHeight=self.positionController.getSize()[1],
                                                                                           xOffset=0,
                                                                                           yOffset=0,
-                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          drawAnchor=Enums.Anchor.Center(),
                                                                                           refObject=self.positionController,
                                                                                           refAnchor=Enums.Anchor.Center()), 
                                         labelInformation=labelInformation)
@@ -211,10 +211,26 @@ class Button:
 
 # A button subclass that handles multiple choice buttons
 class MCQButton(Button):
-
-    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True, **kwargs):
         
-        super().__init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, color="white", thickness=0, curveRadius=0, labelType="text", labelInformation=None, labelSize=10, isWorking=True, **kwargs)
+    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, labelType=Enums.Label.Text(), labelInformation=None, labelSize=10, isWorking=True, **kwargs):
+
+        super().__init__(screen=screen, event=event, sizeX=sizeX, sizeY=sizeY, positionController=positionController, labelType=labelType, labelInformation=labelInformation, labelSize=labelSize, isWorking=isWorking, **kwargs )
+
+        self.selected = False
+
+        self.label.positionController.changeRefAnchor(Enums.Anchor.LeftCenter())
+        self.label.positionController.changeDrawAnchor(Enums.Anchor.LeftCenter())
+        self.label.positionController.changeOffset(newXOffset=20)
+
+    def clicked(self, mousePos):
+        if (self.ButtonRect.collidepoint(mousePos)):
+            if (self.isWorking):
+                CUSTOMEVENT = pygame.event.Event(self.event)
+                pygame.event.post(CUSTOMEVENT)
+                self.selected =  not self.selected
+            return True
+        else:
+            return False
 
     def draw(self):
         if (self.selected):
@@ -258,6 +274,8 @@ class Label:
             self.text = self.loadedFont.render(self.labelInfromation, True, self.color)
             self.labelRect = self.text.get_rect()
 
+            self.positionController.changeSize(newLength=self.labelRect.width, newHeight=self.labelRect.height) # TODO: change all lengths to widths
+
         elif (type(self.type) == Enums.Label.Image):
 
             current_dir = os.path.dirname(__file__)
@@ -269,8 +287,8 @@ class Label:
             self.labelRect = self.image.get_rect()
     
     def draw(self):
-        self.labelRect.center = (self.positionController.getPosition(positionOnObject=Enums.Anchor.TopLeft())[0], 
-                                 self.positionController.getPosition(positionOnObject=Enums.Anchor.TopLeft())[1])
+        self.labelRect.center = (self.positionController.getPosition(positionOnObject=Enums.Anchor.Center())[0], 
+                                 self.positionController.getPosition(positionOnObject=Enums.Anchor.Center())[1])
         if (type(self.type) == Enums.Label.Text):
             self.screen.blit(self.text, self.labelRect)
         elif (type(self.type) == Enums.Label.Image):
@@ -310,6 +328,9 @@ class InputTextBox:
 
         self.inputtedText = ""
 
+        textMargin = 15
+        labelAndBoxSpacing = 10
+
         if (self.labelText == None):
             self.insideRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0], 
                                           self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
@@ -332,9 +353,9 @@ class InputTextBox:
                                         labelType=Enums.Label.Text(), 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
                                                                                           objectHeight=self.positionController.getSize()[1],
-                                                                                          xOffset=35,
+                                                                                          xOffset=textMargin,
                                                                                           yOffset=0,
-                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          drawAnchor=Enums.Anchor.LeftCenter(),
                                                                                           refObject=self.positionController,
                                                                                           refAnchor=Enums.Anchor.LeftCenter()), 
                                         labelInformation=self.defaultText,
@@ -347,27 +368,27 @@ class InputTextBox:
                                         labelType=Enums.Label.Text(), 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
                                                                                           objectHeight=self.positionController.getSize()[1],
-                                                                                          xOffset=35,
+                                                                                          xOffset=0,
                                                                                           yOffset=0,
-                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          drawAnchor=Enums.Anchor.LeftCenter(),
                                                                                           refObject=self.positionController,
                                                                                           refAnchor=Enums.Anchor.LeftCenter()), 
                                         labelInformation=self.labelText,
                                         font='calibri',
                                         color=(0,0,0))
-            self.insideRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + 10, 
+            self.insideRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + labelAndBoxSpacing, 
                                           self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                           self.length, 
                                           self.height)
-            self.outsideRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + 10, 
+            self.outsideRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + labelAndBoxSpacing, 
                                            self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                            self.length, 
                                            self.height)
-            self.activeRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + 10, 
+            self.activeRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + labelAndBoxSpacing, 
                                           self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                           self.length, 
                                           self.height)
-            self.correctRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + 10, 
+            self.correctRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[0] + self.externalLabel.getRect().width + labelAndBoxSpacing, 
                                            self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                            self.length, 
                                            self.height)
@@ -376,15 +397,14 @@ class InputTextBox:
                                         labelType=Enums.Label.Text(), 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
                                                                                           objectHeight=self.positionController.getSize()[1],
-                                                                                          xOffset=35 + self.externalLabel.getRect().width + 10,
+                                                                                          xOffset=textMargin+labelAndBoxSpacing+self.externalLabel.getRect().width,
                                                                                           yOffset=0,
-                                                                                          drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                          drawAnchor=Enums.Anchor.LeftCenter(),
                                                                                           refObject=self.positionController,
                                                                                           refAnchor=Enums.Anchor.LeftCenter()), 
                                         labelInformation=self.defaultText,
                                         font='calibri',
                                         color=(200,200,200))
-
 
     def draw(self):
         pygame.draw.rect(self.screen, (255,255,255), self.insideRect, 0, 3)
@@ -401,7 +421,6 @@ class InputTextBox:
 
         if (self.isActive):
             pygame.draw.rect(self.screen, (55, 190, 245), self.activeRect, 3, 3)
-        self.defaultLabel.draw()
         
         if (self.labelText != None):
             self.externalLabel.draw()
@@ -415,6 +434,8 @@ class InputTextBox:
                 self.defaultLabel.changeColor((200,200,200))
             else: 
                 self.defaultLabel.changeText("")
+
+        self.defaultLabel.draw()
         pass
 
     def clicked(self, mousePos):
@@ -439,6 +460,10 @@ class InputTextBox:
                 self.inputtedText = self.inputtedText[:-1]
         else:
             self.inputtedText += event.unicode  
+            self.defaultLabel.changeText(self.inputtedText)
+            if (self.defaultLabel.text.get_rect().width > self.length - 30):
+                self.inputtedText = self.inputtedText[:-1]
+                self.defaultLabel.changeText(self.inputtedText)
 
     def recenter(self):
         if (self.labelText == None):
@@ -482,6 +507,12 @@ class InputTextBox:
     def submit(self, isCorrect):
         self.submitted = True
         self.isCorrect = isCorrect
+
+    def getLength(self):
+        if (self.labelText == None):
+            return self.insideRect.width
+        else:
+            return self.externalLabel.getRect().width + self.insideRect.width 
 
 # An object that draws a line across the screen
 class Divider:
@@ -545,7 +576,7 @@ class ProblemNumberBox:
                                                                                       objectHeight=self.positionController.getSize()[1],
                                                                                       xOffset=0,
                                                                                       yOffset=0,
-                                                                                      drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                      drawAnchor=Enums.Anchor.Center(),
                                                                                       refObject=self.positionController,
                                                                                       refAnchor=Enums.Anchor.Center()), 
                                     labelInformation=self.problemNumber,
@@ -553,8 +584,8 @@ class ProblemNumberBox:
                                     color = self.color)        
 
     def draw(self):
-        pygame.draw.rect(self.screen, (255,255,255), self.boxOutlineRect, 0, 0)
-        pygame.draw.rect(self.screen, self.color, self.boxOutlineRect, 4, 0)
+        pygame.draw.rect(self.screen, (255,255,255), self.boxOutlineRect, 0, 3)
+        pygame.draw.rect(self.screen, (100,100,100), self.boxOutlineRect, 4, 3)
         self.label.draw()
 
     def changeNumber(self, number):

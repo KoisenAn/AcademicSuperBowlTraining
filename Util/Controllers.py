@@ -1,6 +1,7 @@
 import pygame
 import Elements
 import Enums
+import Controllers
 
 class ProblemController:
 
@@ -233,47 +234,145 @@ class ProblemController:
         for element in self.inputElements:
             element.recenter(center_X, center_Y)
 
-class MCQController:
+class InputController:
 
-    def __init__(self, screen, **kwargs):
+    def __init__(self, screen=None, y=500, **kwargs):
+
+        self.screen = screen
+        self.y = y
+
+        self.elements = []
+        self.interactive = []
+
+    def draw(self):
+        for element in self.elements:
+            element.draw()
+    
+    def clicked(self, mousePos):
+        for element in self.interactive:
+            element.clicked(mousePos)
+
+    def mouseOver(self, mousePos):
+        for element in self.interactive:
+            element.mouseOver(mousePos)
+
+    def recenter(self):
+        for element in self.elements:
+            element.recenter()    
+
+    def getInput(self):
+        pass
+
+class MCQController(InputController):
+
+    def __init__(self, screen=None, y=500, numMCQs=4, maxSelectable=1, **kwargs):
 
         self.screen = screen
 
-        self.MCQButtonList = []
+        self.elements = []
+        self.interactive = []
 
-    def createChoices(self, numMCQs, y, choiceType,):
+        self.y=y
 
-        self.MCQElementList = []
+        self.numMCQs = numMCQs
+
+        self.maxSelectable = maxSelectable
+
+        self.labelList = []
+
+        try:
+            self.labelList = kwargs["labelList"]
+        except:
+            for i in range(numMCQs):
+                try:
+                    self.labelList.append(kwargs["label"+str(i+1)])
+                except:
+                    self.labelList.append(None)  
+
+        self.createChoices(numMCQs=numMCQs)
+
+    def createChoices(self, numMCQs):
+
+        self.mcqButtonList = []
 
         for i in range(numMCQs):
-            MCQButton = Elements.MCQButton()
-            self.MCQElementList.append(MCQButton)
+            mcqButton = Elements.MCQButton(screen=self.screen, 
+                                            event=6905, 
+                                            sizeX=500, 
+                                            sizeY=70, 
+                                            positionController=Controllers.PositionController(objectLength=500,
+                                                                                              objectHeight=70, 
+                                                                                              drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                              xOffset=30, 
+                                                                                              yOffset=self.y+80*i, 
+                                                                                              refAnchor=Enums.Anchor.TopLeft()),  
+                                            labelInformation= ["A. ", "B. ", "C. ", "D. ", "E. ", "F. "][i] + (lambda x: "" if x is None else x)(self.labelList[i]), 
+                                            labelType=Enums.Label.Text(),
+                                            labelSize = 20,
+                                            font = "calibri",
+                                            labelColor = (0,0,0))
+            self.elements.append(mcqButton)
+            self.interactive.append(mcqButton)
 
-        return self.MCQElementList
-    
     def updateMCQStates(self):
         pass
 
-class TextBoxController:
+class TextBoxController(InputController):
 
-    def __init__(self, screen, **kwargs):
+    def __init__(self, screen=None, numTextBoxes=3, y=500, **kwargs):
 
         self.screen = screen
+        self.numTextBoxes = numTextBoxes
 
-        self.MCQButtonList = []
+        self.y = y
 
-    def createChoices(self, numMCQs, y, choiceType,):
+        self.elements = []
+        self.interactive = []
 
-        self.MCQElementList = []
+        self.labelList = []
 
-        for i in range(numMCQs):
-            MCQButton = Elements.MCQButton()
-            self.MCQElementList.append(MCQButton)
+        try:
+            self.labelList = kwargs["labelList"]
+        except:
+            for i in range(numTextBoxes):
+                try:
+                    self.labelList.append(kwargs["label"+str(i+1)])
+                except:
+                    self.labelList.append(None)  
 
-        return self.MCQElementList
-    
-    def updateMCQStates(self):
+        self.createTextBoxes()
+
+    def createTextBoxes(self):
+
+        self.textBoxList = []
+
+        for i in range(self.numTextBoxes):
+            textBox = Elements.InputTextBox(screen=self.screen,
+                                            length=200,
+                                            height=50,
+                                            positionController=Controllers.PositionController(objectLength=200,
+                                                                                              objectHeight=50,
+                                                                                              drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                              xOffset=30+sum((x.getLength()+20) for x in self.elements[0:i]), 
+                                                                                              yOffset=self.y, 
+                                                                                              refAnchor=Enums.Anchor.TopLeft()),
+                                            labelText=self.labelList[i])
+            self.elements.append(textBox)
+            self.interactive.append(textBox)
+
+    def updateTextBoxesText(self, event):
+        for textBox in self.elements:
+            if (textBox.isActive):
+                textBox.inputText(event)
+
+    def updateTextBoxStates(self):
         pass
+
+    def getInput(self):
+        textBoxInputs = []
+        for textBox in self.elements:
+            textBoxInputs.append(textBox.inputtedText)
+        return textBoxInputs
 
 class PositionController:
 
@@ -339,75 +438,87 @@ class PositionController:
         if (positionOnObject == None):
             return position
         else:
-            if (type(self.drawAnchor) == Enums.Anchor.Center): #TODO: Given a drawAnchor, calculate center position and then calculate all other positions
+            if (callable(self.objectLength)):
+                objectLengthValue = self.objectLength()
+            else:
+                objectLengthValue = self.objectLength
 
-                if (callable(self.objectLength)):
-                    objectLengthValue = self.objectLength()
-                else:
-                    objectLengthValue = self.objectLength
+            if (callable(self.objectHeight)):
+                objectHeightValue = self.objectHeight()
+            else:
+                objectHeightValue = self.objectHeight
 
-                if (callable(self.objectHeight)):
-                    objectHeightValue = self.objectHeight()
-                else:
-                    objectHeightValue = self.objectHeight
-
-                if (type(positionOnObject) == Enums.Anchor.Center):
-                    pass
-                elif (type(positionOnObject) == Enums.Anchor.TopRight):
-                    position[0] += objectLengthValue/2
-                    position[1] += -objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.TopLeft):
-                    position[0] += -objectLengthValue/2
-                    position[1] += -objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.BottomRight):
-                    position[0] += objectLengthValue/2
-                    position[1] += objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.BottomLeft):
-                    position[0] += -objectLengthValue/2
-                    position[1] += objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.TopCenter):
-                    position[1] += -objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.BottomCenter):
-                    position[1] += objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.RightCenter):
-                    position[0] += objectLengthValue/2
-                elif (type(positionOnObject) == Enums.Anchor.LeftCenter):
-                    position[0] += -objectLengthValue/2
+            # FInd center position
+            if (type(self.drawAnchor) == Enums.Anchor.Center):
+                pass
             elif (type(self.drawAnchor) == Enums.Anchor.TopLeft):
-                if (type(positionOnObject) == Enums.Anchor.Center):
-                    position[0] += objectLengthValue/2
-                    position[1] += objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.TopRight):
-                    position[0] += objectLengthValue/2
-                elif (type(positionOnObject) == Enums.Anchor.TopLeft):
-                    pass
-                elif (type(positionOnObject) == Enums.Anchor.BottomRight):
-                    position[0] += objectLengthValue
-                    position[1] += objectHeightValue
-                elif (type(positionOnObject) == Enums.Anchor.BottomLeft):
-                    position[1] += objectHeightValue
-                elif (type(positionOnObject) == Enums.Anchor.TopCenter):
-                    position[0] += objectLengthValue/2
-                elif (type(positionOnObject) == Enums.Anchor.BottomCenter):
-                    position[0] += objectLengthValue/2
-                    position[1] += objectHeightValue
-                elif (type(positionOnObject) == Enums.Anchor.RightCenter):
-                    position[0] += objectLengthValue
-                    position[1] += objectHeightValue/2
-                elif (type(positionOnObject) == Enums.Anchor.LeftCenter):
-                    position[1] += objectHeightValue/2
-        
+                position[0] += objectLengthValue/2
+                position[1] += objectHeightValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.BottomLeft):
+                position[0] += objectLengthValue/2
+                position[1] -= objectHeightValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.TopRight):
+                position[0] -= objectLengthValue/2
+                position[1] += objectHeightValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.BottomRight):
+                position[0] -= objectLengthValue/2
+                position[1] -= objectHeightValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.TopCenter):
+                position[1] += objectHeightValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.BottomCenter):
+                position[1] -= objectHeightValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.RightCenter):
+                position[0] -= objectLengthValue/2
+            elif (type(self.drawAnchor) == Enums.Anchor.LeftCenter):
+                position[0] += objectLengthValue/2                                  
+
+            # From center position find other positions
+            if (type(positionOnObject) == Enums.Anchor.Center):
+                pass
+            elif (type(positionOnObject) == Enums.Anchor.TopRight):
+                position[0] += objectLengthValue/2
+                position[1] += -objectHeightValue/2
+            elif (type(positionOnObject) == Enums.Anchor.TopLeft):
+                position[0] += -objectLengthValue/2
+                position[1] += -objectHeightValue/2
+            elif (type(positionOnObject) == Enums.Anchor.BottomRight):
+                position[0] += objectLengthValue/2
+                position[1] += objectHeightValue/2
+            elif (type(positionOnObject) == Enums.Anchor.BottomLeft):
+                position[0] += -objectLengthValue/2
+                position[1] += objectHeightValue/2
+            elif (type(positionOnObject) == Enums.Anchor.TopCenter):
+                position[1] += -objectHeightValue/2
+            elif (type(positionOnObject) == Enums.Anchor.BottomCenter):
+                position[1] += objectHeightValue/2
+            elif (type(positionOnObject) == Enums.Anchor.RightCenter):
+                position[0] += objectLengthValue/2
+            elif (type(positionOnObject) == Enums.Anchor.LeftCenter):
+                position[0] += -objectLengthValue/2
+
             return position
         
     def getSize(self):
         return (lambda x: x if not callable(x) else x())(self.objectLength), (lambda x: x if not callable(x) else x())(self.objectHeight)
     
-    def changeSize(self, newLength = None, newHeight = None):
+    def changeSize(self, newLength=None, newHeight=None):
         if (newLength != None):
             self.objectLength = newLength
         if (newHeight != None):
             self.objectHeight = newHeight
+
+    def changeOffset(self, newXOffset=None, newYOffset=None):
+        if (newXOffset != None):
+            self.xOffset = newXOffset
+        if (newYOffset != None):
+            self.yOffset = newYOffset
     
+    def changeRefAnchor(self, newRefAnchor):
+        self.refAnchor = newRefAnchor
+    
+    def changeDrawAnchor(self, newDrawAnchor):
+        self.drawAnchor = newDrawAnchor
+
 class TextController:
 
     def __init__(self, screen=None):

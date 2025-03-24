@@ -18,14 +18,32 @@ sys.path.insert(0, folder_dir)
 
 import HistoryProblems
 
-eventDict = {3798: "popUpStats", 3799: "popUpExit", 3800: "popUpInPractice", 3801: "checkExit", 3802: "popUpSettings", 4199: "credits", 4200: "home", 4201: "pracSelect", 4202: "history", 6900: "answerInputted", 6901: "answerSelected", 6902: "newProblem"}
+eventDict = {
+    # Pop-ups
+    3798: "popUpStats", 
+    3799: "popUpExit", 
+    3800: "popUpInPractice",
+    3801: "checkExit", 
+    3802: "popUpSettings", 
+    # Practice Selection Events
+    4199: "credits", 
+    4200: "home", 
+    4201: "pracSelect", 
+    4202: "history", 
+    # In practice events
+    6900: "answerInputted", 
+    6901: "answerSelected", 
+    6902: "newProblem", 
+    6903: "Choice A", 
+    6904: "Choice B",
+    6905: "Choice C",
+    6906: "Choice D"}
 
 class Screen:
     def __init__(self, screen = None):
         self.screen = screen
         self.elements = []
         self.interactive = []
-        self.interactiveText = []
 
     def run(self):
         self.checkInteractive()
@@ -473,27 +491,16 @@ class ProblemScreen(Screen):
                                                                                              refAnchor=Enums.Anchor.TopLeft()),
                                                           problemNumber=str(self.problemsDone))
         
-        self.inputTextBox = Elements.InputTextBox(screen=self.screen,
-                                                  length=200,
-                                                  height=50,
-                                                  positionController=Controllers.PositionController(objectLength=200,
-                                                                                                    objectHeight=50,
-                                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                                    xOffset=0, 
-                                                                                                    yOffset=200, 
-                                                                                                    refAnchor=Enums.Anchor.Center()),
-                                                  labelText="Your mom: ")
+        #self.inputController = Controllers.TextBoxController(screen=screen, numTextBoxes=3, y=300, label1="i: ", label2="j: ", label3="k: ")
+        self.inputController = Controllers.MCQController(screen=screen, y=300, label1="An", label2="Lillian", label4="Ollie")
 
-        self.elements.append(self.inputTextBox)
-        self.interactive.append(self.inputTextBox)
-        self.interactiveText.append(self.inputTextBox)
-
+        self.elements.append(self.inputController)
+        self.interactive.append(self.inputController)
+        
         # Creates Problem Controller
         #self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.elements, self.interactive)
         #self.loadProblem()
         #self.elements.append(self.problemController)
-
-        buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
         
         '''
         menuButton = Elements.Button(screen, "cX-50", "50-cY", 68, 68, center_X, center_Y, buttonColor, 6, 10, "image", "menuButton.png", 0.6, 3800)
@@ -506,9 +513,8 @@ class ProblemScreen(Screen):
 
         self.elements.append(self.checkButton)
         self.interactive.append(self.checkButton)
-
-        self.elements.append(self.textDrawer)
         '''
+
         self.elements.append(self.problemNumberBox)
 
         self.draw()

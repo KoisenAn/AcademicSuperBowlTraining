@@ -54,6 +54,7 @@ while running:
             if (popUp != None):
                 popUp.recenter()
 
+        # The mouse is clicked, or well released
         if event.type == pygame.MOUSEBUTTONUP:
             mousePos = pygame.mouse.get_pos()
             if (popUpActive):
@@ -63,25 +64,32 @@ while running:
                 for interactive in currScreen.interactive: 
                     interactive.clicked(mousePos)
 
-        if event.type == pygame.KEYDOWN:
-            for textbox in currScreen.interactiveText:
-                if (textbox.isActive):
-                    textbox.inputText(event)
+        # A key is pressed
+        if event.type == pygame.KEYDOWN: #TODO: Should not be managed outside
+            try:
+                currScreen.inputController.updateTextBoxesText(event)
+            except:
+                pass
 
-            if (event.key == pygame.K_LCTRL or event.key == pygame.K_LCTRL):
+            if (event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL):
                 tabDown = True
                 homeScreenOperPart1 = True
 
             if (tabDown and event.key == pygame.K_t):
-                currScreen = Screens.TestScreen(screen, center_X, center_Y)
+                currScreen = Screens.TestScreen(screen=screen)
             elif (tabDown and event.key == pygame.K_h):
-                currScreen = Screens.HomeScreen(screen, center_X, center_Y)
+                currScreen = Screens.HomeScreen(screen=screen)
             elif (tabDown and event.key == pygame.K_p):
-                currScreen = Screens.PracticeSelectScreen(screen, center_X, center_Y)
+                currScreen = Screens.PracticeSelectScreen(screen=screen)
             elif (tabDown and event.key == pygame.K_q):
                 running = False
-                continue
+            elif (tabDown and (event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT)):
+                try:
+                    print(currScreen.inputController.getInput())
+                except:
+                    pass
 
+        # A key is releaseed
         if event.type == pygame.KEYUP:
             if (event.key == pygame.K_LCTRL or event.key == pygame.K_LCTRL):
                 tabDown = False
@@ -90,7 +98,7 @@ while running:
         # Custom events
         #
     
-        # Pop Ups
+        # Pop-ups
         if event.type >= 3700 and event.type <= 3900:
             popUpActive = True
             if (Screens.eventDict[event.type] == "popUpExit"):
@@ -118,7 +126,8 @@ while running:
                 currScreen = Screens.ProblemScreen(screen=screen, problemType=event.type)
                 continue
 
-        if event.type >= 6900 and event.type <= 7000:
+        # In practice
+        if event.type >= 6900 and event.type <= 7000: # TODO: Problem control should not be handled out in the main loop. Tasks should be delegated to the problem controller
             if (Screens.eventDict[event.type] == "answerInputted"):
 
                 answerRecorder = currScreen.problemController.checkCorrect()
@@ -139,6 +148,10 @@ while running:
             elif (Screens.eventDict[event.type] == "newProblem"):
                 currScreen.loadProblem()
                 currScreen.swapButton()  
+
+            elif (Screens.eventDict[event.type] == "newProblem"):
+                currScreen.loadProblem()
+                currScreen.swapButton()      
 
 
     #print("-----------")   
