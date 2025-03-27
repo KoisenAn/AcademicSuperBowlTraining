@@ -206,7 +206,6 @@ class ProblemController:
 
         elif (self.inputType[0] == "mcq"):
             for mcq in self.inputElements:
-                print(mcq.isSelected())
                 if (mcq.isSelected()):
                     self.answer.append(mcq.getNumber())
 
@@ -263,6 +262,9 @@ class InputController:
     def getInput(self):
         pass
 
+    def processEvent(self, event):
+        pass
+
 class MCQController(InputController):
 
     def __init__(self, screen=None, y=500, numMCQs=4, maxSelectable=1, **kwargs):
@@ -277,6 +279,8 @@ class MCQController(InputController):
         self.numMCQs = numMCQs
 
         self.maxSelectable = maxSelectable
+
+        self.numSelected = 0
 
         self.labelList = []
 
@@ -297,7 +301,7 @@ class MCQController(InputController):
 
         for i in range(numMCQs):
             mcqButton = Elements.MCQButton(screen=self.screen, 
-                                            event=6905, 
+                                            event=6903+i, 
                                             sizeX=500, 
                                             sizeY=70, 
                                             positionController=Controllers.PositionController(objectLength=500,
@@ -306,7 +310,7 @@ class MCQController(InputController):
                                                                                               xOffset=30, 
                                                                                               yOffset=self.y+80*i, 
                                                                                               refAnchor=Enums.Anchor.TopLeft()),  
-                                            labelInformation= ["A. ", "B. ", "C. ", "D. ", "E. ", "F. "][i] + (lambda x: "" if x is None else x)(self.labelList[i]), 
+                                            labelInformation= ["A. ", "B. ", "C. ", "D. "][i] + (lambda x: "" if x is None else x)(self.labelList[i]), 
                                             labelType=Enums.Label.Text(),
                                             labelSize = 20,
                                             font = "calibri",
@@ -316,6 +320,35 @@ class MCQController(InputController):
 
     def updateMCQStates(self):
         pass
+
+    def processEvent(self, event):
+
+        if (self.maxSelectable == 1):
+            for mcq in self.elements:
+                if (event == mcq.event):
+                    mcq.changeSelectedState(not mcq.selected)
+                else:
+                    mcq.changeSelectedState(False)
+        else:
+            for mcq in self.elements:
+                if (event == mcq.event):
+                    if (mcq.isSelected()):
+                        mcq.changeSelectedState(False)
+                        self.numSelected -= 1
+                    else:
+                        if (self.numSelected < self.maxSelectable):
+                            mcq.changeSelectedState(True)
+                            self.numSelected += 1
+        pass
+
+    def getInput(self):
+
+        selectedMCQValues = []
+        for mcq in self.elements:
+            if (mcq.isSelected()):
+                selectedMCQValues.append([mcq.getValue()[0], mcq.getValue()[2:]])
+
+        return selectedMCQValues
 
 class TextBoxController(InputController):
 
@@ -541,6 +574,5 @@ class TextController:
         self.texts = []
 
     def recenter(self):
-        print("-------")
         for text in self.texts:
             text.recenter()

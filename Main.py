@@ -21,8 +21,6 @@ clock = pygame.time.Clock()
 running = True
 Buttons = []
 
-center_X = 640
-center_Y = 360
 currScreen = Screens.HomeScreen(screen)
 popUp = None
 
@@ -34,7 +32,7 @@ for i in range(7):
     problemsDoneList.append([0,0,0,0])
 
 while running:
-    #Checks for user interactions
+    # Checks for user interactions
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -147,14 +145,10 @@ while running:
 
             elif (Screens.eventDict[event.type] == "newProblem"):
                 currScreen.loadProblem()
-                currScreen.swapButton()  
-
-            elif (Screens.eventDict[event.type] == "newProblem"):
-                currScreen.loadProblem()
-                currScreen.swapButton()      
-
-
-    #print("-----------")   
+                currScreen.swapButton()
+        
+            if (Screens.eventDict[event.type].startswith("Choice")):
+                currScreen.inputController.processEvent(event.type) 
             
     screen.fill((230,230,230))
     

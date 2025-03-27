@@ -492,7 +492,12 @@ class ProblemScreen(Screen):
                                                           problemNumber=str(self.problemsDone))
         
         #self.inputController = Controllers.TextBoxController(screen=screen, numTextBoxes=3, y=300, label1="i: ", label2="j: ", label3="k: ")
-        self.inputController = Controllers.MCQController(screen=screen, y=300, label1="An", label2="Lillian", label4="Ollie")
+        self.inputController = Controllers.MCQController(screen=screen, 
+                                                         y=300,
+                                                         maxSelectable=2, 
+                                                         label1="An", 
+                                                         label2="Lillian", 
+                                                         label4="Ollie")
 
         self.elements.append(self.inputController)
         self.interactive.append(self.inputController)

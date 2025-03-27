@@ -54,9 +54,6 @@ class Text:
                                              self.positionController.getSize()[0],
                                              self.positionController.getSize()[1])
 
-        print(self.positionController.getSize())
-
-
     def loadFont(self, font, fontSize):
         if (font.endswith("ttf")):
             self.loadedFont = pygame.font.Font(font, fontSize)
@@ -227,7 +224,6 @@ class MCQButton(Button):
             if (self.isWorking):
                 CUSTOMEVENT = pygame.event.Event(self.event)
                 pygame.event.post(CUSTOMEVENT)
-                self.selected =  not self.selected
             return True
         else:
             return False
@@ -245,8 +241,11 @@ class MCQButton(Button):
     def getNumber(self):
         return self.number
 
-    def deselect(self):
-        self.selected = False
+    def changeSelectedState(self, state):
+        self.selected = state
+
+    def getValue(self):
+        return self.string
 
 # An object which can stick visuals on things like buttons
 class Label:
