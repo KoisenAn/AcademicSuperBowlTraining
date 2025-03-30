@@ -862,7 +862,11 @@ class Answer:
 # An obect that loads, displays, and processes problems
 class Problem: 
 
-    def __init__(self, question = None, answer = None, questionGenerationType=Enums.QuestionGenerationType.Fixed(), problemDisplayType=Enums.ProblemDisplayType.Text(), problemInputType=Enums.ProblemInputType.MCQ(numMCQs=4)):
+    def __init__(self, 
+                 question = None, 
+                 answer = None, 
+                 problemDisplayType=Enums.ProblemDisplayType.Text(), 
+                 problemInputType=Enums.ProblemInputType.MCQ()):
 
         self.elements = []
         self.interactive = []
@@ -871,20 +875,15 @@ class Problem:
         self.question = question
         self.answer = answer
 
-        self.quesionGenerationType = questionGenerationType
-        
         self.problemDisplayType = problemDisplayType
         self.problemInputType = problemInputType
-
-        if (type(questionGenerationType) == Enums.QuestionGenerationType.Generate):
-            self.loadQuestion()
-
+        
     def loadQuestion(self):
         pass
 
     def loadDisplay(self, screen):
         if (type(self.problemDisplayType) == Enums.ProblemDisplayType.Text):
-            self.problemText = Elements.Text(screen=self.screen,
+            self.problemText = Elements.Text(screen=screen,
                                              positionController=Controllers.PositionController(objectLength=1100,
                                                                                                objectHeight=200,
                                                                                                drawAnchor=Enums.Anchor.TopCenter(),

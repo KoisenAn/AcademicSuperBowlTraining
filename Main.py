@@ -125,27 +125,9 @@ while running:
                 continue
 
         # In practice
-        if event.type >= 6900 and event.type <= 7000: # TODO: Problem control should not be handled out in the main loop. Tasks should be delegated to the problem controller
-            if (Screens.eventDict[event.type] == "answerInputted"):
+        if event.type >= 6900 and event.type <= 7000:
 
-                answerRecorder = currScreen.problemController.checkCorrect()
-
-                if (answerRecorder[0]):
-                    if (answerRecorder[2] == 0):
-                        problemsDoneList[answerRecorder[1]-4202][0] += 1
-                    else:
-                        problemsDoneList[answerRecorder[1]-4202][2] += 1
-                else:
-                    if (answerRecorder[2] == 0):
-                        problemsDoneList[answerRecorder[1]-4202][1] += 1
-                    else:
-                        problemsDoneList[answerRecorder[1]-4202][3] += 1
-
-                currScreen.swapButton()
-
-            elif (Screens.eventDict[event.type] == "newProblem"):
-                currScreen.loadProblem()
-                currScreen.swapButton()
+            currScreen.problemController.processEvent(event.type)            
         
             if (Screens.eventDict[event.type].startswith("Choice")):
                 currScreen.inputController.processEvent(event.type) 

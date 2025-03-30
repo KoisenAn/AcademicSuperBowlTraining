@@ -2,236 +2,42 @@ import pygame
 import Elements
 import Enums
 import Controllers
+import Screens
 
 class ProblemController:
 
-    def __init__(self, screen = None, elementList = None, interactiveList = None):
+    def __init__(self, screen=None, problemList=None):
 
         self.screen = screen
-        self.submitted = False
 
-        self.problemType = None
+        self.elements = []
+        self.interactive = []
 
-        self.answer = []
-        self.inputElements = []
+        self.problemList = problemList
 
-        self.textBoxLocations = []
-
-        self.elementList = elementList
-        self.interactiveList = interactiveList
-
-        #self.MCQController = MCQController(screen, center_X, center_Y, self.elementList, self.interactiveList)
+        self.createProblem()
         pass
 
     def reset(self, problemType):
+        pass
 
-        self.answer = []
-        del self.inputElements[:]
-        self.problemType = problemType
-
-    def loadProblemDisplay(self, problem):
-
-        self.problem = problem
-
-        question = problem.getQuestion()
-
-        type = problem.problemDisplayType
-
-        self.questionDisplayType = type
-
-        if (type == "lines"):
-            pass
-
-    def loadSolutionDisplay(self, problem):
-
-        self.problem = problem
-
-        answers = problem.getAnswer()
-
-        for i in range(len(self.textBoxLocations)):
-            string = "Answer: " + str(answers[i])
-            self.TextDrawer.add(string, self.textBoxLocations[i]+(self.TextDrawer.findLengthOfTextRect(string, 25, "calibri"))/2+5, "2*cY-43", 25, self.color, "calibri")
-
-    def loadProblemInput(self, inputType):
-        
-        self.inputType = inputType
-
-        del self.inputElements[:]
-
-        font = 40
-
-        self.textBoxLocations = []
-
-        print(inputType)
-
-        if (inputType[0] == "textBox"):
-            if (inputType[1] == 1):
-                text = self.problem.inputTexts[0]
-
-                currEnd  = 50
-                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text, font, "calibri")
-                self.TextDrawer.add(text, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "calibri")
-                currEnd += lengthFirstText
-                currEnd += 30 #Spacer between outside text and textbox
-
-                lengthTextbox = 2 * self.center_X - 250 - lengthFirstText - 30 #Accounting for difference
-
-                self.textBox1 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
-                self.inputElements.append(self.textBox1)
-
-                self.textBoxLocations.append(currEnd)
-
-            elif (inputType[1] == 2):
-                
-                #Finding sizes
-                currEnd = 50
-                text1 = text = self.problem.inputTexts[0]
-                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text1, font, "calibri")
-
-                text2 = text = self.problem.inputTexts[1]
-                lengthSecondText = self.TextDrawer.findLengthOfTextRect(text2, font, "calibri")
-
-                lengthTextbox = (2 * self.center_X - 250 - lengthFirstText - lengthSecondText - 20*2 - 50)/2
-
-                #Drawing texts and boxes
-                self.TextDrawer.add(text1, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "calibri")
-
-                currEnd += lengthFirstText
-                currEnd += 20
-
-                self.textBox1 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
-                self.inputElements.append(self.textBox1)
-
-                self.textBoxLocations.append(currEnd)
-
-                currEnd += lengthTextbox
-                currEnd += 50
-
-                self.TextDrawer.add(text2, currEnd + lengthSecondText/2, "2*cY-88", font, self.color, "calibri")
-
-                currEnd += lengthSecondText
-                currEnd += 20
-
-                self.textBox2 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
-                self.inputElements.append(self.textBox2)
-
-                self.textBoxLocations.append(currEnd)
-            elif (inputType[1] == 3):
-
-                #Finding sizes
-                currEnd = 50
-                text1 = text = self.problem.inputTexts[0]
-                lengthFirstText = self.TextDrawer.findLengthOfTextRect(text1, font, "calibri")
-
-                text2 = text = self.problem.inputTexts[1]
-                lengthSecondText = self.TextDrawer.findLengthOfTextRect(text2, font, "calibri")
-
-                text3 = text = self.problem.inputTexts[2]
-                lengthThirdText = self.TextDrawer.findLengthOfTextRect(text3, font, "calibri")
-
-                lengthTextbox = (2 * self.center_X - 250 - lengthFirstText - lengthSecondText - lengthThirdText - 20*3 - 50*2)/3
-
-                #Drawing texts and boxes
-                self.TextDrawer.add(text1, currEnd + lengthFirstText/2, "2*cY-88", font, self.color, "calibri")
-
-                currEnd += lengthFirstText
-                currEnd += 20
-
-                self.textBox1 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
-                self.inputElements.append(self.textBox1)
-
-                self.textBoxLocations.append(currEnd)
-    
-                currEnd += lengthTextbox
-                currEnd += 50
-
-                self.TextDrawer.add(text2, currEnd + lengthSecondText/2, "2*cY-88", font, self.color, "calibri")
-
-                currEnd += lengthSecondText
-                currEnd += 20
-
-                self.textBox2 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
-                self.inputElements.append(self.textBox2)
-
-                self.textBoxLocations.append(currEnd)
-                
-                currEnd += lengthTextbox
-                currEnd += 50
-
-                self.TextDrawer.add(text3, currEnd + lengthThirdText/2, "2*cY-88", font, self.color, "calibri")
-
-                currEnd += lengthThirdText
-                currEnd += 20
-
-                self.textBox3 = Elements.InputTextBox(self.screen, self.center_X, self.center_Y, (str(lengthTextbox/2)+"+"+str(currEnd)+"-cX"), "cY-88", lengthTextbox, 50, "Type Answer")
-                self.inputElements.append(self.textBox3)
-
-                self.textBoxLocations.append(currEnd)
-        elif (inputType[0] == "mcq"):
-            if (inputType[1] == 2):
-                self.inputElements = self.MCQController.createChoices(2, 100, True)
-            pass
-        
-    def checkCorrect(self):
-
-        self.submitted = True
-
-        passToProblemRecorder = None # A tuple to be passed into problem recorder (Is the problem correct, type of problem, timed or not timed)
-
-        self.answer = []
-
-        if (self.inputType[0] == "textbox"):
-            for textbox in self.inputElements:
-                self.answer.append(textbox.inputtedText)
-            self.answer.reverse()
-            self.correctList = self.problem.checkCorrect(self.answer)
-            if (type(self.correctList) == bool):
-                for i in range(len(self.inputElements)):
-                    (self.inputElements[i]).submit(self.correctList)
-
-                if (self.correctList):
-                    passToProblemRecorder = (True, self.problemType, 0)
-                else: 
-                    passToProblemRecorder = (False, self.problemType, 0)
-            else:
-                correct = True
-                for i in range(len(self.correctList)):
-                    (self.inputElements[i]).submit(self.correctList[i])
-                    if (correct and not self.correctList[i]):
-                        correct = False
-                        passToProblemRecorder = (False, self.problemType, 0)
-
-                if (correct):
-                    passToProblemRecorder = (True, self.problemType, 0)
-
-        elif (self.inputType[0] == "mcq"):
-            for mcq in self.inputElements:
-                if (mcq.isSelected()):
-                    self.answer.append(mcq.getNumber())
-
-        print(self.answer)
-        passToProblemRecorder = (True, self.problemType, 0)
-
-        #self.loadSolutionDisplay(self.problem)        
-        return passToProblemRecorder
+    def createProblem(self):
+        pass
 
     def updateMCQController(self):
         self.MCQController.updateMCQStates()
 
     def draw(self):
-        if (self.questionDisplayType == "lines"):
-            self.TextDrawer.draw()
-
-        for element in self.inputElements:
+        for element in self.elements:
             element.draw()
     
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        self.TextDrawer.recenter(center_X, center_Y)
+    def recenter(self):
+        for element in self.elements:
+            element.recenter()
 
-        for element in self.inputElements:
-            element.recenter(center_X, center_Y)
+    def processEvent(self, event):
+        if (Screens.eventDict[event] == ""):
+            pass
 
 class InputController:
 

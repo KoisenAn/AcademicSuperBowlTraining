@@ -6,7 +6,6 @@ class QuestionGenerationType:
     class Generate:
         pass
 
-
 class ProblemDisplayType:
 
     class Text:
@@ -34,12 +33,20 @@ class ProblemInputType:
 
     class MCQ:
 
-        def __init__(self, numMCQs):
+        def __init__(self, answerChoices=[], numMCQs=4, numAnswers=1):
+            self.answerChoices = answerChoices
             self.numMCQs = numMCQs
+            self.numAnswers = numAnswers
+
+        def getAnswerChoices(self):
+            return self.answerChoices
 
         def getNumMCQs(self):
             return self.numMCQs
         
+        def getNumAnswers(self):
+            return self.numAnswers
+
 class Anchor:
 
     class Center:
