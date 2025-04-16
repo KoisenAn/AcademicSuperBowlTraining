@@ -1,3 +1,31 @@
+eventDict = {
+    # Pop-ups
+    3798: "popUpStats", 
+    3799: "popUpExit", 
+    3800: "popUpInPractice",
+    3801: "checkExit", 
+    3802: "popUpSettings", 
+    # Practice Selection Events
+    4199: "credits", 
+    4200: "home", 
+    4201: "pracSelect", 
+    4202: "history", 
+    # In practice events
+    6900: "answerInputted", 
+    6901: "answerSelected", 
+    6902: "newProblem", 
+    6903: "Choice A", 
+    6904: "Choice B",
+    6905: "Choice C",
+    6906: "Choice D"}
+
+colors = {"white": (255,255,255), 
+          "black": (0,0,0), 
+          "darkBlue": (53,63,112), 
+          "screenGrey": (230,230,230), 
+          "highlightMCQGrey": (210,210,210), 
+          "highlightBlue": (55, 190, 245, 0.5)}
+
 class QuestionGenerationType:
 
     class Fixed:

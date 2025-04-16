@@ -1,17 +1,12 @@
 import pygame
-import Elements
-import Expressions
+import os
+
 import Enums
 import Controllers
-
-import os
 
 #
 # The following classes are used to draw/create specifics things to display or for users to interact with
 #
-
-colors = {"white":(255,255,255), "black":(0,0,0), "darkBlue":(53,63,112), "screenGrey":(230,230,230), "highlightMCQGrey": (210,210,210), "highlightBlue": (55, 190, 245, 0.5)}
-# TODO: Add color class, fix all color stuff
 
 # An object that displays text on the screen
 class Text:
@@ -101,7 +96,6 @@ class Text:
     
     def recenter(self):
         self.positionController.recenter()
-        print(self.positionController.getSize())
         
 # An interacitve object which returns a event when clicked  
 class Button:
@@ -112,7 +106,7 @@ class Button:
 
         # Inputed variables stored in the object
         self.screen = screen
-        self.color = [colors["highlightMCQGrey"], colors["screenGrey"], colors["highlightBlue"]] # TODO: Fix button color stuff
+        self.color = [Enums.colors["highlightMCQGrey"], Enums.colors["screenGrey"], Enums.colors["highlightBlue"]] # TODO: Fix button color stuff
         self.colorState = 1
         self.curveRadius = curveRadius
         self.thickness = thickness
@@ -131,7 +125,7 @@ class Button:
 
         self.labels = []
         if (type(self.labelType) == Enums.Label.Text):
-            self.label = Elements.Label(screen=self.screen, 
+            self.label = Label(screen=self.screen, 
                                         size=labelSize, 
                                         labelType=labelType, 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
@@ -145,7 +139,7 @@ class Button:
                                         font = kwargs.get("font"),
                                         color = kwargs.get("labelColor"))
         elif (type(self.labelType) == Enums.Label.Image):
-            self.label = Elements.Label(screen=screen, 
+            self.label = Label(screen=screen, 
                                         size=labelSize, 
                                         labelType=labelType, 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
@@ -347,7 +341,7 @@ class InputTextBox:
                                            self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                            self.length, 
                                            self.height)
-            self.defaultLabel = Elements.Label(screen=self.screen, 
+            self.defaultLabel = Label(screen=self.screen, 
                                         size=20, 
                                         labelType=Enums.Label.Text(), 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
@@ -362,7 +356,7 @@ class InputTextBox:
                                         color=(200,200,200))
             self.defaultLabel.recenter()
         else:
-            self.externalLabel = Elements.Label(screen=self.screen, 
+            self.externalLabel = Label(screen=self.screen, 
                                         size=20, 
                                         labelType=Enums.Label.Text(), 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
@@ -391,7 +385,7 @@ class InputTextBox:
                                            self.positionController.getPosition(positionOnObject = Enums.Anchor.TopLeft())[1], 
                                            self.length, 
                                            self.height)
-            self.defaultLabel = Elements.Label(screen=self.screen, 
+            self.defaultLabel = Label(screen=self.screen, 
                                         size=20, 
                                         labelType=Enums.Label.Text(), 
                                         positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
@@ -513,37 +507,7 @@ class InputTextBox:
         else:
             return self.externalLabel.getRect().width + self.insideRect.width 
 
-# An object that draws a line across the screen
-class Divider:
-
-    def __init__(self, screen, type, center_X, center_Y, cord, thickness, color):
-
-        self.screen = screen
-        
-        self.type = type
-
-        self.center_X= center_X
-        self.center_Y = center_Y
-
-        self.cord = cord
-
-        self.color = color
-
-        self.thickness = thickness
-
-    def draw(self):
-        cord = Expressions.locationExpressionValue(self.cord, self.center_X, self.center_Y)
-        if (self.type == "horizontal"):
-            pygame.draw.line(self.screen, self.color, (0,cord), (2*self.center_X,cord), self.thickness)
-        elif (self.type == "vertical"):
-            pygame.draw.line(self.screen, self.color, (cord,0), (cord,2*self.center_Y), self.thickness)
-
-    def recenter(self, X, Y):
-        self.center_X = X
-        self.center_Y = Y
-
 # An object that displays the problem number
-# DEPRECATED
 class ProblemNumberBox:
 
     def __init__(self, screen=None, positionController=None, length=60, height=60, problemNumber=None):
@@ -568,7 +532,7 @@ class ProblemNumberBox:
                                           self.length, 
                                           self.height)
 
-        self.label = Elements.Label(screen=self.screen, 
+        self.label = Label(screen=self.screen, 
                                     size=30, 
                                     labelType=Enums.Label.Text(), 
                                     positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
@@ -584,7 +548,7 @@ class ProblemNumberBox:
 
     def draw(self):
         pygame.draw.rect(self.screen, (255,255,255), self.boxOutlineRect, 0, 3)
-        pygame.draw.rect(self.screen, (100,100,100), self.boxOutlineRect, 4, 3)
+        pygame.draw.rect(self.screen, (0,0,0), self.boxOutlineRect, 4, 3)
         self.label.draw()
 
     def changeNumber(self, number):
@@ -603,7 +567,8 @@ class ProblemNumberBox:
                                           self.height)
         self.label.recenter()
 
-# An object 
+# An object that darkens everything underneath it
+# DEPRECATED
 class ScreenShader:
 
     def __init__(self, screen, center_X, center_Y, event, popUpRect):
@@ -637,143 +602,8 @@ class ScreenShader:
         else:
             return False
 
-# An interactive object that can switch in between two states
-# DEPRECATED
-class Switch:
-
-    def __init__(self, screen, X, Y, center_X, center_Y, size, state, text, locationOfText, colors, event, working):
-        
-        self.screen = screen
-
-        self.center_X = center_X
-        self.center_Y = center_Y
-
-        self.X = X
-        self.Y = Y
-
-        self.size = size
-        self.borderSize = int(size/10)
-        self.fontSize = int(size*2/5)
-
-        self.xOp = Expressions.locationExpressionValue(self.X, center_X, center_Y)
-        self.yOp = Expressions.locationExpressionValue(self.Y, center_X, center_Y)
-
-        self.state = state
-
-        self.colors = colors
-
-        self.working = working
-
-        self.event = event
-
-        self.backRect = pygame.Rect(self.xOp-self.size, self.yOp-self.size/2, 2*self.size, self.size)
-        
-        if (self.state):
-            self.moveRect = pygame.Rect(self.xOp-self.size, self.yOp-self.size/2, self.size, self.size)
-        else:
-            self.moveRect = pygame.Rect(self.xOp, self.yOp-self.size/2, self.size, self.size)
-
-        self.textDrawer = Elements.TextDrawer(screen, center_X, center_Y)
-
-        self.textDrawer.add("OFF", str(self.X) + "-" + str(self.size/2) + "+" + "5", self.Y, self.fontSize, (100,100,100), "calibri")
-
-        self.textDrawer.add("ON", str(self.X) + "+" + str(self.size/2-5), self.Y, self.fontSize, (240,240,240), "calibri")
-
-        self.text = text
-        self.locationOfText = locationOfText
-
-        self.labelSize = int(1.5*self.fontSize)
-        if (type(locationOfText) == str):
-            if (locationOfText == "left"):
-                self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2-30), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
-            elif (locationOfText == "right"):
-                self.textDrawer.add(self.text, str(self.X) + "+" + str(self.size+self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2+30), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
-        elif (type(locationOfText) == list):
-            if (locationOfText[0] == "left"):
-                self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2-locationOfText[1]), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
-            elif (locationOfText[0] == "right"):
-                self.textDrawer.add(self.text, str(self.X) + "+" + str(self.size+self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2+locationOfText[1]), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
-
-        else: # Default parameters are to the left and with a 30 pixel spacer
-            self.textDrawer.add(self.text, str(self.X) + "-" + str(self.size-self.textDrawer.findLengthOfTextRect(self.text, self.labelSize, "calibri")/2-30), self.Y, self.labelSize, self.colors["darkBlue"], "calibri")
-
-
-    def draw(self):
-        if (self.state):
-            pygame.draw.rect(self.screen, (70, 170, 250), self.backRect, 0, 15)
-        else:
-            pygame.draw.rect(self.screen, (175,175,175), self.backRect, 0, 15)
-        pygame.draw.rect(self.screen, self.colors["darkBlue"], self.backRect, self.borderSize, 15)
-
-        self.textDrawer.draw()
-
-        pygame.draw.rect(self.screen, (255,255,255), self.moveRect, 0, 15)
-        pygame.draw.rect(self.screen, self.colors["darkBlue"], self.moveRect, self.borderSize, 15)
-
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-        self.xOp = Expressions.locationExpressionValue(self.X, center_X, center_Y)
-        self.yOp = Expressions.locationExpressionValue(self.Y, center_X, center_Y)
-        self.textDrawer.recenter(self.center_X, self.center_Y)
-        if (self.state):
-            self.moveRect = pygame.Rect(self.xOp-self.size, self.yOp-self.size/2, self.size, self.size)
-        else:
-            self.moveRect = pygame.Rect(self.xOp, self.yOp-self.size/2, self.size, self.size)
-        self.backRect = pygame.Rect(self.xOp-self.size, self.yOp-self.size/2, 2*self.size, self.size)
-
-    def clicked(self, mousePos):
-        if (self.moveRect.collidepoint(mousePos)):
-            self.state = not self.state
-            if (self.state):
-                self.moveRect = pygame.Rect(self.xOp-self.size, self.yOp-self.size/2, self.size, self.size)
-            else:
-                self.moveRect = pygame.Rect(self.xOp, self.yOp-self.size/2, self.size, self.size)
-            CUSTOMEVENT = pygame.event.Event(self.event)
-            pygame.event.post(CUSTOMEVENT)
-            return True
-        else:
-            return False
-
-# An object that draws a line
-# DEPRECATED
-class Line:
-
-    def __init__(self, screen, center_X, center_Y, startX, startY, endX, endY, thickness, color):
-
-        self.screen = screen
-
-        self.center_X = center_X
-        self.center_Y = center_Y
-
-        self.startX = startX
-        self.startY = startY
-        self.endX = endX
-        self.endY = endY
-        
-        self.thickness = thickness
-        self.color = color
-
-        self.startXOp = Expressions.locationExpressionValue(self.startX, center_X, center_Y)
-        self.startYOp = Expressions.locationExpressionValue(self.startY, center_X, center_Y)
-
-        self.endXOp = Expressions.locationExpressionValue(self.endX, center_X, center_Y)
-        self.endYOp = Expressions.locationExpressionValue(self.endY, center_X, center_Y)
-
-    def draw(self):
-        pygame.draw.line(self.screen, self.color, (self.startXOp, self.startYOp), (self.endXOp, self.endYOp), self.thickness)
-
-    def recenter(self, center_X, center_Y):
-        self.center_X = center_X
-        self.center_Y = center_Y
-
-        self.startXOp = Expressions.locationExpressionValue(self.startX, center_X, center_Y)
-        self.startYOp = Expressions.locationExpressionValue(self.startY, center_X, center_Y)
-
-        self.endXOp = Expressions.locationExpressionValue(self.endX, center_X, center_Y)
-        self.endYOp = Expressions.locationExpressionValue(self.endY, center_X, center_Y)
-
 # An object that displays an image
+# DEPRECATED
 class Image:
 
     def __init__(self, screen, center_X, center_Y, X, Y, imageName, scale, thickness, colors):
@@ -859,7 +689,7 @@ class Answer:
         else:
             return False
         
-# An obect that loads, displays, and processes problems
+# An object that loads, displays, and processes problems
 class Problem: 
 
     def __init__(self, 
@@ -878,34 +708,66 @@ class Problem:
         self.problemDisplayType = problemDisplayType
         self.problemInputType = problemInputType
         
+        self.inputController = None
+
+        self.displayAndInputBorderY = 100
+
     def loadQuestion(self):
         pass
 
     def loadDisplay(self, screen):
         if (type(self.problemDisplayType) == Enums.ProblemDisplayType.Text):
-            self.problemText = Elements.Text(screen=screen,
-                                             positionController=Controllers.PositionController(objectLength=1100,
-                                                                                               objectHeight=200,
-                                                                                               drawAnchor=Enums.Anchor.TopCenter(),
-                                                                                               xOffset=0, 
-                                                                                               yOffset=10, 
-                                                                                               refAnchor=Enums.Anchor.TopCenter()),
-                                             string="  "+self.question,
-                                             font="calibri",
-                                             fontSize=30,
-                                             alignment=Enums.TextAlignment.Center(),
-                                             showingTextBox=False)
+            self.problemText = Text(screen=screen,
+                                    positionController=Controllers.PositionController(objectLength=1100,
+                                                                                      objectHeight=200,
+                                                                                      drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                      xOffset=30, 
+                                                                                      yOffset=95, 
+                                                                                      refAnchor=Enums.Anchor.TopLeft()),
+                                    string="          "+self.question,
+                                    font="calibri",
+                                    fontSize=35,
+                                    leftMargin=0,
+                                    topMargin=12,
+                                    alignment=Enums.TextAlignment.Left(),
+                                    showingTextBox=False)
             self.elements.append(self.problemText)
     
     def loadInput(self, screen):
         if (type(self.problemInputType) == Enums.ProblemInputType.MCQ):
-            self.inputElementController = Controllers.MCQController(screen=screen, numMCQs=self.problemInputType.getNumMCQs())
+            self.inputController = Controllers.MCQController(screen=screen, 
+                                                             numMCQs=self.problemInputType.getNumMCQs(),
+                                                             labelList=self.problemInputType.getAnswerChoices(),
+                                                             maxSelectable=1)
         elif (type(self.problemInputType) == Enums.ProblemInputType.TextBox):
-            self.inputElementController = Controllers.TextBoxController(screen=screen, numTextBoxes=self.problemDisplayType.getNumTextBoxes())
-        self.interactive.append(self.inputElementController)
+            self.inputController = Controllers.TextBoxController(screen=screen, 
+                                                                 numTextBoxes=self.problemInputType.getNumTextBoxes())
+        self.elements.append(self.inputController)
+        self.interactive.append(self.inputController)
     
-    def checkCorrect(self, userAnswer):
-        return (self.answer == userAnswer)
+    def checkCorrect(self):
+        input = self.inputController.getInput()
+
+        if (len(input) == 0):
+            return False
+        elif (type(self.answer) == list):
+            if (len(self.answer) != len(input())):
+                raise ValueError("Answer and Input Mismatch")
+            else:
+                isCorrect = True
+                self.answer = [str(x) for x in self.answer]
+                self.answer.sort()
+                self.inputController.sort()
+                for i in range(len(self.answer)):
+                    if self.answer[i] != input()[i]:
+                        isCorrect = False
+                        break
+                return isCorrect
+        else:    
+            if (len(input) > 1):
+                raise ValueError("Answer and Input Mismatch")
+            else:
+                return (self.answer == input[0])
         
     def getQuestion(self):
         return self.question

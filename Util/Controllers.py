@@ -1,8 +1,8 @@
 import pygame
+import random
+
 import Elements
 import Enums
-import Controllers
-import Screens
 
 class ProblemController:
 
@@ -12,32 +12,82 @@ class ProblemController:
 
         self.elements = []
         self.interactive = []
+        self.interactiveText = []
 
         self.problemList = problemList
 
-        self.createProblem()
-        pass
+        self.submitButton = Elements.Button(screen=self.screen, 
+                                       event=6900, 
+                                       sizeX=120, 
+                                       sizeY=90, 
+                                       positionController=PositionController(objectLength=120,
+                                                                             objectHeight=90, 
+                                                                             drawAnchor=Enums.Anchor.Center(),
+                                                                             xOffset=0, 
+                                                                             yOffset=0, 
+                                                                             refAnchor=Enums.Anchor.Center()), 
+                                       labelInformation="Submit", 
+                                       labelType=Enums.Label.Text(),
+                                       labelSize=30,
+                                       font="calibri",
+                                       labelColor=(0,0,0))
+        self.elements.append(self.submitButton)
+        self.interactive.append(self.submitButton)        
+        self.nextProblemButton = Elements.Button(screen=self.screen, 
+                                            event=6902, 
+                                            sizeX=120, 
+                                            sizeY=90, 
+                                            positionController=PositionController(objectLength=120,
+                                                                                  objectHeight=90, 
+                                                                                  drawAnchor=Enums.Anchor.Center(),
+                                                                                  xOffset=120, 
+                                                                                  yOffset=0, 
+                                                                                  refAnchor=Enums.Anchor.Center()), 
+                                            labelInformation="arrowIcon.png", 
+                                            labelType=Enums.Label.Image(),
+                                            labelSize=0.25)
+        self.elements.append(self.nextProblemButton)
+        self.interactive.append(self.nextProblemButton)
 
     def reset(self, problemType):
         pass
 
     def createProblem(self):
-        pass
 
-    def updateMCQController(self):
-        self.MCQController.updateMCQStates()
+        self.elements = []
+        self.interactive = []
+        self.interactiveText = []
 
-    def draw(self):
-        for element in self.elements:
-            element.draw()
+        self.elements.append(self.submitButton)
+        self.interactive.append(self.submitButton)           
+
+        self.elements.append(self.nextProblemButton)
+        self.interactive.append(self.nextProblemButton)
+
+        self.problem = self.problemList[random.randint(0, len(self.problemList)-1)]
+
+        self.problem.loadQuestion()
+        self.problem.loadDisplay(screen=self.screen)
+        self.problem.loadInput(screen=self.screen)
+
+        for element in self.problem.elements:
+            self.elements.append(element)
+
+        for element in self.problem.interactive:
+            self.interactive.append(element)
+
+        for element in self.problem.interactiveText:
+            self.interactiveText.append(element)
     
+    def answerInputted(self):
+        isCorrect = self.problem.checkCorrect()
+        print(isCorrect)
+        # TODO: Lock inputControllers when problem submitted
+        # self.problem.inputController.showCorrect()        
+
     def recenter(self):
         for element in self.elements:
             element.recenter()
-
-    def processEvent(self, event):
-        if (Screens.eventDict[event] == ""):
-            pass
 
 class InputController:
 
@@ -101,7 +151,7 @@ class MCQController(InputController):
 
         self.createChoices(numMCQs=numMCQs)
 
-    def createChoices(self, numMCQs):
+    def createChoices(self, numMCQs): # TODO Randomize and limit answer choices
 
         self.mcqButtonList = []
 
@@ -110,7 +160,7 @@ class MCQController(InputController):
                                             event=6903+i, 
                                             sizeX=500, 
                                             sizeY=70, 
-                                            positionController=Controllers.PositionController(objectLength=500,
+                                            positionController=PositionController(objectLength=500,
                                                                                               objectHeight=70, 
                                                                                               drawAnchor=Enums.Anchor.TopLeft(),
                                                                                               xOffset=30, 
@@ -152,7 +202,7 @@ class MCQController(InputController):
         selectedMCQValues = []
         for mcq in self.elements:
             if (mcq.isSelected()):
-                selectedMCQValues.append([mcq.getValue()[0], mcq.getValue()[2:]])
+                selectedMCQValues.append(mcq.getValue()[3:])
 
         return selectedMCQValues
 
@@ -189,7 +239,7 @@ class TextBoxController(InputController):
             textBox = Elements.InputTextBox(screen=self.screen,
                                             length=200,
                                             height=50,
-                                            positionController=Controllers.PositionController(objectLength=200,
+                                            positionController=PositionController(objectLength=200,
                                                                                               objectHeight=50,
                                                                                               drawAnchor=Enums.Anchor.TopLeft(),
                                                                                               xOffset=30+sum((x.getLength()+20) for x in self.elements[0:i]), 

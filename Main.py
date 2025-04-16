@@ -11,9 +11,8 @@ current_dir = os.path.dirname(__file__)
 folder_dir = os.path.join(current_dir, '2024-2025 Subjects')
 sys.path.insert(0, folder_dir)
 
-import Elements
 import Screens
-import PopUp
+import Enums
 
 pygame.init()
 screen = pygame.display.set_mode((1280,720), pygame.RESIZABLE)
@@ -55,12 +54,8 @@ while running:
         # The mouse is clicked, or well released
         if event.type == pygame.MOUSEBUTTONUP:
             mousePos = pygame.mouse.get_pos()
-            if (popUpActive):
-                for interactive in popUp.interactive: #TODO: Combine popUp interactive and screen interactive
-                    interactive.clicked(mousePos)
-            else:
-                for interactive in currScreen.interactive: 
-                    interactive.clicked(mousePos)
+            for interactive in currScreen.interactive: 
+                interactive.clicked(mousePos)
 
         # A key is pressed
         if event.type == pygame.KEYDOWN: #TODO: Should not be managed outside
@@ -95,29 +90,19 @@ while running:
         #
         # Custom events
         #
-    
-        # Pop-ups
-        if event.type >= 3700 and event.type <= 3900:
-            popUpActive = True
-            if (Screens.eventDict[event.type] == "popUpExit"):
-                popUpActive = False
-            elif (Screens.eventDict[event.type] == "popUpInPractice"):
-                popUp = PopUp.popUpInPracticeMenu(screen, center_X, center_Y, problemsDoneList[currScreen.getType()-4202])
-            elif (Screens.eventDict[event.type] == "popUpSettings"):
-                popUp = PopUp.popUpSettings(screen, center_X, center_Y)
-            elif (Screens.eventDict[event.type] == "popUpStats"):
-                popUp = PopUp.popUpStats(screen, center_X, center_Y, problemsDoneList)
+
+        # TODO: Pop-ups
 
         # Screens
         if event.type >= 4100 and event.type <= 4300:
             popUpActive = False
-            if Screens.eventDict[event.type] == "home":
+            if Enums.eventDict[event.type] == "home":
                 currScreen = Screens.HomeScreen(screen=screen)
                 continue
-            elif Screens.eventDict[event.type] == "credits":
+            elif Enums.eventDict[event.type] == "credits":
                 currScreen = Screens.CreditsScreen(screen=screen)
                 continue
-            elif Screens.eventDict[event.type] == "pracSelect":
+            elif Enums.eventDict[event.type] == "pracSelect":
                 currScreen = Screens.PracticeSelectScreen(screen=screen) 
                 continue
             elif event.type >= 4202 and event.type <= 4208:
@@ -127,16 +112,14 @@ while running:
         # In practice
         if event.type >= 6900 and event.type <= 7000:
 
-            currScreen.problemController.processEvent(event.type)            
+            currScreen.processEvent(event.type)            
         
-            if (Screens.eventDict[event.type].startswith("Choice")):
-                currScreen.inputController.processEvent(event.type) 
+            if (Enums.eventDict[event.type].startswith("Choice")):
+                currScreen.problemController.problem.inputController.processEvent(event.type) # TODO: Fix whatever tf this is
             
     screen.fill((230,230,230))
     
     currScreen.run()
-    if (popUpActive):
-        popUp.draw()
 
     pygame.display.flip()
 

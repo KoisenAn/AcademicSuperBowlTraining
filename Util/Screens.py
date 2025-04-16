@@ -1,14 +1,12 @@
 import pygame
+import random
+import os
+import sys
+
 import Elements
-import Expressions
 import Screens
 import Controllers
 import Enums
-
-import random
-
-import os
-import sys
 
 # 2024-2025 Year
 current_dir = os.path.dirname(__file__)
@@ -17,27 +15,6 @@ folder_dir = os.path.join(current_dir, '2024-2025 Subjects')
 sys.path.insert(0, folder_dir)
 
 import HistoryProblems
-
-eventDict = {
-    # Pop-ups
-    3798: "popUpStats", 
-    3799: "popUpExit", 
-    3800: "popUpInPractice",
-    3801: "checkExit", 
-    3802: "popUpSettings", 
-    # Practice Selection Events
-    4199: "credits", 
-    4200: "home", 
-    4201: "pracSelect", 
-    4202: "history", 
-    # In practice events
-    6900: "answerInputted", 
-    6901: "answerSelected", 
-    6902: "newProblem", 
-    6903: "Choice A", 
-    6904: "Choice B",
-    6905: "Choice C",
-    6906: "Choice D"}
 
 class Screen:
     def __init__(self, screen = None):
@@ -110,7 +87,6 @@ class HomeScreen(Screen):
                                   showingTextBox=False)
 
         buttonTextSize = 50
-        buttonColor = ((53, 63, 112), (230,230,230))
 
         startButton = Elements.Button(screen=self.screen, 
                                       event=4201, 
@@ -122,7 +98,6 @@ class HomeScreen(Screen):
                                                                                         xOffset=0, 
                                                                                         yOffset=0, 
                                                                                         refAnchor=Enums.Anchor.Center()), 
-                                      color=buttonColor, 
                                       labelInformation="Start", 
                                       labelType=Enums.Label.Text(),
                                       labelSize = buttonTextSize,
@@ -138,7 +113,6 @@ class HomeScreen(Screen):
                                                                                         refAnchor=Enums.Anchor.Center()), 
                                             sizeX=300, 
                                             sizeY=125, 
-                                            color=buttonColor, 
                                             labelInformation="Credits/Help", 
                                             labelType=Enums.Label.Text(),
                                             labelSize=buttonTextSize,
@@ -160,10 +134,6 @@ class CreditsScreen(Screen):
 
         super().__init__(screen)
 
-        self.colors = {"darkBlue":(53, 63, 112), "screenGrey": (230,230,230)}
-
-        buttonColor = (self.colors["darkBlue"], self.colors["screenGrey"], self.colors["darkBlue"])
-
         homeButton = Elements.Button(screen=screen, 
                                      event=4200, 
                                      sizeX=100, 
@@ -174,7 +144,6 @@ class CreditsScreen(Screen):
                                                                                        xOffset=-125, 
                                                                                        yOffset=-125, 
                                                                                        refAnchor=Enums.Anchor.BottomRight()), 
-                                     color=buttonColor, 
                                      labelInformation="homeIcon.png", 
                                      labelSize = 0.25,
                                      labelType=Enums.Label.Image())        
@@ -290,7 +259,6 @@ class PracticeSelectScreen(Screen):
                                   showingTextBox=False) 
         self.elements.append(self.title)       
 
-        buttonColor = ((53,63,112), (230,230,230))
         
         #Utility Button Sizes
         homeButton = Elements.Button(screen=screen, 
@@ -303,9 +271,8 @@ class PracticeSelectScreen(Screen):
                                                                                        xOffset=-275, 
                                                                                        yOffset=225, 
                                                                                        refAnchor=Enums.Anchor.Center()), 
-                                     color=buttonColor, 
                                      labelInformation="homeIcon.png", 
-                                     labelSize = 0.25,
+                                     labelSize=0.25,
                                      labelType=Enums.Label.Image())
         settingsButton = Elements.Button(screen=screen, 
                                      event=3802, 
@@ -317,9 +284,8 @@ class PracticeSelectScreen(Screen):
                                                                                        xOffset=-125, 
                                                                                        yOffset=225, 
                                                                                        refAnchor=Enums.Anchor.Center()), 
-                                     color=buttonColor, 
                                      labelInformation="settingsIcon.png", 
-                                     labelSize = 0.25,
+                                     labelSize=0.25,
                                      labelType=Enums.Label.Image())
         helpButton = Elements.Button(screen=screen, 
                                      event=3798, 
@@ -330,10 +296,9 @@ class PracticeSelectScreen(Screen):
                                                                                        drawAnchor=Enums.Anchor.TopLeft(),
                                                                                        xOffset=25, 
                                                                                        yOffset=225, 
-                                                                                       refAnchor=Enums.Anchor.Center()), 
-                                     color=buttonColor, 
+                                                                                       refAnchor=Enums.Anchor.Center()),  
                                      labelInformation="questionIcon.png", 
-                                     labelSize = 0.25,
+                                     labelSize=0.25,
                                      labelType=Enums.Label.Image())    
         statsButton = Elements.Button(screen=screen, 
                                      event=3798, 
@@ -345,9 +310,8 @@ class PracticeSelectScreen(Screen):
                                                                                        xOffset=175, 
                                                                                        yOffset=225, 
                                                                                        refAnchor=Enums.Anchor.Center()), 
-                                     color=buttonColor, 
                                      labelInformation="questionIcon.png", 
-                                     labelSize = 0.25,
+                                     labelSize=0.25,
                                      labelType=Enums.Label.Image())      
 
         #Adding Utility Buttons
@@ -378,28 +342,26 @@ class PracticeSelectScreen(Screen):
                                                                                           xOffset=0, 
                                                                                           yOffset=-150, 
                                                                                           refAnchor=Enums.Anchor.Center()), 
-                                        color=buttonColor, 
                                         labelInformation="Quaternions", 
-                                        labelSize = practicebuttonTextSize,
+                                        labelSize=practicebuttonTextSize,
                                         labelType=Enums.Label.Text(),
-                                        font = "calibri",
-                                        labelColor = (0,0,0))        
+                                        font="calibri",
+                                        labelColor=(0,0,0))        
         graphButton = Elements.Button(screen=screen, 
-                                        event=4202, 
-                                        sizeX=250, 
-                                        sizeY=100, 
-                                        positionController=Controllers.PositionController(objectLength=250,
+                                      event=4202, 
+                                      sizeX=250, 
+                                      sizeY=100, 
+                                      positionController=Controllers.PositionController(objectLength=250,
                                                                                           objectHeight=100, 
                                                                                           drawAnchor=Enums.Anchor.Center(),
                                                                                           xOffset=0, 
                                                                                           yOffset=-50, 
                                                                                           refAnchor=Enums.Anchor.Center()), 
-                                        color=buttonColor, 
                                         labelInformation="Graph Theory", 
-                                        labelSize = practicebuttonTextSize,
+                                        labelSize=practicebuttonTextSize,
                                         labelType=Enums.Label.Text(),
-                                        font = "calibri",
-                                        labelColor = (0,0,0))
+                                        font="calibri",
+                                        labelColor=(0,0,0))
         moduloButton = Elements.Button(screen=screen, 
                                         event=4202, 
                                         sizeX=345, 
@@ -410,12 +372,11 @@ class PracticeSelectScreen(Screen):
                                                                                           xOffset=0, 
                                                                                           yOffset=50, 
                                                                                           refAnchor=Enums.Anchor.Center()), 
-                                        color=buttonColor, 
                                         labelInformation="Modulo Arithmetic", 
-                                        labelSize = practicebuttonTextSize,
+                                        labelSize=practicebuttonTextSize,
                                         labelType=Enums.Label.Text(),
-                                        font = "calibri",
-                                        labelColor = (0,0,0))
+                                        font="calibri",
+                                        labelColor=(0,0,0))
         historyButton = Elements.Button(screen=screen, 
                                         event=4202, 
                                         sizeX=155, 
@@ -426,12 +387,11 @@ class PracticeSelectScreen(Screen):
                                                                                           xOffset=0, 
                                                                                           yOffset=150, 
                                                                                           refAnchor=Enums.Anchor.Center()), 
-                                        color=buttonColor, 
                                         labelInformation="History", 
-                                        labelSize = practicebuttonTextSize,
+                                        labelSize=practicebuttonTextSize,
                                         labelType=Enums.Label.Text(),
-                                        font = "calibri",
-                                        labelColor = (0,0,0))
+                                        font="calibri",
+                                        labelColor=(0,0,0))
         
         #Adding to Elements
         self.elements.append(quaternionButton)
@@ -453,35 +413,37 @@ class ProblemScreen(Screen):
 
         super().__init__(screen)
 
+        self.interactiveText = []
+
         self.problemType = problemType
 
+        # 2024-2025 Year
+        match (Enums.eventDict[self.problemType]):
+            case "history":
+                problemList = HistoryProblems.problemList
+                titleText = "History Practice"
+                 
         self.problemsDone = 0
         self.problemsDoneTracker = []
 
         # Stylistic Stuff
-
         self.colors = {"darkBlue": (53, 63, 112), "screenGrey": (230,230,230), "lightBlue":(38, 176, 237)}
 
-        self.titleTextSize = 50
+        self.titleTextSize = 50     
+        self.title = Elements.Text(screen=self.screen,
+                                   positionController=Controllers.PositionController(objectLength=1100,
+                                                                                     objectHeight=200,
+                                                                                     drawAnchor=Enums.Anchor.TopCenter(),
+                                                                                     xOffset=0, 
+                                                                                     yOffset=10, 
+                                                                                     refAnchor=Enums.Anchor.TopCenter()),
+                                   string=titleText,
+                                   font="calibri",
+                                   fontSize=self.titleTextSize,
+                                   alignment=Enums.TextAlignment.Center(),
+                                   showingTextBox=False)    
+        self.elements.append(self.title)   
 
-        # 2024-2025 Year
-        match (Screens.eventDict[self.problemType]):
-            case "history":
-                self.title = Elements.Text(screen=self.screen,
-                                           positionController=Controllers.PositionController(objectLength=1100,
-                                                                                             objectHeight=200,
-                                                                                             drawAnchor=Enums.Anchor.TopCenter(),
-                                                                                             xOffset=0, 
-                                                                                             yOffset=10, 
-                                                                                             refAnchor=Enums.Anchor.TopCenter()),
-                                           string="History Practice",
-                                           font="calibri",
-                                           fontSize=self.titleTextSize,
-                                           alignment=Enums.TextAlignment.Center(),
-                                           showingTextBox=False)    
-                self.elements.append(self.title)            
-
-        # Stylistic Stuff
         self.problemNumberBox = Elements.ProblemNumberBox(screen=self.screen, 
                                                           positionController=Controllers.PositionController(objectLength=60,
                                                                                              objectHeight=60,
@@ -490,85 +452,43 @@ class ProblemScreen(Screen):
                                                                                              yOffset=95, 
                                                                                              refAnchor=Enums.Anchor.TopLeft()),
                                                           problemNumber=str(self.problemsDone))
-        
-        #self.inputController = Controllers.TextBoxController(screen=screen, numTextBoxes=3, y=300, label1="i: ", label2="j: ", label3="k: ")
-        self.inputController = Controllers.MCQController(screen=screen, 
-                                                         y=300,
-                                                         maxSelectable=2, 
-                                                         label1="An", 
-                                                         label2="Lillian", 
-                                                         label4="Ollie")
-
-        self.elements.append(self.inputController)
-        self.interactive.append(self.inputController)
+        self.elements.append(self.problemNumberBox)
         
         # Creates Problem Controller
-        #self.problemController = Controllers.ProblemController(screen, self.center_X, self.center_Y, self.colors["darkBlue"], self.elements, self.interactive)
-        #self.loadProblem()
-        #self.elements.append(self.problemController)
-        
-        '''
-        menuButton = Elements.Button(screen, "cX-50", "50-cY", 68, 68, center_X, center_Y, buttonColor, 6, 10, "image", "menuButton.png", 0.6, 3800)
+        self.problemController = Controllers.ProblemController(screen=screen,
+                                                               problemList=problemList)
 
-        self.elements.append(menuButton)
-        self.interactive.append(menuButton)
-
-        self.checkButton = Elements.Button(screen, "cX-100", "cY-88", 100, 68, center_X, center_Y, buttonColor, 6, 10, "text", "Submit", 30, 6900)
-        self.nextButton = Elements.Button(screen, "cX-100", "cY-88", 100, 68, center_X, center_Y, buttonColor, 6, 10, "image", "arrowButton.png", 0.3, 6901)
-
-        self.elements.append(self.checkButton)
-        self.interactive.append(self.checkButton)
-        '''
-
-        self.elements.append(self.problemNumberBox)
-
-        self.draw()
+        self.loadProblem()
 
     def loadProblem(self):
 
-        self.problemsDone += 1
-        self.problemNumberBox.changeNumber(self.problemsDone)
-        
-        try:
-            for textbox in self.problemController.inputElements:
-                self.interactive.append(textbox)
-                self.interactiveText.append(textbox)
-        except:
-            pass
+        self.elements = []
+        self.interactive = []
+        self.interactiveText = []
 
-        self.problemController.reset(self.problemType)
+        self.elements.append(self.problemNumberBox)
 
-        # 2024-2025 Year
-        match (Screens.eventDict[self.problemType]):
-            case "history":
-                self.problem = HistoryProblems.problemList[random.randint(0, len(HistoryProblems.problemList)-1)]
+        self.problemController.createProblem()
 
-        self.problem.create()
-        self.problemController.loadProblemDisplay(self.problem)
-        self.problemController.loadProblemInput(self.problem.answerReceiver)
+        for element in self.problemController.elements:
+            self.elements.append(element)
 
-        for inputElement in self.problemController.inputElements:
-            self.interactive.append(inputElement)
-            self.interactiveText.append(inputElement)
+        for element in self.problemController.interactive:
+            self.interactive.append(element)
 
-    '''
-    def swapButton(self):
-        if (self.checkButton in self.elements):
-            self.elements.remove(self.checkButton)
-            self.interactive.remove(self.checkButton)
-            self.elements.append(self.nextButton)
-            self.interactive.append(self.nextButton)
-        else:
-            self.elements.remove(self.nextButton)
-            self.interactive.remove(self.nextButton)
-            self.elements.append(self.checkButton)
-            self.interactive.append(self.checkButton)
-    '''
+        for element in self.problemController.interactiveText:
+            self.interactiveText.append(element)
+
+    def processEvent(self, event):
+        if (Enums.eventDict[event] == "answerInputted"):
+            self.problemController.answerInputted()
+        elif (Enums.eventDict[event] == "newProblem"):
+            print("newProblme woooooo")
+            self.loadProblem()
+        pass    
 
     def recenter(self):
         super().recenter()
-        #self.checkButton.recenter(center_X, center_Y)
-        #self.nextButton.recenter(center_X, center_Y)
 
     def getType(self):
-        return self.problemType    
+        return self.problemType
