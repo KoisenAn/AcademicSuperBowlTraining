@@ -12,7 +12,6 @@ class ProblemController:
 
         self.elements = []
         self.interactive = []
-        self.interactiveText = []
 
         self.problemList = problemList
 
@@ -56,7 +55,6 @@ class ProblemController:
 
         self.elements = []
         self.interactive = []
-        self.interactiveText = []
 
         self.elements.append(self.submitButton)
         self.interactive.append(self.submitButton)           
@@ -75,14 +73,12 @@ class ProblemController:
 
         for element in self.problem.interactive:
             self.interactive.append(element)
-
-        for element in self.problem.interactiveText:
-            self.interactiveText.append(element)
     
     def answerInputted(self):
         isCorrect = self.problem.checkCorrect()
-        print(isCorrect)
-        # TODO: Lock inputControllers when problem submitted
+        self.problem.inputController.lockInteractiveElements()
+        self.problem.inputController.processIsCorrect(isCorrect)
+        # TODO: Maybe seperate problem and inputController
         # self.problem.inputController.showCorrect()        
 
     def recenter(self):
@@ -118,12 +114,19 @@ class InputController:
     def getInput(self):
         pass
 
+    def lockInteractiveElements(self):
+        for interactive in self.interactive:
+            interactive.setLockState(True)
+
+    def processIsCorrect(self, isCorrect):
+        pass
+
     def processEvent(self, event):
         pass
 
 class MCQController(InputController):
 
-    def __init__(self, screen=None, y=500, numMCQs=4, maxSelectable=1, **kwargs):
+    def __init__(self, screen=None, y=200, numChoices=4, maxSelectable=1, **kwargs):
 
         self.screen = screen
 
@@ -132,7 +135,7 @@ class MCQController(InputController):
 
         self.y=y
 
-        self.numMCQs = numMCQs
+        self.numChoices = numChoices
 
         self.maxSelectable = maxSelectable
 
@@ -143,20 +146,20 @@ class MCQController(InputController):
         try:
             self.labelList = kwargs["labelList"]
         except:
-            for i in range(numMCQs):
+            for i in range(numChoices):
                 try:
                     self.labelList.append(kwargs["label"+str(i+1)])
                 except:
                     self.labelList.append(None)  
 
-        self.createChoices(numMCQs=numMCQs)
+        self.createChoices(numChoices=numChoices)
 
-    def createChoices(self, numMCQs): # TODO Randomize and limit answer choices
+    def createChoices(self, numChoices): # TODO Randomize and limit answer choices
 
-        self.mcqButtonList = []
+        self.mcButtonList = []
 
-        for i in range(numMCQs):
-            mcqButton = Elements.MCQButton(screen=self.screen, 
+        for i in range(numChoices):
+            mcButton = Elements.MCQButton(screen=self.screen, 
                                             event=6903+i, 
                                             sizeX=500, 
                                             sizeY=70, 
@@ -171,29 +174,38 @@ class MCQController(InputController):
                                             labelSize = 20,
                                             font = "calibri",
                                             labelColor = (0,0,0))
-            self.elements.append(mcqButton)
-            self.interactive.append(mcqButton)
+            self.elements.append(mcButton)
+            self.interactive.append(mcButton)
+            self.mcButtonList.append(mcButton)
 
-    def updateMCQStates(self):
-        pass
+    def processIsCorrect(self, isCorrect):
+        for mcButton in self.mcButtonList:
+            if mcButton.isSelected():
+                if isCorrect:
+                    mcButton.changeColor(colorState=3)
+                    #mcButton.label.changeColor((50, 150, 60))
+                else:
+                    mcButton.changeColor(colorState=4)
+                print(mcButton.colorState)
+                    #mcButton.changeColor((170, 20, 20))
+            # TODO: Find a way to show correct answer when wrong
 
     def processEvent(self, event):
-
         if (self.maxSelectable == 1):
-            for mcq in self.elements:
-                if (event == mcq.event):
-                    mcq.changeSelectedState(not mcq.selected)
+            for mcButton in self.elements:
+                if (event == mcButton.event):
+                    mcButton.changeSelectedState(not mcButton.selected)
                 else:
-                    mcq.changeSelectedState(False)
+                    mcButton.changeSelectedState(False)
         else:
-            for mcq in self.elements:
-                if (event == mcq.event):
-                    if (mcq.isSelected()):
-                        mcq.changeSelectedState(False)
+            for mcButton in self.elements:
+                if (event == mcButton.event):
+                    if (mcButton.isSelected()):
+                        mcButton.changeSelectedState(False)
                         self.numSelected -= 1
                     else:
                         if (self.numSelected < self.maxSelectable):
-                            mcq.changeSelectedState(True)
+                            mcButton.changeSelectedState(True)
                             self.numSelected += 1
         pass
 

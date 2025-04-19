@@ -17,14 +17,14 @@ historyProblem1 = Elements.Problem(question="Who is the cutest?",
                                    answer="Ollie",
                                    problemDisplayType=Enums.ProblemDisplayType.Text(),
                                    problemInputType=Enums.ProblemInputType.MCQ(answerChoices=["An", "Ollie", "Chuckie", "Lillian"],
-                                                                               numMCQs=4,
+                                                                               numChoices=4,
                                                                                numAnswers=1))
 
 historyProblem2 = Elements.Problem(question="Who is the toughest?",
                                    answer="Ollie",
                                    problemDisplayType=Enums.ProblemDisplayType.Text(),
                                    problemInputType=Enums.ProblemInputType.MCQ(answerChoices=["An", "Ollie", "Jenny", "Ansel"],
-                                                                               numMCQs=4,
+                                                                               numChoices=4,
                                                                                numAnswers=1))
 
 problemList = [historyProblem1, historyProblem2]

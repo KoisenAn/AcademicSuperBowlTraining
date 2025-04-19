@@ -24,7 +24,9 @@ colors = {"white": (255,255,255),
           "darkBlue": (53,63,112), 
           "screenGrey": (230,230,230), 
           "highlightMCQGrey": (210,210,210), 
-          "highlightBlue": (55, 190, 245, 0.5)}
+          "highlightBlue": (55,190,245,0.5),
+          "rightGreen": (140,250,150),
+          "wrongRed": (250,145,145)}
 
 class QuestionGenerationType:
 
@@ -61,16 +63,16 @@ class ProblemInputType:
 
     class MCQ:
 
-        def __init__(self, answerChoices=[], numMCQs=4, numAnswers=1):
+        def __init__(self, answerChoices=[], numChoices=4, numAnswers=1):
             self.answerChoices = answerChoices
-            self.numMCQs = numMCQs
+            self.numChoices = numChoices
             self.numAnswers = numAnswers
 
         def getAnswerChoices(self):
             return self.answerChoices
 
-        def getNumMCQs(self):
-            return self.numMCQs
+        def getNumChoices(self):
+            return self.numChoices
         
         def getNumAnswers(self):
             return self.numAnswers

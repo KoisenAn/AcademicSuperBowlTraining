@@ -413,8 +413,6 @@ class ProblemScreen(Screen):
 
         super().__init__(screen)
 
-        self.interactiveText = []
-
         self.problemType = problemType
 
         # 2024-2025 Year
@@ -464,7 +462,6 @@ class ProblemScreen(Screen):
 
         self.elements = []
         self.interactive = []
-        self.interactiveText = []
 
         self.elements.append(self.problemNumberBox)
 
@@ -476,14 +473,10 @@ class ProblemScreen(Screen):
         for element in self.problemController.interactive:
             self.interactive.append(element)
 
-        for element in self.problemController.interactiveText:
-            self.interactiveText.append(element)
-
     def processEvent(self, event):
         if (Enums.eventDict[event] == "answerInputted"):
             self.problemController.answerInputted()
         elif (Enums.eventDict[event] == "newProblem"):
-            print("newProblme woooooo")
             self.loadProblem()
         pass    
 
