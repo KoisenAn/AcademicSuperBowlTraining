@@ -48,12 +48,12 @@ class ProblemInputType:
 
     class TextBox:
 
-        def __init__(self, numTextboxes, firstInputBoxText, secondInputBoxText=None, thirdInputBoxText=None):
-            self.textboxes = numTextboxes
+        def __init__(self, numTextBoxes, firstInputBoxText, secondInputBoxText=None, thirdInputBoxText=None):
+            self.textboxes = numTextBoxes
             self.firstInputBoxText = firstInputBoxText
             self.secondInputBoxText = secondInputBoxText
             self.thirdInputBoxText = thirdInputBoxText
-            self.inputBoxTextList = [firstInputBoxText, secondInputBoxText, thirdInputBoxText][:numTextboxes-1]
+            self.inputBoxTextList = [firstInputBoxText, secondInputBoxText, thirdInputBoxText][:numTextBoxes-1]
 
         def getNumTextBoxes(self):
             return self.textboxes
@@ -63,13 +63,16 @@ class ProblemInputType:
 
     class MCQ:
 
-        def __init__(self, answerChoices=[], numChoices=4, numAnswers=1):
-            self.answerChoices = answerChoices
+        def __init__(self, otherAnswerChoices=[], numChoices=4, numAnswers=1):
+            self.otherAnswerChoices = otherAnswerChoices
             self.numChoices = numChoices
             self.numAnswers = numAnswers
 
-        def getAnswerChoices(self):
-            return self.answerChoices
+        def getAnswer(self):
+            return self.answer
+
+        def getOtherAnswerChoices(self):
+            return self.otherAnswerChoices
 
         def getNumChoices(self):
             return self.numChoices

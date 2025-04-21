@@ -13,18 +13,26 @@ sys.path.insert(0, folder_dir)
 import Elements
 import Enums
 
-historyProblem1 = Elements.Problem(question="Who is the cutest?",
+testProblem1 = Elements.Problem(question="Who is the cutest?",
                                    answer="Ollie",
                                    problemDisplayType=Enums.ProblemDisplayType.Text(),
-                                   problemInputType=Enums.ProblemInputType.MCQ(answerChoices=["An", "Ollie", "Chuckie", "Lillian"],
+                                   problemInputType=Enums.ProblemInputType.MCQ(otherAnswerChoices=["An", "Chuckie", "Lillian"],
                                                                                numChoices=4,
                                                                                numAnswers=1))
 
-historyProblem2 = Elements.Problem(question="Who is the toughest?",
+testProblem2 = Elements.Problem(question="Who is the toughest?",
                                    answer="Ollie",
                                    problemDisplayType=Enums.ProblemDisplayType.Text(),
-                                   problemInputType=Enums.ProblemInputType.MCQ(answerChoices=["An", "Ollie", "Jenny", "Ansel"],
+                                   problemInputType=Enums.ProblemInputType.MCQ(otherAnswerChoices=["An", "Jenny", "Ansel"],
                                                                                numChoices=4,
                                                                                numAnswers=1))
 
-problemList = [historyProblem1, historyProblem2]
+testProblem3 = Elements.Problem(question="How much Aura does Ollie have?",
+                                   answer="10000",
+                                   problemDisplayType=Enums.ProblemDisplayType.Text(),
+                                   problemInputType=Enums.ProblemInputType.TextBox(numTextBoxes=1,
+                                                                                   firstInputBoxText="Answer: "))
+
+problemList = [testProblem1,
+               testProblem2,
+               testProblem3]

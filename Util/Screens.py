@@ -258,7 +258,6 @@ class PracticeSelectScreen(Screen):
                                   alignment=Enums.TextAlignment.Center(),
                                   showingTextBox=False) 
         self.elements.append(self.title)       
-
         
         #Utility Button Sizes
         homeButton = Elements.Button(screen=screen, 
@@ -267,66 +266,21 @@ class PracticeSelectScreen(Screen):
                                      sizeY=100, 
                                      positionController=Controllers.PositionController(objectLength=100,
                                                                                        objectHeight=100, 
-                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                       xOffset=-275, 
+                                                                                       drawAnchor=Enums.Anchor.TopCenter(),
+                                                                                       xOffset=0,
                                                                                        yOffset=225, 
                                                                                        refAnchor=Enums.Anchor.Center()), 
                                      labelInformation="homeIcon.png", 
                                      labelSize=0.25,
-                                     labelType=Enums.Label.Image())
-        settingsButton = Elements.Button(screen=screen, 
-                                     event=3802, 
-                                     sizeX=100, 
-                                     sizeY=100, 
-                                     positionController=Controllers.PositionController(objectLength=100,
-                                                                                       objectHeight=100, 
-                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                       xOffset=-125, 
-                                                                                       yOffset=225, 
-                                                                                       refAnchor=Enums.Anchor.Center()), 
-                                     labelInformation="settingsIcon.png", 
-                                     labelSize=0.25,
-                                     labelType=Enums.Label.Image())
-        helpButton = Elements.Button(screen=screen, 
-                                     event=3798, 
-                                     sizeX=100, 
-                                     sizeY=100, 
-                                     positionController=Controllers.PositionController(objectLength=100,
-                                                                                       objectHeight=100, 
-                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                       xOffset=25, 
-                                                                                       yOffset=225, 
-                                                                                       refAnchor=Enums.Anchor.Center()),  
-                                     labelInformation="questionIcon.png", 
-                                     labelSize=0.25,
-                                     labelType=Enums.Label.Image())    
-        statsButton = Elements.Button(screen=screen, 
-                                     event=3798, 
-                                     sizeX=100, 
-                                     sizeY=100, 
-                                     positionController=Controllers.PositionController(objectLength=100,
-                                                                                       objectHeight=100, 
-                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                       xOffset=175, 
-                                                                                       yOffset=225, 
-                                                                                       refAnchor=Enums.Anchor.Center()), 
-                                     labelInformation="questionIcon.png", 
-                                     labelSize=0.25,
-                                     labelType=Enums.Label.Image())      
+                                     labelType=Enums.Label.Image())   
 
         #Adding Utility Buttons
         
         #Adding To Elements
         self.elements.append(homeButton)
-        self.elements.append(settingsButton)
-        self.elements.append(statsButton)
-        self.elements.append(helpButton)
 
         #Adding To Interactive
         self.interactive.append(homeButton)
-        self.interactive.append(settingsButton)
-        self.interactive.append(statsButton)
-        self.interactive.append(helpButton)
 
         #Practice Button Sizes
         practicebuttonTextSize = 40
@@ -449,7 +403,7 @@ class ProblemScreen(Screen):
                                                                                              xOffset=30, 
                                                                                              yOffset=95, 
                                                                                              refAnchor=Enums.Anchor.TopLeft()),
-                                                          problemNumber=str(self.problemsDone))
+                                                          problemNumber=str(self.problemsDone+1))
         self.elements.append(self.problemNumberBox)
         
         # Creates Problem Controller
@@ -463,6 +417,7 @@ class ProblemScreen(Screen):
         self.elements = []
         self.interactive = []
 
+        self.elements.append(self.title)
         self.elements.append(self.problemNumberBox)
 
         self.problemController.createProblem()
@@ -478,7 +433,13 @@ class ProblemScreen(Screen):
             self.problemController.answerInputted()
         elif (Enums.eventDict[event] == "newProblem"):
             self.loadProblem()
+            self.problemController.newProblem()
+            self.problemsDone += 1
+            self.problemNumberBox.changeNumber(str(self.problemsDone+1))
         pass    
+
+    def processInputText(self, event):
+        self.problemController.problem.inputController.updateTextBoxesText(event)
 
     def recenter(self):
         super().recenter()

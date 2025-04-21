@@ -102,7 +102,21 @@ class Button:
 
     positionController: Controllers.PositionController
 
-    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, thickness=0, curveRadius=0, labelType=Enums.Label.Text(), labelInformation=None, labelSize=10, isWorking=True, locked=False, **kwargs):
+    def __init__(self, 
+                 screen=None, 
+                 event=None, 
+                 sizeX=100, 
+                 sizeY=100, 
+                 positionController=None, 
+                 thickness=0, 
+                 curveRadius=0, 
+                 labelType=Enums.Label.Text(), 
+                 labelInformation=None, 
+                 labelSize=10, 
+                 isWorking=True, 
+                 locked=False, 
+                 isActive=True, 
+                 **kwargs):
 
         # Inputed variables stored in the object
         self.screen = screen
@@ -117,6 +131,7 @@ class Button:
 
         self.locked = locked
         self.isWorking = isWorking
+        self.isActive = isActive
 
         self.sizeX = sizeX
         self.sizeY = sizeY
@@ -158,22 +173,23 @@ class Button:
 
     #Draws everything
     def draw(self):
-        pygame.draw.rect(self.screen, self.color[self.colorState], self.ButtonRect, 0, self.curveRadius)
-        for label in self.labels:
-            label.draw()
+        if (self.isActive):
+            pygame.draw.rect(self.screen, self.color[self.colorState], self.ButtonRect, 0, self.curveRadius)
+            for label in self.labels:
+                label.draw()
 
     #Runs/check if clicked
     def clicked(self, mousePos):
-        if (self.ButtonRect.collidepoint(mousePos)):
-            if (self.isWorking and not self.locked):
+        if (self.isActive and self.isWorking and not self.locked):
+            if (self.ButtonRect.collidepoint(mousePos)):
                 CUSTOMEVENT = pygame.event.Event(self.event)
                 pygame.event.post(CUSTOMEVENT)
-            return True
-        else:
-            return False
+                return True
+            else:
+                return False
         
     def mouseOver(self, mousePos):
-        if (not self.locked):
+        if (self.isActive and self.isWorking and not self.locked):
             isMouseOver = self.ButtonRect.collidepoint(mousePos)
             if (isMouseOver):
                 self.colorState = 0
@@ -206,12 +222,38 @@ class Button:
     def setLockState(self, lockState):
         self.locked = lockState
 
+    def setActiveState(self, activeState):
+        self.isActive = activeState
+
 # A button subclass that handles multiple choice buttons
 class MCQButton(Button):
         
-    def __init__(self, screen=None, event=None, sizeX=100, sizeY=100, positionController=None, labelType=Enums.Label.Text(), labelInformation=None, labelSize=10, isWorking=True, locked=False, **kwargs):
+    def __init__(self, 
+                 screen=None, 
+                 event=None, 
+                 sizeX=100, 
+                 sizeY=100, 
+                 positionController=None, 
+                 labelType=Enums.Label.Text(), 
+                 labelInformation=None, 
+                 labelSize=10, 
+                 isWorking=True, 
+                 locked=False, 
+                 isActive=True,
+                 **kwargs):
 
-        super().__init__(screen=screen, event=event, sizeX=sizeX, sizeY=sizeY, positionController=positionController, labelType=labelType, labelInformation=labelInformation, labelSize=labelSize, isWorking=isWorking, locked=False, **kwargs )
+        super().__init__(screen=screen, 
+                         event=event, 
+                         sizeX=sizeX, 
+                         sizeY=sizeY, 
+                         positionController=positionController, 
+                         labelType=labelType, 
+                         labelInformation=labelInformation, 
+                         labelSize=labelSize, 
+                         isWorking=isWorking, 
+                         locked=locked, 
+                         isActive=isActive,
+                         **kwargs)
 
         self.selected = False
 
@@ -242,14 +284,21 @@ class MCQButton(Button):
 class Label:
 
     #Initializing function for labels of text and images 
-    def __init__(self, screen=None, positionController = None, size=10, labelType=None, labelInformation = None, **kwargs):
+    def __init__(self, 
+                 screen=None, 
+                 positionController=None, 
+                 size=10, 
+                 labelType=None, 
+                 labelInformation=None, 
+                 labelDrawAnchor=Enums.Anchor.Center(),
+                 **kwargs):
 
         self.screen = screen
         self.positionController = positionController
         self.type = labelType
         self.labelSize = size
-
         self.labelInfromation = labelInformation
+        self.labelDrawAnchor = labelDrawAnchor
         
         if (type(self.type) == Enums.Label.Text):
             self.font = kwargs.get("font")
@@ -277,8 +326,16 @@ class Label:
             self.labelRect = self.image.get_rect()
     
     def draw(self):
-        self.labelRect.center = (self.positionController.getPosition(positionOnObject=Enums.Anchor.Center())[0], 
-                                 self.positionController.getPosition(positionOnObject=Enums.Anchor.Center())[1])
+        refPosition = (self.positionController.getPosition(positionOnObject=self.labelDrawAnchor)[0], 
+                       self.positionController.getPosition(positionOnObject=self.labelDrawAnchor)[1]) 
+        
+        if (type(self.labelDrawAnchor) == Enums.Anchor.Center):
+            self.labelRect.center = refPosition
+        elif (type(self.labelDrawAnchor) == Enums.Anchor.TopLeft):
+            self.labelRect.topleft = refPosition
+        elif (type(self.labelDrawAnchor) == Enums.Anchor.LeftCenter):
+            self.labelRect.midleft = refPosition    
+            
         if (type(self.type) == Enums.Label.Text):
             self.screen.blit(self.text, self.labelRect)
         elif (type(self.type) == Enums.Label.Image):
@@ -286,6 +343,7 @@ class Label:
             
     def changeText(self, text):
         self.text = self.loadedFont.render(text, True, self.color)
+        self.labelRect = self.text.get_rect()
     
     def changeImage(self, imagePath):
         self.string = imagePath
@@ -302,12 +360,13 @@ class Label:
 # An interactive object that takes in keyboard input and returns it
 class InputTextBox:
 
-    def __init__(self, screen=None, length=200, height=50, positionController=None, defaultText="Input", labelText = None):
+    def __init__(self, screen=None, length=200, height=50, positionController=None, defaultText="Input", labelText=None, isLocked=False):
 
         self.screen = screen
         self.isActive = False
         self.submitted = False
         self.isCorrect = False
+        self.isLocked = isLocked
 
         self.length = length
         self.height = height
@@ -339,18 +398,19 @@ class InputTextBox:
                                            self.length, 
                                            self.height)
             self.defaultLabel = Label(screen=self.screen, 
-                                        size=20, 
-                                        labelType=Enums.Label.Text(), 
-                                        positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
-                                                                                          objectHeight=self.positionController.getSize()[1],
-                                                                                          xOffset=textMargin,
-                                                                                          yOffset=0,
-                                                                                          drawAnchor=Enums.Anchor.LeftCenter(),
-                                                                                          refObject=self.positionController,
-                                                                                          refAnchor=Enums.Anchor.LeftCenter()), 
-                                        labelInformation=self.defaultText,
-                                        font='calibri',
-                                        color=(200,200,200))
+                                      size=20, 
+                                      labelType=Enums.Label.Text(), 
+                                      positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
+                                                                                        objectHeight=self.positionController.getSize()[1],
+                                                                                        xOffset=textMargin,
+                                                                                        yOffset=0,
+                                                                                        drawAnchor=Enums.Anchor.LeftCenter(),
+                                                                                        refObject=self.positionController,
+                                                                                        refAnchor=Enums.Anchor.LeftCenter()), 
+                                      labelInformation=self.defaultText,
+                                      font='calibri',
+                                      color=(200,200,200),
+                                      labelDrawAnchor=Enums.Anchor.LeftCenter())
             self.defaultLabel.recenter()
         else:
             self.externalLabel = Label(screen=self.screen, 
@@ -394,7 +454,8 @@ class InputTextBox:
                                                                                           refAnchor=Enums.Anchor.LeftCenter()), 
                                         labelInformation=self.defaultText,
                                         font='calibri',
-                                        color=(200,200,200))
+                                        color=(200,200,200),
+                                        labelDrawAnchor=Enums.Anchor.LeftCenter())
 
     def draw(self):
         pygame.draw.rect(self.screen, (255,255,255), self.insideRect, 0, 3)
@@ -407,7 +468,8 @@ class InputTextBox:
                 pygame.draw.rect(self.screen, (250,145,145), self.correctRect, 0, 3)
                 self.defaultLabel.changeColor((170, 20, 20))
 
-        pygame.draw.rect(self.screen, (100,100,100), self.outsideRect, 3, 3)
+        #pygame.draw.rect(self.screen, (100,100,100), self.outsideRect, 3, 3)
+        pygame.draw.rect(self.screen, (0,0,0), self.outsideRect, 3, 3)
 
         if (self.isActive):
             pygame.draw.rect(self.screen, (55, 190, 245), self.activeRect, 3, 3)
@@ -440,7 +502,7 @@ class InputTextBox:
         pass
 
     def inputText(self, event):
-        if (not self.locked):
+        if (not self.isLocked):
             if event.key == pygame.K_RETURN:
                 self.isActive = False
                 pass
@@ -534,18 +596,18 @@ class ProblemNumberBox:
                                           self.height)
 
         self.label = Label(screen=self.screen, 
-                                    size=30, 
-                                    labelType=Enums.Label.Text(), 
-                                    positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
-                                                                                      objectHeight=self.positionController.getSize()[1],
-                                                                                      xOffset=0,
-                                                                                      yOffset=0,
-                                                                                      drawAnchor=Enums.Anchor.Center(),
-                                                                                      refObject=self.positionController,
-                                                                                      refAnchor=Enums.Anchor.Center()), 
-                                    labelInformation=self.problemNumber,
-                                    font = 'calibri',
-                                    color = self.color)        
+                           size=30, 
+                           labelType=Enums.Label.Text(), 
+                           positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
+                                                                             objectHeight=self.positionController.getSize()[1],
+                                                                             xOffset=0,
+                                                                             yOffset=0,
+                                                                             drawAnchor=Enums.Anchor.Center(),
+                                                                             refObject=self.positionController,
+                                                                             refAnchor=Enums.Anchor.Center()), 
+                           labelInformation=self.problemNumber,
+                           font='calibri',
+                           color=self.color)        
 
     def draw(self):
         pygame.draw.rect(self.screen, (255,255,255), self.boxOutlineRect, 0, 3)
@@ -553,8 +615,7 @@ class ProblemNumberBox:
         self.label.draw()
 
     def changeNumber(self, number):
-
-        self.label.changeText(number)
+        self.label.changeText(str(number))
 
     def recenter(self):
         self.positionController.recenter()
@@ -676,8 +737,8 @@ class Image:
 class Problem: 
 
     def __init__(self, 
-                 question = None, 
-                 answer = None, 
+                 question=None, 
+                 answer=None, 
                  problemDisplayType=Enums.ProblemDisplayType.Text(), 
                  problemInputType=Enums.ProblemInputType.MCQ()):
 
@@ -718,8 +779,9 @@ class Problem:
     def loadInput(self, screen):
         if (type(self.problemInputType) == Enums.ProblemInputType.MCQ):
             self.inputController = Controllers.MCQController(screen=screen, 
+                                                             answer=self.answer,
                                                              numChoices=self.problemInputType.getNumChoices(),
-                                                             labelList=self.problemInputType.getAnswerChoices(),
+                                                             labelList=self.problemInputType.getOtherAnswerChoices(),
                                                              maxSelectable=1)
         elif (type(self.problemInputType) == Enums.ProblemInputType.TextBox):
             self.inputController = Controllers.TextBoxController(screen=screen, 

@@ -16,35 +16,36 @@ class ProblemController:
         self.problemList = problemList
 
         self.submitButton = Elements.Button(screen=self.screen, 
-                                       event=6900, 
-                                       sizeX=120, 
-                                       sizeY=90, 
-                                       positionController=PositionController(objectLength=120,
-                                                                             objectHeight=90, 
-                                                                             drawAnchor=Enums.Anchor.Center(),
-                                                                             xOffset=0, 
-                                                                             yOffset=0, 
-                                                                             refAnchor=Enums.Anchor.Center()), 
-                                       labelInformation="Submit", 
-                                       labelType=Enums.Label.Text(),
-                                       labelSize=30,
-                                       font="calibri",
-                                       labelColor=(0,0,0))
+                                            event=6900, 
+                                            sizeX=100, 
+                                            sizeY=60, 
+                                            positionController=PositionController(objectLength=100,
+                                                                                  objectHeight=60, 
+                                                                                  drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                  xOffset=30, 
+                                                                                  yOffset=600, 
+                                                                                  refAnchor=Enums.Anchor.TopLeft()), 
+                                            labelInformation="Submit", 
+                                            labelType=Enums.Label.Text(),
+                                            labelSize=25,
+                                            font="calibri",
+                                            labelColor=(0,0,0))
         self.elements.append(self.submitButton)
         self.interactive.append(self.submitButton)        
         self.nextProblemButton = Elements.Button(screen=self.screen, 
-                                            event=6902, 
-                                            sizeX=120, 
-                                            sizeY=90, 
-                                            positionController=PositionController(objectLength=120,
-                                                                                  objectHeight=90, 
-                                                                                  drawAnchor=Enums.Anchor.Center(),
-                                                                                  xOffset=120, 
-                                                                                  yOffset=0, 
-                                                                                  refAnchor=Enums.Anchor.Center()), 
-                                            labelInformation="arrowIcon.png", 
-                                            labelType=Enums.Label.Image(),
-                                            labelSize=0.25)
+                                                 event=6902, 
+                                                 sizeX=100, 
+                                                 sizeY=60, 
+                                                 positionController=PositionController(objectLength=100,
+                                                                                       objectHeight=60, 
+                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       xOffset=30, 
+                                                                                       yOffset=600, 
+                                                                                       refAnchor=Enums.Anchor.TopLeft()), 
+                                                 labelInformation="arrowIcon.png", 
+                                                 labelType=Enums.Label.Image(),
+                                                 labelSize=0.20,
+                                                 isActive=False)
         self.elements.append(self.nextProblemButton)
         self.interactive.append(self.nextProblemButton)
 
@@ -78,8 +79,14 @@ class ProblemController:
         isCorrect = self.problem.checkCorrect()
         self.problem.inputController.lockInteractiveElements()
         self.problem.inputController.processIsCorrect(isCorrect)
-        # TODO: Maybe seperate problem and inputController
-        # self.problem.inputController.showCorrect()        
+        self.submitButton.setActiveState(False)
+        self.nextProblemButton.setActiveState(True)
+        # TODO: Show correct feature
+        # self.problem.inputController.showCorrect()  
+
+    def newProblem(self):
+        self.submitButton.setActiveState(True)
+        self.nextProblemButton.setActiveState(False) 
 
     def recenter(self):
         for element in self.elements:
@@ -126,12 +133,14 @@ class InputController:
 
 class MCQController(InputController):
 
-    def __init__(self, screen=None, y=200, numChoices=4, maxSelectable=1, **kwargs):
+    def __init__(self, screen=None, answer=None, y=200, numChoices=4, maxSelectable=1, **kwargs):
 
         self.screen = screen
 
         self.elements = []
         self.interactive = []
+
+        self.answer = answer
 
         self.y=y
 
@@ -150,30 +159,35 @@ class MCQController(InputController):
                 try:
                     self.labelList.append(kwargs["label"+str(i+1)])
                 except:
-                    self.labelList.append(None)  
+                    self.labelList.append(None)          
 
         self.createChoices(numChoices=numChoices)
 
-    def createChoices(self, numChoices): # TODO Randomize and limit answer choices
+    def createChoices(self, numChoices):
 
         self.mcButtonList = []
 
+        # Randomizing choices
+        random.shuffle(self.labelList)
+        selectableAnswers = self.labelList.copy()
+        selectableAnswers.insert(random.randint(0,numChoices-1), self.answer)
+
         for i in range(numChoices):
             mcButton = Elements.MCQButton(screen=self.screen, 
-                                            event=6903+i, 
-                                            sizeX=500, 
-                                            sizeY=70, 
-                                            positionController=PositionController(objectLength=500,
-                                                                                              objectHeight=70, 
-                                                                                              drawAnchor=Enums.Anchor.TopLeft(),
-                                                                                              xOffset=30, 
-                                                                                              yOffset=self.y+80*i, 
-                                                                                              refAnchor=Enums.Anchor.TopLeft()),  
-                                            labelInformation= ["A. ", "B. ", "C. ", "D. "][i] + (lambda x: "" if x is None else x)(self.labelList[i]), 
-                                            labelType=Enums.Label.Text(),
-                                            labelSize = 20,
-                                            font = "calibri",
-                                            labelColor = (0,0,0))
+                                          event=6903+i, 
+                                          sizeX=500, 
+                                          sizeY=70, 
+                                          positionController=PositionController(objectLength=500,
+                                                                                objectHeight=70, 
+                                                                                drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                xOffset=30, 
+                                                                                yOffset=self.y+80*i, 
+                                                                                refAnchor=Enums.Anchor.TopLeft()),  
+                                          labelInformation= ["A. ", "B. ", "C. ", "D. "][i] + (lambda x: "" if x is None else x)(selectableAnswers[i]), 
+                                          labelType=Enums.Label.Text(),
+                                          labelSize = 20,
+                                          font = "calibri",
+                                          labelColor = (0,0,0))
             self.elements.append(mcButton)
             self.interactive.append(mcButton)
             self.mcButtonList.append(mcButton)
@@ -183,11 +197,8 @@ class MCQController(InputController):
             if mcButton.isSelected():
                 if isCorrect:
                     mcButton.changeColor(colorState=3)
-                    #mcButton.label.changeColor((50, 150, 60))
                 else:
                     mcButton.changeColor(colorState=4)
-                print(mcButton.colorState)
-                    #mcButton.changeColor((170, 20, 20))
             # TODO: Find a way to show correct answer when wrong
 
     def processEvent(self, event):
@@ -260,14 +271,16 @@ class TextBoxController(InputController):
                                             labelText=self.labelList[i])
             self.elements.append(textBox)
             self.interactive.append(textBox)
+            self.textBoxList.append(textBox)
 
     def updateTextBoxesText(self, event):
-        for textBox in self.elements:
-            if (textBox.isActive):
-                textBox.inputText(event)
+        for interactiveElement in self.interactive:
+            if (type(interactiveElement) == Elements.InputTextBox):
+                interactiveElement.inputText(event)
 
-    def updateTextBoxStates(self):
-        pass
+    def processIsCorrect(self, isCorrect):
+        for textBox in self.elements:
+            textBox.setSubmittedState(isCorrect)
 
     def getInput(self):
         textBoxInputs = []

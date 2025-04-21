@@ -58,16 +58,16 @@ while running:
                 interactive.clicked(mousePos)
 
         # A key is pressed
-        if event.type == pygame.KEYDOWN: #TODO: Should not be managed outside
+        if event.type == pygame.KEYDOWN:
+            
             try:
-                currScreen.inputController.updateTextBoxesText(event)
+                currScreen.processInputText(event) 
             except:
                 pass
 
             if (event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL):
                 tabDown = True
-                homeScreenOperPart1 = True
-
+                
             if (tabDown and event.key == pygame.K_t):
                 currScreen = Screens.TestScreen(screen=screen)
             elif (tabDown and event.key == pygame.K_h):
@@ -76,11 +76,6 @@ while running:
                 currScreen = Screens.PracticeSelectScreen(screen=screen)
             elif (tabDown and event.key == pygame.K_q):
                 running = False
-            elif (tabDown and (event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT)):
-                try:
-                    print(currScreen.inputController.getInput())
-                except:
-                    pass
 
         # A key is releaseed
         if event.type == pygame.KEYUP:
