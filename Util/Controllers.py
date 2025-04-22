@@ -174,7 +174,8 @@ class MCQController(InputController):
         # Randomizing choices
         random.shuffle(self.labelList)
         selectableAnswers = self.labelList.copy()
-        selectableAnswers.insert(random.randint(0,numChoices-1), self.answer)
+        self.correctChoice = random.randint(0,numChoices-1)
+        selectableAnswers.insert(self.correctChoice, self.answer)
 
         # Determining size for mcButton length
         maxTextLength = Elements.Text.findSizeOfTextRect(font="calibri",fontSize=20,string="A. " + selectableAnswers[0])[0]
@@ -213,7 +214,7 @@ class MCQController(InputController):
                     mcButton.changeColor(colorState=3)
                 else:
                     mcButton.changeColor(colorState=4)
-            # TODO: Find a way to show correct answer when wrong
+        self.mcButtonList[self.correctChoice].changeColor(colorState=3)
 
     def processEvent(self, event):
         if (self.maxSelectable == 1):
@@ -255,37 +256,41 @@ class InputTextBoxController(InputController):
         self.elements = []
         self.interactive = []
 
-        self.labelList = []
+        self.inputBoxTextList = []
 
         try:
-            self.labelList = kwargs["labelList"]
+            self.inputBoxTextList = kwargs["inputBoxTextList"]
         except:
             for i in range(numTextBoxes):
                 try:
-                    self.labelList.append(kwargs["label"+str(i+1)])
+                    self.inputBoxTextList.append(kwargs["inputBoxText"+str(i+1)])
                 except:
-                    self.labelList.append(None)  
+                    self.inputBoxTextList.append(None)  
 
         self.createTextBoxes()
 
-    def createTextBoxes(self):
+    def createTextBoxes(self, marginFromQuestion=300, marginBetweenTextBoxes=20):
 
         self.textBoxList = []
+
+        self.height = 50
+
+        marginFromQuestion = marginFromQuestion - (self.height + marginBetweenTextBoxes) * self.numTextBoxes
 
         for i in range(self.numTextBoxes):
             textBox = Elements.InputTextBox(screen=self.screen,
                                             length=200,
                                             height=50,
-                                            positionController=PositionController(objectLength=200,
-                                                                                              objectHeight=50,
-                                                                                              drawAnchor=Enums.ANCHOR.TOP_LEFT(),
-                                                                                              xOffset=30+sum((x.getLength()+20) for x in self.elements[0:i]), 
-                                                                                              yOffset=self.y, 
-                                                                                              refAnchor=Enums.ANCHOR.TOP_LEFT()),
-                                            labelText=self.labelList[i])
+                                            positionController=PositionController(drawAnchor=Enums.ANCHOR.TOP_LEFT(),
+                                                                                  xOffset=30, 
+                                                                                  yOffset=(lambda y: y + marginFromQuestion + (self.height + marginBetweenTextBoxes) * i if not callable(y) else y() + marginFromQuestion + (self.height + marginBetweenTextBoxes) * i)(self.y), 
+                                                                                  refAnchor=Enums.ANCHOR.TOP_LEFT()),
+                                            labelText=self.inputBoxTextList[i])
             self.elements.append(textBox)
             self.interactive.append(textBox)
             self.textBoxList.append(textBox)
+
+        self.height += marginFromQuestion + (self.height + marginBetweenTextBoxes) * (self.numTextBoxes-1) # TODO: Find a better way to calculate positon for submit and next button
 
     def updateTextBoxesText(self, event):
         for interactiveElement in self.interactive:
@@ -486,6 +491,8 @@ class PositionController:
             self.xOffset = newXOffset
         if (newYOffset != None):
             self.yOffset = newYOffset
+        if (self.drawObject != None):    
+            self.drawObject.recenter()
     
     def changeRefAnchor(self, newRefAnchor):
         self.refAnchor = newRefAnchor

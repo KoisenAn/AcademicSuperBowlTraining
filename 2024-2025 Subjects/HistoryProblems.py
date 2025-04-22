@@ -13,7 +13,7 @@ sys.path.insert(0, folder_dir)
 import Elements
 import Enums
 
-'''
+
 testProblem1 = Elements.Problem(question="Who is the cutest?",
                                    answer="Ollie",
                                    problemDisplayType=Enums.ProblemDisplayType.Text(),
@@ -29,11 +29,13 @@ testProblem2 = Elements.Problem(question="Who is the toughest?",
                                                                                numAnswers=1))
 
 testProblem3 = Elements.Problem(question="How much Aura does Ollie have?",
-                                   answer="10000",
-                                   problemDisplayType=Enums.ProblemDisplayType.Text(),
-                                   problemInputType=Enums.ProblemInputType.TextBox(numTextBoxes=1,
-                                                                                   firstInputBoxText="Answer: "))
-'''
+                                answer=["10000","1000","100"],
+                                problemDisplayType=Enums.ProblemDisplayType.Text(),
+                                problemInputType=Enums.ProblemInputType.TextBox(numTextBoxes=3,
+                                                                                inputBoxText1="Answer 1: ",
+                                                                                inputBoxText2="Answer 2: ",
+                                                                                inputBoxText3="Answer 3: "))
+
 
 #
 # William Hamilton Problems
@@ -247,6 +249,10 @@ historyProblem207 = Elements.Problem(question="During the late 1940s and 1950s, 
                                                                                  numChoices=4,
                                                                                  numAnswers=1))
 
+problemList = [testProblem1, testProblem2, testProblem3]
+
+'''
 problemList = [historyProblem101,
                historyProblem102,
                historyProblem103]
+'''

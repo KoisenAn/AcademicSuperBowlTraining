@@ -412,6 +412,7 @@ class InputTextBox:
         self.length = length
         self.height = height
         self.positionController = positionController
+        self.positionController.drawObject = self
 
         self.defaultText = defaultText
         self.labelText = labelText
@@ -543,7 +544,7 @@ class InputTextBox:
         pass
 
     def inputText(self, event):
-        if (not self.isLocked):
+        if (not self.isLocked and self.isActive):
             if event.key == pygame.K_RETURN:
                 self.isActive = False
                 pass
@@ -829,6 +830,7 @@ class Problem:
         elif (type(self.problemInputType) == Enums.ProblemInputType.TextBox):
             self.inputController = Controllers.InputTextBoxController(screen=screen, 
                                                                       numTextBoxes=self.problemInputType.getNumTextBoxes(),
+                                                                      inputBoxTextList=self.problemInputType.getInputBoxTextList(),
                                                                       y=y)
         self.elements.append(self.inputController)
         self.interactive.append(self.inputController)
@@ -840,15 +842,15 @@ class Problem:
         if (len(input) == 0):
             return False
         elif (type(self.answer) == list):
-            if (len(self.answer) != len(input())):
+            if (len(self.answer) != len(input)):
                 raise ValueError("Answer and Input Mismatch")
             else:
                 isCorrect = True
                 self.answer = [str(x) for x in self.answer]
                 self.answer.sort()
-                self.inputController.sort()
+                input.sort()
                 for i in range(len(self.answer)):
-                    if self.answer[i] != input()[i]:
+                    if self.answer[i] != input[i]:
                         isCorrect = False
                         break
                 return isCorrect

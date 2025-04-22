@@ -50,12 +50,13 @@ class ProblemInputType:
 
     class TextBox:
 
-        def __init__(self, numTextBoxes, firstInputBoxText, secondInputBoxText=None, thirdInputBoxText=None):
+        def __init__(self, numTextBoxes, inputBoxText1, inputBoxText2=None, inputBoxText3=None, inputBoxText4=None):
             self.textboxes = numTextBoxes
-            self.firstInputBoxText = firstInputBoxText
-            self.secondInputBoxText = secondInputBoxText
-            self.thirdInputBoxText = thirdInputBoxText
-            self.inputBoxTextList = [firstInputBoxText, secondInputBoxText, thirdInputBoxText][:numTextBoxes-1]
+            self.inputBoxText1 = inputBoxText1
+            self.inputBoxText2 = inputBoxText2
+            self.inputBoxText3 = inputBoxText3
+            self.inputBoxText4 = inputBoxText4
+            self.inputBoxTextList = [inputBoxText1, inputBoxText2, inputBoxText3, inputBoxText4][:numTextBoxes]
 
         def getNumTextBoxes(self):
             return self.textboxes
