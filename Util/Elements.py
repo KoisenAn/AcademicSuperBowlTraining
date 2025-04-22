@@ -889,7 +889,6 @@ class Problem:
     def onAnswerSubmitted(self, isCorrect):
         self.inputController.lockInteractiveElements()
         self.inputController.processIsCorrect(isCorrect)
-        print(isCorrect)
         self.inputController.showAnswer(self.answer)
 
     def getQuestion(self):
