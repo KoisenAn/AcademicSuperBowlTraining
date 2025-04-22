@@ -29,12 +29,12 @@ testProblem2 = Elements.Problem(question="Who is the toughest?",
                                                                                numAnswers=1))
 
 testProblem3 = Elements.Problem(question="How much Aura does Ollie have?",
-                                answer=["10000","1000","100"],
+                                answer=["10000", "1000", "100"],
                                 problemDisplayType=Enums.ProblemDisplayType.Text(),
                                 problemInputType=Enums.ProblemInputType.TextBox(numTextBoxes=3,
-                                                                                inputBoxText1="Answer 1: ",
-                                                                                inputBoxText2="Answer 2: ",
-                                                                                inputBoxText3="Answer 3: "))
+                                                                                inputBoxText1="Your Answer 1: ",
+                                                                                inputBoxText2="Your Answer 2: ",
+                                                                                inputBoxText3="Your Answer 3: "))
 
 
 #

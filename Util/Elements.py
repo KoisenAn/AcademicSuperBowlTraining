@@ -322,7 +322,7 @@ class MCQButton(Button):
         return self.string
 
 # An object which can stick visuals on things like buttons
-class Label:
+class Label: # TODO: Add autoformatting feature for positionController
 
     #Initializing function for labels of text and images 
     def __init__(self, 
@@ -407,6 +407,7 @@ class InputTextBox:
         self.isActive = False
         self.submitted = False
         self.isCorrect = False
+        self.showAnswerLabel = False
         self.isLocked = isLocked
 
         self.length = length
@@ -472,6 +473,7 @@ class InputTextBox:
                                           self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[1], 
                                           self.length, 
                                           self.height)
+            # TODO: Make all the rects + input label dependent on the inside rect so you don't have to duplicate code
             self.outsideRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[0] + self.externalLabel.getRect().width + labelAndBoxSpacing, 
                                            self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[1], 
                                            self.length, 
@@ -498,6 +500,21 @@ class InputTextBox:
                                         font='calibri',
                                         color=(200,200,200),
                                         labelDrawAnchor=Enums.ANCHOR.LEFT_CENTER())
+            
+        self.answerLabel = Label(screen=self.screen, 
+                                 size=20, 
+                                 labelType=Enums.LABEL_TYPE.TEXT(), 
+                                 positionController=Controllers.PositionController(objectLength=self.positionController.getSize()[0], 
+                                                                                   objectHeight=self.positionController.getSize()[1],
+                                                                                   xOffset=self.insideRect.midright[0] + 10,
+                                                                                   yOffset=self.insideRect.midright[1],
+                                                                                   drawAnchor=Enums.ANCHOR.LEFT_CENTER(),
+                                                                                   refObject=Enums.SCREEN(),
+                                                                                   refAnchor=Enums.ANCHOR.TOP_LEFT()), 
+                                 labelInformation=self.defaultText,
+                                 font='calibri',
+                                 color=(0,0,0),
+                                 labelDrawAnchor=Enums.ANCHOR.LEFT_CENTER())
 
     def draw(self):
         pygame.draw.rect(self.screen, (255,255,255), self.insideRect, 0, 3)
@@ -510,7 +527,6 @@ class InputTextBox:
                 pygame.draw.rect(self.screen, (250,145,145), self.correctRect, 0, 3)
                 self.defaultLabel.changeColor((170, 20, 20))
 
-        #pygame.draw.rect(self.screen, (100,100,100), self.outsideRect, 3, 3)
         pygame.draw.rect(self.screen, (0,0,0), self.outsideRect, 3, 3)
 
         if (self.isActive):
@@ -530,6 +546,9 @@ class InputTextBox:
                 self.defaultLabel.changeText("")
 
         self.defaultLabel.draw()
+
+        if (self.showAnswerLabel):
+            self.answerLabel.draw()
         pass
 
     def clicked(self, mousePos):
@@ -605,6 +624,10 @@ class InputTextBox:
 
     def setLockState(self, lockState):
         self.locked = lockState
+
+    def showAnswer(self, answer):
+        self.showAnswerLabel = True
+        self.answerLabel.changeText("Correct Answer: " + answer)
 
     def getLength(self):
         if (self.labelText == None):
@@ -798,6 +821,10 @@ class Problem:
         self.displayAndInputBorderY = 100
 
     def loadQuestion(self):
+
+        self.elements = []
+        self.interactive = []
+
         pass
 
     def loadDisplay(self, screen, margin=30):
@@ -840,19 +867,18 @@ class Problem:
         input = self.inputController.getInput()
 
         if (len(input) == 0):
-            return False
+            return None
         elif (type(self.answer) == list):
             if (len(self.answer) != len(input)):
                 raise ValueError("Answer and Input Mismatch")
             else:
-                isCorrect = True
+                isCorrect = []
                 self.answer = [str(x) for x in self.answer]
-                self.answer.sort()
-                input.sort()
                 for i in range(len(self.answer)):
                     if self.answer[i] != input[i]:
-                        isCorrect = False
-                        break
+                        isCorrect.append(False)
+                    else:
+                        isCorrect.append(True)
                 return isCorrect
         else:    
             if (len(input) > 1):
@@ -860,6 +886,12 @@ class Problem:
             else:
                 return (self.answer == input[0])
         
+    def onAnswerSubmitted(self, isCorrect):
+        self.inputController.lockInteractiveElements()
+        self.inputController.processIsCorrect(isCorrect)
+        print(isCorrect)
+        self.inputController.showAnswer(self.answer)
+
     def getQuestion(self):
         return self.question
 

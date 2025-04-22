@@ -78,12 +78,9 @@ class ProblemController:
     
     def answerInputted(self):
         isCorrect = self.problem.checkCorrect()
-        self.problem.inputController.lockInteractiveElements()
-        self.problem.inputController.processIsCorrect(isCorrect)
+        self.problem.onAnswerSubmitted(isCorrect)
         self.submitButton.setActiveState(False)
         self.nextProblemButton.setActiveState(True)
-        # TODO: Show correct feature
-        # self.problem.inputController.showCorrect()  
 
     def newProblem(self):
         self.submitButton.setActiveState(True)
@@ -127,6 +124,9 @@ class InputController:
             interactive.setLockState(True)
 
     def processIsCorrect(self, isCorrect):
+        pass
+
+    def showAnswer(self, answer):
         pass
 
     def processEvent(self, event):
@@ -209,11 +209,16 @@ class MCQController(InputController):
 
     def processIsCorrect(self, isCorrect):
         for mcButton in self.mcButtonList:
-            if mcButton.isSelected():
-                if isCorrect:
-                    mcButton.changeColor(colorState=3)
-                else:
-                    mcButton.changeColor(colorState=4)
+            if (isCorrect == None):
+                mcButton.changeColor(colorState=4)
+            else:
+                if mcButton.isSelected():
+                    if not isCorrect:
+                        mcButton.changeColor(colorState=4)
+                    else:
+                        mcButton.changeColor(colorState=3)
+
+    def showAnswer(self, answer):
         self.mcButtonList[self.correctChoice].changeColor(colorState=3)
 
     def processEvent(self, event):
@@ -298,8 +303,15 @@ class InputTextBoxController(InputController):
                 interactiveElement.inputText(event)
 
     def processIsCorrect(self, isCorrect):
-        for textBox in self.elements:
-            textBox.setSubmittedState(isCorrect)
+        for i in range(len(self.elements)):
+            if (isCorrect == None):
+                self.elements[i].setSubmittedState(False)
+            else:
+                self.elements[i].setSubmittedState(isCorrect[i]) # TODO: Make matching isCorrect to inputTextBoxes more secure than through indexing
+
+    def showAnswer(self, answer):
+        for i in range(len(self.elements)):
+            self.elements[i].showAnswer(answer[i])
 
     def getInput(self):
         textBoxInputs = []
