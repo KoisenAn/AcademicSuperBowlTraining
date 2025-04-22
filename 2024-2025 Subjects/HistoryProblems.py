@@ -46,7 +46,7 @@ historyProblem101 = Elements.Problem(question="What mathematical system did Will
                                                                                numChoices=4,
                                                                                numAnswers=1))
 
-historyProblem102 = Elements.Problem(question="Where did William Hamilton carve the famous quaternion eqaution?",
+historyProblem102 = Elements.Problem(question="Where did William Hamilton carve the famous quaternion equation?",
                                    answer="Into Bloom Bridge",
                                    problemDisplayType=Enums.ProblemDisplayType.Text(),
                                    problemInputType=Enums.ProblemInputType.MCQ(otherAnswerChoices=["On a blackboard in Trinity College", "Into his study desk", "Into the wall of his observatory"],

@@ -64,8 +64,11 @@ class ProblemController:
         self.problem = self.problemList[random.randint(0, len(self.problemList)-1)]
 
         self.problem.loadQuestion()
-        self.problem.loadDisplay(screen=self.screen)
-        self.problem.loadInput(screen=self.screen)
+        inputDisplayHeight = self.problem.loadDisplay(screen=self.screen)
+        submitAndNextButtonDisplayHeight = self.problem.loadInput(screen=self.screen, y=(lambda: inputDisplayHeight))
+
+        self.submitButton.positionController.changeOffset(newYOffset=(lambda: submitAndNextButtonDisplayHeight))
+        self.nextProblemButton.positionController.changeOffset(newYOffset=(lambda: submitAndNextButtonDisplayHeight))
 
         for element in self.problem.elements:
             self.elements.append(element)
@@ -129,6 +132,9 @@ class InputController:
     def processEvent(self, event):
         pass
 
+    def getHeight(self):
+        return self.height
+
 class MCQController(InputController):
 
     def __init__(self, screen=None, answer=None, y=200, numChoices=4, maxSelectable=1, **kwargs):
@@ -187,7 +193,7 @@ class MCQController(InputController):
                                                                                 objectHeight=70, 
                                                                                 drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                 xOffset=30, 
-                                                                                yOffset=self.y+80*i, 
+                                                                                yOffset=(lambda y: y if not callable(y) else y())(self.y)+80*i, 
                                                                                 refAnchor=Enums.ANCHOR.TOP_LEFT()),  
                                           labelInformation= ["A. ", "B. ", "C. ", "D. "][i] + (lambda x: "" if x is None else x)(selectableAnswers[i]), 
                                           labelType=Enums.LABEL_TYPE.TEXT(),
@@ -197,6 +203,8 @@ class MCQController(InputController):
             self.elements.append(mcButton)
             self.interactive.append(mcButton)
             self.mcButtonList.append(mcButton)
+
+        self.height = 320
 
     def processIsCorrect(self, isCorrect):
         for mcButton in self.mcButtonList:

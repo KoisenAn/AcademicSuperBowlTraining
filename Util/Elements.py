@@ -799,9 +799,9 @@ class Problem:
     def loadQuestion(self):
         pass
 
-    def loadDisplay(self, screen):
+    def loadDisplay(self, screen, margin=30):
         if (type(self.problemDisplayType) == Enums.ProblemDisplayType.Text):
-            self.problemText = Text(screen=screen,
+            self.problemDisplay = Text(screen=screen,
                                     positionController=Controllers.PositionController(objectLength=(lambda: pygame.display.get_window_size()[0]-120-30),
                                                                                       objectHeight=200,
                                                                                       drawAnchor=Enums.ANCHOR.TOP_LEFT(),
@@ -815,20 +815,24 @@ class Problem:
                                     topMargin=12,
                                     alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                     showingTextBox=False)
-            self.elements.append(self.problemText)
+            self.elements.append(self.problemDisplay)
+            return self.problemDisplay.positionController.getOffsets()[1] + self.problemDisplay.findHeight() + margin
     
-    def loadInput(self, screen):
+    def loadInput(self, screen, y, margin=30):
         if (type(self.problemInputType) == Enums.ProblemInputType.MCQ):
             self.inputController = Controllers.MCQController(screen=screen, 
                                                              answer=self.answer,
                                                              numChoices=self.problemInputType.getNumChoices(),
                                                              labelList=self.problemInputType.getOtherAnswerChoices(),
-                                                             maxSelectable=1)
+                                                             maxSelectable=1,
+                                                             y=y)
         elif (type(self.problemInputType) == Enums.ProblemInputType.TextBox):
             self.inputController = Controllers.InputTextBoxController(screen=screen, 
-                                                                 numTextBoxes=self.problemInputType.getNumTextBoxes())
+                                                                      numTextBoxes=self.problemInputType.getNumTextBoxes(),
+                                                                      y=y)
         self.elements.append(self.inputController)
         self.interactive.append(self.inputController)
+        return (lambda y: y if not callable(y) else y())(y) + self.inputController.getHeight() + margin
     
     def checkCorrect(self):
         input = self.inputController.getInput()
