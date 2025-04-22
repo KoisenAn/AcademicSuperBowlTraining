@@ -17,11 +17,9 @@ class ProblemController:
 
         self.submitButton = Elements.Button(screen=self.screen, 
                                             event=6900, 
-                                            sizeX=100, 
-                                            sizeY=60, 
-                                            positionController=PositionController(objectLength=100,
-                                                                                  objectHeight=60, 
-                                                                                  drawAnchor=Enums.ANCHOR.TOP_LEFT(),
+                                            length=100, 
+                                            height=60, 
+                                            positionController=PositionController(drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                   xOffset=30, 
                                                                                   yOffset=600, 
                                                                                   refAnchor=Enums.ANCHOR.TOP_LEFT()), 
@@ -34,8 +32,8 @@ class ProblemController:
         self.interactive.append(self.submitButton)        
         self.nextProblemButton = Elements.Button(screen=self.screen, 
                                                  event=6902, 
-                                                 sizeX=100, 
-                                                 sizeY=60, 
+                                                 length=100, 
+                                                 height=60, 
                                                  positionController=PositionController(objectLength=100,
                                                                                        objectHeight=60, 
                                                                                        drawAnchor=Enums.ANCHOR.TOP_LEFT(),
@@ -183,8 +181,8 @@ class MCQController(InputController):
         for i in range(numChoices):
             mcButton = Elements.MCQButton(screen=self.screen, 
                                           event=6903+i, 
-                                          sizeX=mcButtonLength, 
-                                          sizeY=70, 
+                                          length=mcButtonLength, 
+                                          height=70, 
                                           positionController=PositionController(objectLength=mcButtonLength,
                                                                                 objectHeight=70, 
                                                                                 drawAnchor=Enums.ANCHOR.TOP_LEFT(),
@@ -299,16 +297,18 @@ class InputTextBoxController(InputController):
 class PositionController:
 
     def __init__(self, 
-                 objectLength=Enums.AUTO_DETERMINE_ATTRIBUTE, 
-                 objectHeight=Enums.AUTO_DETERMINE_ATTRIBUTE, 
+                 objectLength=Enums.AUTO_DETERMINE_ATTRIBUTE(), 
+                 objectHeight=Enums.AUTO_DETERMINE_ATTRIBUTE(), 
                  xOffset = 0, 
                  yOffset = 0, 
+                 drawObject = None,
                  drawAnchor = Enums.ANCHOR.CENTER(), 
                  refObject = Enums.SCREEN(), 
                  refAnchor = Enums.ANCHOR.CENTER()):
         
         self.objectLength = objectLength
         self.objectHeight = objectHeight
+        self.drawObject = drawObject
         self.drawAnchor = drawAnchor
         
         self.xOffset = xOffset
@@ -367,37 +367,7 @@ class PositionController:
         if (positionOnObject == None):
             return position
         else:
-            if (type(self.objectLength) == Enums.AUTO_DETERMINE_ATTRIBUTE):
-                try:
-                    objectLengthValue = self.refObject.length
-                except:
-                    try:
-                        objectLengthValue = self.refObject.findLength()
-                    except:
-                        try:
-                            objectLengthValue = self.refObject.getLength()
-                        except:
-                            raise ValueError("refObject has no length property that can be assigned")
-            elif (callable(self.objectLength)):
-                objectLengthValue = self.objectLength()
-            else:
-                objectLengthValue = self.objectLength
-            
-            if (type(self.objectHeight) == Enums.AUTO_DETERMINE_ATTRIBUTE):
-                try:
-                    objectHeightValue = self.refObject.height
-                except:
-                    try:
-                        objectHeightValue = self.refObject.findHeight()
-                    except:
-                        try:
-                            objectHeightValue = self.refObject.getHeight()
-                        except:
-                            raise ValueError("refObject has no height property that can be assigned")
-            elif (callable(self.objectHeight)):
-                objectHeightValue = self.objectHeight()
-            else:
-                objectHeightValue = self.objectHeight
+            objectLengthValue, objectHeightValue = self.getSize()
 
             # FInd center position
             if (type(self.drawAnchor) == Enums.ANCHOR.CENTER):
@@ -448,10 +418,47 @@ class PositionController:
                 position[0] += -objectLengthValue/2
 
             return position
-        
+                
     def getSize(self):
-        return (lambda x: x if not callable(x) else x())(self.objectLength), (lambda x: x if not callable(x) else x())(self.objectHeight)
+        if (type(self.objectLength) == Enums.AUTO_DETERMINE_ATTRIBUTE):
+            length = self.autoDetermineLength()
+        elif (callable(self.objectLength)):
+            length = self.objectLength()
+        else:
+            length = self.objectLength
+
+        if (type(self.objectHeight) == Enums.AUTO_DETERMINE_ATTRIBUTE):
+            height = self.autoDetermineHeight()
+        elif (callable(self.objectHeight)):
+            height = self.objectHeight()
+        else:
+            height = self.objectHeight
+        return length, height
     
+    def autoDetermineLength(self): 
+        try:
+            return self.drawObject.length
+        except:
+            try:
+                return self.drawObject.findLength()
+            except:
+                try:
+                    return self.drawObject.getLength()
+                except:
+                    raise ValueError("refObject has no height property that can be assigned") 
+
+    def autoDetermineHeight(self): 
+        try:
+            return self.drawObject.height
+        except:
+            try:
+                return self.drawObject.findHeight()
+            except:
+                try:
+                    return self.drawObject.getHeight()
+                except:
+                    raise ValueError("refObject has no height property that can be assigned") 
+                
     def changeSize(self, newLength=None, newHeight=None):
         if (newLength != None):
             self.objectLength = newLength

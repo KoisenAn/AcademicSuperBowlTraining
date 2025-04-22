@@ -11,11 +11,24 @@ import Controllers
 # An object that displays text on the screen
 class Text:
 
-    def __init__(self, screen = None, positionController=None, string=None, lineSpacing = 1, leftMargin = 20, rightMargin = 20, topMargin = 20, alignment = Enums.TEXT_ALIGNMENT.LEFT, fontSize = 12, color = (0,0,0), font = "calibri", showingTextBox = False):
+    def __init__(self, 
+                 screen = None, 
+                 positionController=None, 
+                 string=None, 
+                 lineSpacing = 1, 
+                 leftMargin = 20, 
+                 rightMargin = 20, 
+                 topMargin = 20, 
+                 alignment = Enums.TEXT_ALIGNMENT.LEFT, 
+                 fontSize = 12, 
+                 color = (0,0,0), 
+                 font = "calibri", 
+                 showingTextBox = False):
         
         self.screen = screen
 
         self.positionController = positionController
+        self.positionController.drawObject = self
 
         self.string = string
 
@@ -54,15 +67,16 @@ class Text:
             self.loadedFont = pygame.font.SysFont(font, fontSize)
         return self.loadedFont
 
+    @staticmethod
     def findSizeOfTextRect(font, fontSize, string):
-        
+
         if (type(font) == str):
             if (font.endswith("ttf")):
                 loadedFont = pygame.font.Font(font, fontSize)
             else:
                 loadedFont = pygame.font.SysFont(font, fontSize)
-        elif (type(font) == pygame.font):
-            pass
+        elif (type(font) == pygame.font.Font):
+            loadedFont = font
 
         text = loadedFont.render(string, True, (0,0,0))
         textRect = text.get_rect()
@@ -74,22 +88,8 @@ class Text:
         for i in range(len(self.text)):
             textLine = self.loadedFont.render(self.text[i], True, self.color)
             textLineRect = textLine.get_rect()
-            height += textLineRect.height * self.lineSpacing
-        print(height)
+            height += textLineRect.height * self.lineSpacing  
         return height
-
-    def findTextHeight1(self):
-        height = self.topMargin
-        for i in range(len(self.text)):
-            textLine = self.loadedFont.render(self.text[i], True, self.color)
-            textLineRect = textLine.get_rect()
-            height += textLineRect.height * self.lineSpacing
-        return height
-
-    def findTextHieght2(self):
-        textLine = self.loadedFont.render(self.text[0], True, self.color)
-        textLineRect = textLine.get_rect()
-        return self.topMargin + textLineRect.height * (len(self.text)) * self.lineSpacing
 
     def processText(self):
         
@@ -101,7 +101,6 @@ class Text:
 
         line = "" 
         for i in range(len(wordList)):
-            print(self.findSizeOfTextRect("calibri", 10, "hi"))
             if (self.findSizeOfTextRect(font=self.loadedFont, fontSize=self.fontSize, string=(line + wordList[i]))[0] > self.maxLength):
                 self.text.append(line)
                 line = ""
@@ -137,8 +136,8 @@ class Button:
     def __init__(self, 
                  screen=None, 
                  event=None, 
-                 sizeX=100, 
-                 sizeY=100, 
+                 length=100, 
+                 height=100, 
                  positionController=None, 
                  thickness=0, 
                  curveRadius=0, 
@@ -165,12 +164,13 @@ class Button:
         self.isWorking = isWorking
         self.isActive = isActive
 
-        self.sizeX = sizeX
-        self.sizeY = sizeY
+        self.length = length
+        self.height = height
         self.positionController = positionController
+        self.positionController.drawObject = self # TODO: Get rid of all the size parameters for buttons
 
         #Button Creation
-        self.ButtonRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[0], self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[1], self.sizeX, self.sizeY)
+        self.ButtonRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[0], self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[1], self.length, self.height)
 
         self.labels = []
         if (type(self.labelType) == Enums.LABEL_TYPE.TEXT):
@@ -232,7 +232,7 @@ class Button:
 
     def recenter(self):
         self.positionController.recenter()
-        self.ButtonRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[0], self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[1], self.sizeX, self.sizeY)
+        self.ButtonRect = pygame.Rect(self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[0], self.positionController.getPosition(positionOnObject = Enums.ANCHOR.TOP_LEFT())[1], self.length, self.height)
         for label in self.labels:
             label.recenter()
      
@@ -240,7 +240,7 @@ class Button:
         return self.positionController
 
     def getSize(self):
-        return self.sizeX, self.sizeY
+        return self.length, self.height
     
     def changeColor(self, colorState):
         self.colorState = colorState
@@ -263,8 +263,8 @@ class MCQButton(Button):
     def __init__(self, 
                  screen=None, 
                  event=None, 
-                 sizeX=100, 
-                 sizeY=100, 
+                 length=100, 
+                 height=100, 
                  positionController=None, 
                  labelType=Enums.LABEL_TYPE.TEXT(), 
                  labelInformation=None, 
@@ -276,8 +276,8 @@ class MCQButton(Button):
 
         super().__init__(screen=screen, 
                          event=event, 
-                         sizeX=sizeX, 
-                         sizeY=sizeY, 
+                         length=length, 
+                         height=height, 
                          positionController=positionController, 
                          labelType=labelType, 
                          labelInformation=labelInformation, 
