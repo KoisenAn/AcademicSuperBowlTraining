@@ -333,34 +333,36 @@ class PositionController:
             position = [self.refObject.getPosition(positionOnObject=Enums.ANCHOR.TOP_LEFT())[0], 
                         self.refObject.getPosition(positionOnObject=Enums.ANCHOR.TOP_LEFT())[1]]
 
+        xOffsetValue, yOffsetValue = self.getOffsets()
+
         # Finding center position
         if (type(self.refAnchor) == Enums.ANCHOR.CENTER):
-            position[0] += self.refLength/2 + self.xOffset
-            position[1] += self.refHeight/2 + self.yOffset
+            position[0] += self.refLength/2 + xOffsetValue
+            position[1] += self.refHeight/2 + yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.TOP_RIGHT):
-            position[0] += self.refLength + self.xOffset
-            position[1] += self.yOffset
+            position[0] += self.refLength + xOffsetValue
+            position[1] += yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.TOP_LEFT):
-            position[0] += self.xOffset
-            position[1] += self.yOffset
+            position[0] += xOffsetValue
+            position[1] += yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.BOTTOM_RIGHT):
-            position[0] += self.refLength + self.xOffset
-            position[1] += self.refHeight + self.yOffset
+            position[0] += self.refLength + xOffsetValue
+            position[1] += self.refHeight + yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.BOTTOM_LEFT):
-            position[0] += self.xOffset
-            position[1] += self.refHeight + self.yOffset
+            position[0] += xOffsetValue
+            position[1] += self.refHeight + yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.TOP_CENTER):
-            position[0] += self.refLength/2 + self.xOffset
-            position[1] += self.yOffset
+            position[0] += self.refLength/2 + xOffsetValue
+            position[1] += yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.BOTTOM_CENTER):
-            position[0] += self.refLength/2 + self.xOffset
-            position[1] += self.refHeight + self.yOffset  
+            position[0] += self.refLength/2 + xOffsetValue
+            position[1] += self.refHeight + yOffsetValue  
         elif (type(self.refAnchor) == Enums.ANCHOR.RIGHT_CENTER):
-            position[0] += self.refLength + self.xOffset
-            position[1] += self.refHeight/2 + self.yOffset
+            position[0] += self.refLength + xOffsetValue
+            position[1] += self.refHeight/2 + yOffsetValue
         elif (type(self.refAnchor) == Enums.ANCHOR.LEFT_CENTER):
-            position[0] += self.xOffset
-            position[1] += self.refHeight/2 + self.yOffset
+            position[0] += xOffsetValue
+            position[1] += self.refHeight/2 + yOffsetValue
 
         # Offsetting by initial draw anchor
 
@@ -445,7 +447,7 @@ class PositionController:
                 try:
                     return self.drawObject.getLength()
                 except:
-                    raise ValueError("refObject has no height property that can be assigned") 
+                    raise ValueError("refObject has no length property that can be assigned") 
 
     def autoDetermineHeight(self): 
         try:
@@ -464,6 +466,12 @@ class PositionController:
             self.objectLength = newLength
         if (newHeight != None):
             self.objectHeight = newHeight
+
+    def getOffsets(self):
+        xOffsetValue = (lambda x: x if not callable(x) else x())(self.xOffset)
+        yOffsetValue = (lambda y: y if not callable(y) else y())(self.yOffset)
+
+        return xOffsetValue, yOffsetValue
 
     def changeOffset(self, newXOffset=None, newYOffset=None):
         if (newXOffset != None):

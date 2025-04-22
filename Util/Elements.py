@@ -12,18 +12,18 @@ import Controllers
 class Text:
 
     def __init__(self, 
-                 screen = None, 
+                 screen=None, 
                  positionController=None, 
                  string=None, 
-                 lineSpacing = 1, 
-                 leftMargin = 20, 
-                 rightMargin = 20, 
-                 topMargin = 20, 
-                 alignment = Enums.TEXT_ALIGNMENT.LEFT, 
-                 fontSize = 12, 
-                 color = (0,0,0), 
-                 font = "calibri", 
-                 showingTextBox = False):
+                 lineSpacing=1, 
+                 leftMargin=20, 
+                 rightMargin=20, 
+                 topMargin=20, 
+                 alignment=Enums.TEXT_ALIGNMENT.LEFT, 
+                 fontSize=12, 
+                 color=(0,0,0), 
+                 font="calibri", 
+                 showingTextBox=False):
         
         self.screen = screen
 
@@ -90,6 +90,15 @@ class Text:
             textLineRect = textLine.get_rect()
             height += textLineRect.height * self.lineSpacing  
         return height
+    
+    def findLength(self):
+        length = 0
+        for i in range(len(self.text)):
+            textLine = self.loadedFont.render(self.text[i], True, self.color)
+            textLineRect = textLine.get_rect()
+            if (textLineRect.width > length): # TODO: Change all length to width
+                length = textLineRect.width
+        return length
 
     def processText(self):
         
@@ -110,7 +119,7 @@ class Text:
         
     def draw(self):
 
-        if (self.showingTextBox):
+        if (self.showingTextBox): # TODO: Draw fitted outline when dimensions are not specified 
             pygame.draw.rect(self.screen, Enums.colors["black"], self.outsideTextBoxRect, 0)
             pygame.draw.rect(self.screen, Enums.colors["screenGrey"], self.insideTextBoxRect, 0)
 
