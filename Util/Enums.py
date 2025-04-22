@@ -28,6 +28,8 @@ colors = {"white": (255,255,255),
           "rightGreen": (140,250,150),
           "wrongRed": (250,145,145)}
 
+# TODO: Replace all the enum class names with capital letters
+
 class QuestionGenerationType:
 
     class Fixed:
@@ -80,56 +82,72 @@ class ProblemInputType:
         def getNumAnswers(self):
             return self.numAnswers
 
-class Anchor:
+class ANCHOR:
 
-    class Center:
+    class CENTER:
         pass
     
-    class TopRight:
+    class TOP_RIGHT:
         pass
 
-    class TopLeft:
+    class TOP_LEFT:
         pass
 
-    class BottomRight:
+    class BOTTOM_RIGHT:
         pass
 
-    class BottomLeft:
+    class BOTTOM_LEFT:
         pass
 
-    class TopCenter:
+    class TOP_CENTER:
         pass
 
-    class BottomCenter:
+    class BOTTOM_CENTER:
         pass
 
-    class RightCenter:
+    class RIGHT_CENTER:
         pass
 
-    class LeftCenter:
+    class LEFT_CENTER:
         pass
 
-class Screen:
+class SCREEN:
     pass
 
-class Label:
+class LABEL_TYPE:
     
-    class Text:
+    class TEXT:
         pass
 
-    class Image:
+    class IMAGE:
         pass
 
-    class Inactive:
+    class INACTIVE:
         pass
 
-class TextAlignment:
+class TEXT_ALIGNMENT:
 
-    class Left:
+    class LEFT:
         pass
 
-    class Right:
+    class RIGHT:
         pass
 
-    class Center:
+    class CENTER:
+        pass
+
+class AUTO_DETERMINE_ATTRIBUTE:
+    pass
+
+class INPUT_CONTROLLER_POSITION_FORMAT:
+
+    class AUTO:
+        pass
+
+class INPUt_CONTROLLER_FORMAT:
+
+    class VERTICAL:
+        pass
+
+    class HORIZONTAL:
         pass

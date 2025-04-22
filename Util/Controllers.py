@@ -21,12 +21,12 @@ class ProblemController:
                                             sizeY=60, 
                                             positionController=PositionController(objectLength=100,
                                                                                   objectHeight=60, 
-                                                                                  drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                  drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                   xOffset=30, 
                                                                                   yOffset=600, 
-                                                                                  refAnchor=Enums.Anchor.TopLeft()), 
+                                                                                  refAnchor=Enums.ANCHOR.TOP_LEFT()), 
                                             labelInformation="Submit", 
-                                            labelType=Enums.Label.Text(),
+                                            labelType=Enums.LABEL_TYPE.TEXT(),
                                             labelSize=25,
                                             font="calibri",
                                             labelColor=(0,0,0))
@@ -38,12 +38,12 @@ class ProblemController:
                                                  sizeY=60, 
                                                  positionController=PositionController(objectLength=100,
                                                                                        objectHeight=60, 
-                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                        xOffset=30, 
                                                                                        yOffset=600, 
-                                                                                       refAnchor=Enums.Anchor.TopLeft()), 
+                                                                                       refAnchor=Enums.ANCHOR.TOP_LEFT()), 
                                                  labelInformation="arrowIcon.png", 
-                                                 labelType=Enums.Label.Image(),
+                                                 labelType=Enums.LABEL_TYPE.IMAGE(),
                                                  labelSize=0.20,
                                                  isActive=False)
         self.elements.append(self.nextProblemButton)
@@ -142,7 +142,7 @@ class MCQController(InputController):
 
         self.answer = answer
 
-        self.y=y
+        self.y = y
 
         self.numChoices = numChoices
 
@@ -172,19 +172,27 @@ class MCQController(InputController):
         selectableAnswers = self.labelList.copy()
         selectableAnswers.insert(random.randint(0,numChoices-1), self.answer)
 
+        # Determining size for mcButton length
+        maxTextLength = Elements.Text.findSizeOfTextRect(font="calibri",fontSize=20,string="A. " + selectableAnswers[0])[0]
+        for i in range(1, numChoices):
+            textlength = Elements.Text.findSizeOfTextRect(font="calibri",fontSize=20,string="A. " + selectableAnswers[i])[0]
+            if (textlength > maxTextLength):
+                maxTextLength = textlength
+        mcButtonLength = maxTextLength + 40
+
         for i in range(numChoices):
             mcButton = Elements.MCQButton(screen=self.screen, 
                                           event=6903+i, 
-                                          sizeX=500, 
+                                          sizeX=mcButtonLength, 
                                           sizeY=70, 
-                                          positionController=PositionController(objectLength=500,
+                                          positionController=PositionController(objectLength=mcButtonLength,
                                                                                 objectHeight=70, 
-                                                                                drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                 xOffset=30, 
                                                                                 yOffset=self.y+80*i, 
-                                                                                refAnchor=Enums.Anchor.TopLeft()),  
+                                                                                refAnchor=Enums.ANCHOR.TOP_LEFT()),  
                                           labelInformation= ["A. ", "B. ", "C. ", "D. "][i] + (lambda x: "" if x is None else x)(selectableAnswers[i]), 
-                                          labelType=Enums.Label.Text(),
+                                          labelType=Enums.LABEL_TYPE.TEXT(),
                                           labelSize = 20,
                                           font = "calibri",
                                           labelColor = (0,0,0))
@@ -229,7 +237,7 @@ class MCQController(InputController):
 
         return selectedMCQValues
 
-class TextBoxController(InputController):
+class InputTextBoxController(InputController):
 
     def __init__(self, screen=None, numTextBoxes=3, y=500, **kwargs):
 
@@ -264,10 +272,10 @@ class TextBoxController(InputController):
                                             height=50,
                                             positionController=PositionController(objectLength=200,
                                                                                               objectHeight=50,
-                                                                                              drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                              drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                               xOffset=30+sum((x.getLength()+20) for x in self.elements[0:i]), 
                                                                                               yOffset=self.y, 
-                                                                                              refAnchor=Enums.Anchor.TopLeft()),
+                                                                                              refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                             labelText=self.labelList[i])
             self.elements.append(textBox)
             self.interactive.append(textBox)
@@ -290,7 +298,14 @@ class TextBoxController(InputController):
 
 class PositionController:
 
-    def __init__(self, objectLength, objectHeight, xOffset = 0, yOffset = 0, drawAnchor = Enums.Anchor.Center(), refObject = Enums.Screen(), refAnchor = Enums.Anchor.Center()):
+    def __init__(self, 
+                 objectLength=Enums.AUTO_DETERMINE_ATTRIBUTE, 
+                 objectHeight=Enums.AUTO_DETERMINE_ATTRIBUTE, 
+                 xOffset = 0, 
+                 yOffset = 0, 
+                 drawAnchor = Enums.ANCHOR.CENTER(), 
+                 refObject = Enums.SCREEN(), 
+                 refAnchor = Enums.ANCHOR.CENTER()):
         
         self.objectLength = objectLength
         self.objectHeight = objectHeight
@@ -305,45 +320,45 @@ class PositionController:
         self.recenter()
     
     def recenter(self):
-        if (type(self.refObject) == Enums.Screen):
+        if (type(self.refObject) == Enums.SCREEN):
             self.refLength, self.refHeight = pygame.display.get_window_size()
         elif (type(self.refObject) == PositionController):
             self.refLength, self.refHeight = self.refObject.getSize()
 
     def getPosition(self, positionOnObject = None):
 
-        if (type(self.refObject) == Enums.Screen):
+        if (type(self.refObject) == Enums.SCREEN):
             position = [0,0]
         elif (type(self.refObject) == PositionController):
-            position = [self.refObject.getPosition(positionOnObject=Enums.Anchor.TopLeft())[0], 
-                        self.refObject.getPosition(positionOnObject=Enums.Anchor.TopLeft())[1]]
+            position = [self.refObject.getPosition(positionOnObject=Enums.ANCHOR.TOP_LEFT())[0], 
+                        self.refObject.getPosition(positionOnObject=Enums.ANCHOR.TOP_LEFT())[1]]
 
         # Finding center position
-        if (type(self.refAnchor) == Enums.Anchor.Center):
+        if (type(self.refAnchor) == Enums.ANCHOR.CENTER):
             position[0] += self.refLength/2 + self.xOffset
             position[1] += self.refHeight/2 + self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.TopRight):
+        elif (type(self.refAnchor) == Enums.ANCHOR.TOP_RIGHT):
             position[0] += self.refLength + self.xOffset
             position[1] += self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.TopLeft):
+        elif (type(self.refAnchor) == Enums.ANCHOR.TOP_LEFT):
             position[0] += self.xOffset
             position[1] += self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.BottomRight):
+        elif (type(self.refAnchor) == Enums.ANCHOR.BOTTOM_RIGHT):
             position[0] += self.refLength + self.xOffset
             position[1] += self.refHeight + self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.BottomLeft):
+        elif (type(self.refAnchor) == Enums.ANCHOR.BOTTOM_LEFT):
             position[0] += self.xOffset
             position[1] += self.refHeight + self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.TopCenter):
+        elif (type(self.refAnchor) == Enums.ANCHOR.TOP_CENTER):
             position[0] += self.refLength/2 + self.xOffset
             position[1] += self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.BottomCenter):
+        elif (type(self.refAnchor) == Enums.ANCHOR.BOTTOM_CENTER):
             position[0] += self.refLength/2 + self.xOffset
             position[1] += self.refHeight + self.yOffset  
-        elif (type(self.refAnchor) == Enums.Anchor.RightCenter):
+        elif (type(self.refAnchor) == Enums.ANCHOR.RIGHT_CENTER):
             position[0] += self.refLength + self.xOffset
             position[1] += self.refHeight/2 + self.yOffset
-        elif (type(self.refAnchor) == Enums.Anchor.LeftCenter):
+        elif (type(self.refAnchor) == Enums.ANCHOR.LEFT_CENTER):
             position[0] += self.xOffset
             position[1] += self.refHeight/2 + self.yOffset
 
@@ -352,62 +367,84 @@ class PositionController:
         if (positionOnObject == None):
             return position
         else:
-            if (callable(self.objectLength)):
+            if (type(self.objectLength) == Enums.AUTO_DETERMINE_ATTRIBUTE):
+                try:
+                    objectLengthValue = self.refObject.length
+                except:
+                    try:
+                        objectLengthValue = self.refObject.findLength()
+                    except:
+                        try:
+                            objectLengthValue = self.refObject.getLength()
+                        except:
+                            raise ValueError("refObject has no length property that can be assigned")
+            elif (callable(self.objectLength)):
                 objectLengthValue = self.objectLength()
             else:
                 objectLengthValue = self.objectLength
-
-            if (callable(self.objectHeight)):
+            
+            if (type(self.objectHeight) == Enums.AUTO_DETERMINE_ATTRIBUTE):
+                try:
+                    objectHeightValue = self.refObject.height
+                except:
+                    try:
+                        objectHeightValue = self.refObject.findHeight()
+                    except:
+                        try:
+                            objectHeightValue = self.refObject.getHeight()
+                        except:
+                            raise ValueError("refObject has no height property that can be assigned")
+            elif (callable(self.objectHeight)):
                 objectHeightValue = self.objectHeight()
             else:
                 objectHeightValue = self.objectHeight
 
             # FInd center position
-            if (type(self.drawAnchor) == Enums.Anchor.Center):
+            if (type(self.drawAnchor) == Enums.ANCHOR.CENTER):
                 pass
-            elif (type(self.drawAnchor) == Enums.Anchor.TopLeft):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.TOP_LEFT):
                 position[0] += objectLengthValue/2
                 position[1] += objectHeightValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.BottomLeft):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.BOTTOM_LEFT):
                 position[0] += objectLengthValue/2
                 position[1] -= objectHeightValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.TopRight):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.TOP_RIGHT):
                 position[0] -= objectLengthValue/2
                 position[1] += objectHeightValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.BottomRight):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.BOTTOM_RIGHT):
                 position[0] -= objectLengthValue/2
                 position[1] -= objectHeightValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.TopCenter):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.TOP_CENTER):
                 position[1] += objectHeightValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.BottomCenter):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.BOTTOM_CENTER):
                 position[1] -= objectHeightValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.RightCenter):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.RIGHT_CENTER):
                 position[0] -= objectLengthValue/2
-            elif (type(self.drawAnchor) == Enums.Anchor.LeftCenter):
+            elif (type(self.drawAnchor) == Enums.ANCHOR.LEFT_CENTER):
                 position[0] += objectLengthValue/2                                  
 
             # From center position find other positions
-            if (type(positionOnObject) == Enums.Anchor.Center):
+            if (type(positionOnObject) == Enums.ANCHOR.CENTER):
                 pass
-            elif (type(positionOnObject) == Enums.Anchor.TopRight):
+            elif (type(positionOnObject) == Enums.ANCHOR.TOP_RIGHT):
                 position[0] += objectLengthValue/2
                 position[1] += -objectHeightValue/2
-            elif (type(positionOnObject) == Enums.Anchor.TopLeft):
+            elif (type(positionOnObject) == Enums.ANCHOR.TOP_LEFT):
                 position[0] += -objectLengthValue/2
                 position[1] += -objectHeightValue/2
-            elif (type(positionOnObject) == Enums.Anchor.BottomRight):
+            elif (type(positionOnObject) == Enums.ANCHOR.BOTTOM_RIGHT):
                 position[0] += objectLengthValue/2
                 position[1] += objectHeightValue/2
-            elif (type(positionOnObject) == Enums.Anchor.BottomLeft):
+            elif (type(positionOnObject) == Enums.ANCHOR.BOTTOM_LEFT):
                 position[0] += -objectLengthValue/2
                 position[1] += objectHeightValue/2
-            elif (type(positionOnObject) == Enums.Anchor.TopCenter):
+            elif (type(positionOnObject) == Enums.ANCHOR.TOP_CENTER):
                 position[1] += -objectHeightValue/2
-            elif (type(positionOnObject) == Enums.Anchor.BottomCenter):
+            elif (type(positionOnObject) == Enums.ANCHOR.BOTTOM_CENTER):
                 position[1] += objectHeightValue/2
-            elif (type(positionOnObject) == Enums.Anchor.RightCenter):
+            elif (type(positionOnObject) == Enums.ANCHOR.RIGHT_CENTER):
                 position[0] += objectLengthValue/2
-            elif (type(positionOnObject) == Enums.Anchor.LeftCenter):
+            elif (type(positionOnObject) == Enums.ANCHOR.LEFT_CENTER):
                 position[0] += -objectLengthValue/2
 
             return position

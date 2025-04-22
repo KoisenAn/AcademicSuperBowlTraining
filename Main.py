@@ -15,7 +15,7 @@ import Screens
 import Enums
 
 pygame.init()
-screen = pygame.display.set_mode((1280,720), pygame.RESIZABLE)
+screen = pygame.display.set_mode((1366,697), pygame.RESIZABLE)
 clock = pygame.time.Clock()
 running = True
 Buttons = []
@@ -42,14 +42,12 @@ while running:
                 width = 1280
             else:
                 width = pygame.display.get_window_size()[0]
-            if (pygame.display.get_window_size()[1] < 400):
-                height = 400
+            if (pygame.display.get_window_size()[1] < 600):
+                height = 600
             else:
                 height = pygame.display.get_window_size()[1]
             currScreen.recenter()
-            screen = pygame.display.set_mode((width,height), pygame.RESIZABLE)
-            if (popUp != None):
-                popUp.recenter()
+            screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
         # The mouse is clicked, or well released
         if event.type == pygame.MOUSEBUTTONUP:

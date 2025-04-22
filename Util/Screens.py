@@ -35,8 +35,8 @@ class Screen:
             element.draw()
 
     def recenter(self):
-        for elements in self.elements:
-            elements.recenter() 
+        for element in self.elements:
+            element.recenter() 
 
 class TestScreen(Screen):
 
@@ -75,15 +75,15 @@ class HomeScreen(Screen):
 
         self.title = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
-                                                                                    objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.Center(),
+                                                                                    objectHeight=Enums.AUTO_DETERMINE_ATTRIBUTE,
+                                                                                    drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                     xOffset=0, 
                                                                                     yOffset=-175, 
-                                                                                    refAnchor=Enums.Anchor.Center()),
+                                                                                    refAnchor=Enums.ANCHOR.CENTER()),
                                   string="2024-2025 BHSS Academic Super Bowl Math Training Tool",
                                   font="calibri",
                                   fontSize=60,
-                                  alignment=Enums.TextAlignment.Center(),
+                                  alignment=Enums.TEXT_ALIGNMENT.CENTER(),
                                   showingTextBox=False)
 
         buttonTextSize = 50
@@ -94,12 +94,12 @@ class HomeScreen(Screen):
                                       sizeY=125, 
                                       positionController=Controllers.PositionController(objectLength=175,
                                                                                         objectHeight=125, 
-                                                                                        drawAnchor=Enums.Anchor.Center(),
+                                                                                        drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                         xOffset=0, 
                                                                                         yOffset=0, 
-                                                                                        refAnchor=Enums.Anchor.Center()), 
+                                                                                        refAnchor=Enums.ANCHOR.CENTER()), 
                                       labelInformation="Start", 
-                                      labelType=Enums.Label.Text(),
+                                      labelType=Enums.LABEL_TYPE.TEXT(),
                                       labelSize = buttonTextSize,
                                       font = "calibri",
                                       labelColor = (0,0,0))
@@ -107,14 +107,14 @@ class HomeScreen(Screen):
                                             event=4199, 
                                             positionController=Controllers.PositionController(objectLength=300,
                                                                                         objectHeight=125, 
-                                                                                        drawAnchor=Enums.Anchor.Center(),
+                                                                                        drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                         xOffset=0, 
                                                                                         yOffset=150, 
-                                                                                        refAnchor=Enums.Anchor.Center()), 
+                                                                                        refAnchor=Enums.ANCHOR.CENTER()), 
                                             sizeX=300, 
                                             sizeY=125, 
                                             labelInformation="Credits/Help", 
-                                            labelType=Enums.Label.Text(),
+                                            labelType=Enums.LABEL_TYPE.TEXT(),
                                             labelSize=buttonTextSize,
                                             font = "calibri",
                                             labelColor = (0,0,0))
@@ -140,13 +140,13 @@ class CreditsScreen(Screen):
                                      sizeY=100, 
                                      positionController=Controllers.PositionController(objectLength=100,
                                                                                        objectHeight=100, 
-                                                                                       drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                       drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                        xOffset=-125, 
                                                                                        yOffset=-125, 
-                                                                                       refAnchor=Enums.Anchor.BottomRight()), 
+                                                                                       refAnchor=Enums.ANCHOR.BOTTOM_RIGHT()), 
                                      labelInformation="homeIcon.png", 
                                      labelSize = 0.25,
-                                     labelType=Enums.Label.Image())        
+                                     labelType=Enums.LABEL_TYPE.IMAGE())        
 
         self.elements.append(homeButton)
         self.interactive.append(homeButton)
@@ -156,75 +156,75 @@ class CreditsScreen(Screen):
         self.developedByHeading = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                     xOffset=20, 
                                                                                     yOffset=20, 
-                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                                                                    refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                   string="Created By: ",
                                   font="calibri",
                                   fontSize=50,
-                                  alignment=Enums.TextAlignment.Left(),
+                                  alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                   showingTextBox=False) 
         self.developerNames = Elements.Text(screen=self.screen,
-                                  positionController=Controllers.PositionController(objectLength=1100,
+                                  positionController=Controllers.PositionController(objectLength=(lambda: pygame.display.get_window_size()[0]-62),
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                     xOffset=20, 
                                                                                     yOffset=85, 
-                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                                                                    refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                   string=" An Kieu",
                                   font="calibri",
                                   fontSize=30,
-                                  alignment=Enums.TextAlignment.Left(),
+                                  alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                   showingTextBox=False) 
         self.team2324Heading = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                     xOffset=20, 
                                                                                     yOffset=135, 
-                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                                                                    refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                   string="BHSS 2023-2024 Math Team: ",
                                   font="calibri",
                                   fontSize=50,
-                                  alignment=Enums.TextAlignment.Left(),
+                                  alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                   showingTextBox=False) 
         self.team2324Names = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=(lambda: pygame.display.get_window_size()[0]-62),
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                     xOffset=22, 
                                                                                     yOffset=200, 
-                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                                                                    refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                   string="An Kieu (Captain), Minh Huynh, Edward Choi, Jackson Fries, Jacob Hammond, Will Yi, Dylan Stringer, Shayan Shamsipour, Yelena Zhou, Yucelin Zhou",
                                   font="calibri",
                                   fontSize=30,
                                   lineSpacing=1.5,
-                                  alignment=Enums.TextAlignment.Left(),
+                                  alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                   showingTextBox=False) 
         self.team2425Heading = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                     xOffset=20, 
                                                                                     yOffset=300, 
-                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                                                                    refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                   string="BHSS 2024-2025 Math Team: ",
                                   font="calibri",
                                   fontSize=50,
-                                  alignment=Enums.TextAlignment.Left(),
+                                  alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                   showingTextBox=False) 
         self.team2425Names = Elements.Text(screen=self.screen,
-                                  positionController=Controllers.PositionController(objectLength=1100,
+                                  positionController=Controllers.PositionController(objectLength=(lambda: pygame.display.get_window_size()[0]-62),
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                    drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                     xOffset=22, 
                                                                                     yOffset=365, 
-                                                                                    refAnchor=Enums.Anchor.TopLeft()),
+                                                                                    refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                   string="An Kieu (Captain), Bach Kieu, Edward Choi, Jackson Fries, Jacob Hammond, Will Yi, Jachary Yang, Yelena Zhou, Yucelin Zhou",
                                   font="calibri",
                                   fontSize=30,
-                                  alignment=Enums.TextAlignment.Left(),
+                                  alignment=Enums.TEXT_ALIGNMENT.LEFT(),
                                   lineSpacing=1.5,
                                   showingTextBox=False) 
         
@@ -248,14 +248,14 @@ class PracticeSelectScreen(Screen):
         self.title = Elements.Text(screen=self.screen,
                                   positionController=Controllers.PositionController(objectLength=1100,
                                                                                     objectHeight=200,
-                                                                                    drawAnchor=Enums.Anchor.Center(),
+                                                                                    drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                     xOffset=0, 
                                                                                     yOffset=-225, 
-                                                                                    refAnchor=Enums.Anchor.Center()),
+                                                                                    refAnchor=Enums.ANCHOR.CENTER()),
                                   string="Select Practice",
                                   font="calibri",
                                   fontSize=60,
-                                  alignment=Enums.TextAlignment.Center(),
+                                  alignment=Enums.TEXT_ALIGNMENT.CENTER(),
                                   showingTextBox=False) 
         self.elements.append(self.title)       
         
@@ -269,10 +269,10 @@ class PracticeSelectScreen(Screen):
                                                                                        drawAnchor=Enums.Anchor.TopCenter(),
                                                                                        xOffset=0,
                                                                                        yOffset=225, 
-                                                                                       refAnchor=Enums.Anchor.Center()), 
+                                                                                       refAnchor=Enums.ANCHOR.CENTER()), 
                                      labelInformation="homeIcon.png", 
                                      labelSize=0.25,
-                                     labelType=Enums.Label.Image())   
+                                     labelType=Enums.LABEL_TYPE.IMAGE())   
 
         #Adding Utility Buttons
         
@@ -292,13 +292,13 @@ class PracticeSelectScreen(Screen):
                                         sizeY=100, 
                                         positionController=Controllers.PositionController(objectLength=230,
                                                                                           objectHeight=100, 
-                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                           xOffset=0, 
                                                                                           yOffset=-150, 
-                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                                                                          refAnchor=Enums.ANCHOR.CENTER()), 
                                         labelInformation="Quaternions", 
                                         labelSize=practicebuttonTextSize,
-                                        labelType=Enums.Label.Text(),
+                                        labelType=Enums.LABEL_TYPE.TEXT(),
                                         font="calibri",
                                         labelColor=(0,0,0))        
         graphButton = Elements.Button(screen=screen, 
@@ -307,13 +307,13 @@ class PracticeSelectScreen(Screen):
                                       sizeY=100, 
                                       positionController=Controllers.PositionController(objectLength=250,
                                                                                           objectHeight=100, 
-                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                           xOffset=0, 
                                                                                           yOffset=-50, 
-                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                                                                          refAnchor=Enums.ANCHOR.CENTER()), 
                                         labelInformation="Graph Theory", 
                                         labelSize=practicebuttonTextSize,
-                                        labelType=Enums.Label.Text(),
+                                        labelType=Enums.LABEL_TYPE.TEXT(),
                                         font="calibri",
                                         labelColor=(0,0,0))
         moduloButton = Elements.Button(screen=screen, 
@@ -322,13 +322,13 @@ class PracticeSelectScreen(Screen):
                                         sizeY=100, 
                                         positionController=Controllers.PositionController(objectLength=345,
                                                                                           objectHeight=100, 
-                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                           xOffset=0, 
                                                                                           yOffset=50, 
-                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                                                                          refAnchor=Enums.ANCHOR.CENTER()), 
                                         labelInformation="Modulo Arithmetic", 
                                         labelSize=practicebuttonTextSize,
-                                        labelType=Enums.Label.Text(),
+                                        labelType=Enums.LABEL_TYPE.TEXT(),
                                         font="calibri",
                                         labelColor=(0,0,0))
         historyButton = Elements.Button(screen=screen, 
@@ -337,13 +337,13 @@ class PracticeSelectScreen(Screen):
                                         sizeY=100, 
                                         positionController=Controllers.PositionController(objectLength=155,
                                                                                           objectHeight=100, 
-                                                                                          drawAnchor=Enums.Anchor.Center(),
+                                                                                          drawAnchor=Enums.ANCHOR.CENTER(),
                                                                                           xOffset=0, 
                                                                                           yOffset=150, 
-                                                                                          refAnchor=Enums.Anchor.Center()), 
+                                                                                          refAnchor=Enums.ANCHOR.CENTER()), 
                                         labelInformation="History", 
                                         labelSize=practicebuttonTextSize,
-                                        labelType=Enums.Label.Text(),
+                                        labelType=Enums.LABEL_TYPE.TEXT(),
                                         font="calibri",
                                         labelColor=(0,0,0))
         
@@ -392,17 +392,17 @@ class ProblemScreen(Screen):
                                    string=titleText,
                                    font="calibri",
                                    fontSize=self.titleTextSize,
-                                   alignment=Enums.TextAlignment.Center(),
+                                   alignment=Enums.TEXT_ALIGNMENT.CENTER(),
                                    showingTextBox=False)    
         self.elements.append(self.title)   
 
         self.problemNumberBox = Elements.ProblemNumberBox(screen=self.screen, 
                                                           positionController=Controllers.PositionController(objectLength=60,
                                                                                              objectHeight=60,
-                                                                                             drawAnchor=Enums.Anchor.TopLeft(),
+                                                                                             drawAnchor=Enums.ANCHOR.TOP_LEFT(),
                                                                                              xOffset=30, 
                                                                                              yOffset=95, 
-                                                                                             refAnchor=Enums.Anchor.TopLeft()),
+                                                                                             refAnchor=Enums.ANCHOR.TOP_LEFT()),
                                                           problemNumber=str(self.problemsDone+1))
         self.elements.append(self.problemNumberBox)
         
@@ -443,6 +443,7 @@ class ProblemScreen(Screen):
 
     def recenter(self):
         super().recenter()
+        self.problemController.recenter()
 
     def getType(self):
         return self.problemType

@@ -33,6 +33,14 @@ testProblem3 = Elements.Problem(question="How much Aura does Ollie have?",
                                    problemInputType=Enums.ProblemInputType.TextBox(numTextBoxes=1,
                                                                                    firstInputBoxText="Answer: "))
 
+testProblem4 = Elements.Problem(question="This is a test problem la la la la la. AHHHHHH. So many words. Isn't this so awesome. I think it is. New line right now. Bud",
+                                   answer="Ollie",
+                                   problemDisplayType=Enums.ProblemDisplayType.Text(),
+                                   problemInputType=Enums.ProblemInputType.MCQ(otherAnswerChoices=["An", "Jenny", "Ansel"],
+                                                                               numChoices=4,
+                                                                               numAnswers=1))
+
 problemList = [testProblem1,
                testProblem2,
-               testProblem3]
+               testProblem3,
+               testProblem4]
